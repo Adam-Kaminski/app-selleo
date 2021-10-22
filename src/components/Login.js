@@ -6,8 +6,6 @@ import Button from "@mui/material/Button";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { useState } from "react";
 
-
-
 const Login = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
 
@@ -19,7 +17,7 @@ const Login = ({ handleLogin }) => {
   };
 
   return (
-    <div className="App">
+    <div className="login-box">
       <img className="logo" src={logo} />
       <Box
         onSubmit={handleSubmit}

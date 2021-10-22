@@ -7,23 +7,27 @@ import Test1 from "./pages/Test1";
 
 const Routes = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("username1")
+    localStorage.getItem("username")
   );
 
   return (
     <Router>
-      <Route exact path="/dashboard">
-        {!isLoggedIn ? <Redirect to="/" /> : <Dashboard />}
+      <Route path="/dashboard">
+        {!isLoggedIn ? (
+          <Redirect to="/" />
+        ) : (
+          <Dashboard handleLogin={setIsLoggedIn} />
+        )}
       </Route>
       <Route exact path="/">
         {isLoggedIn ? (
-          <Redirect to="/dashboard" />
+          <Redirect to="/dashboard/calendar" />
         ) : (
           <Login handleLogin={setIsLoggedIn} />
         )}
       </Route>
-      <Route path={'/test'}>
-          <Test1 />
+      <Route path={"/test"}>
+        <Test1 />
       </Route>
     </Router>
   );
