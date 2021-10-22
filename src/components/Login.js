@@ -1,9 +1,12 @@
+import React from "react";
 import logo from "../logo.png";
-import FormControl, { useFormControl } from "@mui/material/FormControl";
+import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { useState } from "react";
+
+
 
 const Login = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
@@ -16,7 +19,7 @@ const Login = ({ handleLogin }) => {
   };
 
   return (
-    <>
+    <div className="App">
       <img className="logo" src={logo} />
       <Box
         onSubmit={handleSubmit}
@@ -41,7 +44,7 @@ const Login = ({ handleLogin }) => {
           </Button>
         </FormControl>
       </Box>
-    </>
+    </div>
   );
 };
 
