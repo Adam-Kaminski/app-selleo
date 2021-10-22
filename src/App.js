@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-// import Routes from "./Routes";
+import Routes from "./Routes";
 import Entries from "./components/Entries";
 import NewEntry from "./components/NewEntry";
 // import {Entries} from "./components/Entries";
@@ -8,7 +8,7 @@ import NewEntry from "./components/NewEntry";
 function App() {
   return (
     <div>
-      {/* <Routes /> */}
+      <Routes />
       <NewEntry />
       <Entries />
     </div>
