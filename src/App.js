@@ -1,10 +1,16 @@
 import "./App.css";
-import Routes from "./Routes";
+import React from "react";
+// import Routes from "./Routes";
+import Entries from "./components/Entries";
+import NewEntry from "./components/NewEntry";
+// import {Entries} from "./components/Entries";
 
 function App() {
   return (
-    <div className="App">
-      <Routes />
+    <div>
+      {/* <Routes /> */}
+      <NewEntry />
+      <Entries />
     </div>
   );
 }
