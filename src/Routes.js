@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Login from "./components/Login";
 import { Redirect } from "react-router";
 import Dashboard from "./pages/Dashboard";
+import Test1 from "./pages/Test1";
 
 const Routes = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("username")
+    localStorage.getItem("username1")
   );
 
   return (
@@ -20,6 +21,9 @@ const Routes = () => {
         ) : (
           <Login handleLogin={setIsLoggedIn} />
         )}
+      </Route>
+      <Route path={'/test'}>
+          <Test1 />
       </Route>
     </Router>
   );

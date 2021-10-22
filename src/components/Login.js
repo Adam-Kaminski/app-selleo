@@ -19,7 +19,7 @@ const Login = ({ handleLogin }) => {
   };
 
   return (
-    <>
+    <div className="App">
       <img className="logo" src={logo} />
       <Box
         onSubmit={handleSubmit}
@@ -44,7 +44,7 @@ const Login = ({ handleLogin }) => {
           </Button>
         </FormControl>
       </Box>
-    </>
+    </div>
   );
 };
 
