@@ -1,4 +1,5 @@
 import React from "react";
+import "./Bundle.scss";
 
 const Bundle = () => {
   return (

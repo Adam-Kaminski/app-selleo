@@ -1,12 +1,12 @@
-.calendarContainer{
+.calendarContainer {
   width: 100%;
   position: relative;
   background-color: #fafeff;
   padding: 5px;
-  &__main{
+  &__main {
     position: relative;
     width: 100%;
-    >section{
+    > section {
       padding: 5px;
     }
     // .calendarSection{
@@ -14,7 +14,7 @@
     // .listSection{
     // }
   }
-  &__bottomButtons{
+  &__bottomButtons {
     position: relative;
     width: 100%;
     padding: 20px;
