@@ -3,24 +3,19 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-} from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
+import getNewClient from "./api";
 
-const client = new ApolloClient({
-  uri: "https://worklog-on-steroids.herokuapp.com/api/ql_open",
-  cache: new InMemoryCache(),
-});
+const username = localStorage.getItem("username");
 
-
+const client = getNewClient(username);
 
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <App />
-    </ApolloProvider>,
+    </ApolloProvider>
+    ,
   </React.StrictMode>,
   document.getElementById("root")
 );
