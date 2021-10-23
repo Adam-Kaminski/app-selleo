@@ -1,7 +1,7 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import { Switch, Route } from "react-router-dom";
-import Bundle from "../components/Bundle";
+import Bundle from "../components/Bundle/Bundle";
 import Calendar from "../components/Calendar";
 import Settings from "../components/Settings";
 
