@@ -1,3 +1,16 @@
+*{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+html, body{
+  position: relative;
+}
+body { 
+  margin: 0;
+  padding: 0;
+}
+
 .login-box {
   position: fixed;
   top: 50%;
