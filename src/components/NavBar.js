@@ -29,7 +29,7 @@ const NavBar = ({ handleLogin }) => {
               icon={<CalendarTodayIcon />}
             />
           </Link>
-          <Link to="/dashboard/bundle">
+          <Link to="/dashboard/bundles">
             <BottomNavigationAction
               icon={<PlaylistAddCheckIcon />}
               label="bundle"
