@@ -17,7 +17,7 @@ const Login = ({ handleLogin }) => {
 
   return (
     <div className="login-box">
-      <img className="logo" src="../../logo.png" />
+      <img className="logo" src="/assets/img/logo.png" />
       <Box
         onSubmit={handleSubmit}
         component="form"
