@@ -1,9 +1,10 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import { Switch, Route } from "react-router-dom";
-import Bundle from "../components/Bundle/Bundle";
+import Bundles from "../components/Bundles/Bundles";
+import Bundle from "../components/Bundles/Bundle";
 import Calendar from "../components/Calendar";
-import Settings from "../components/Settings";
+import Settings from "../components/Settings/Settings";
 
 const Dashboard = ({ handleLogin }) => {
   const username = localStorage.getItem("username");
@@ -14,7 +15,10 @@ const Dashboard = ({ handleLogin }) => {
       <div className="wrapper">
         <h2>Witaj, {username}</h2>
         <Switch>
-          <Route path="/dashboard/bundle">
+          <Route path="/dashboard/bundles">
+            <Bundles />
+          </Route>
+          <Route path="/dashboard/bundle/:id">
             <Bundle />
           </Route>
           <Route path="/dashboard/calendar">

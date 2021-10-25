@@ -1,0 +1,23 @@
+.bundle-list {
+  max-width: 500px;
+  margin: 0 auto;
+  display: block;
+
+  a {
+    color: #000;
+  }
+
+  li {
+    list-style: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+    cursor: pointer;
+
+    span {
+      display: block;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+  }
+}
