@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "../logo.png";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -18,7 +17,7 @@ const Login = ({ handleLogin }) => {
 
   return (
     <div className="login-box">
-      <img className="logo" src={logo} />
+      <img className="logo" src="../../logo.png" />
       <Box
         onSubmit={handleSubmit}
         component="form"
