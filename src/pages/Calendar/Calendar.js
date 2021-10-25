@@ -1,4 +1,5 @@
 import React from "react";
+import EntryList from '../../components/EntryList';
 import Box from '@mui/material/Box';
 import isWeekend from 'date-fns/isWeekend';
 import TextField from '@mui/material/TextField';
@@ -29,13 +30,6 @@ const Calendar = () => {
     </>
   );
 
-  const htmlListBudles = (
-    <>
-      <h1>Bunles List</h1>
-
-    </>
-  );
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', boxShadow: 2 }} className="calendarContainer">
       <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }} className="calendarContainer__main">
@@ -43,7 +37,7 @@ const Calendar = () => {
           {htmlCalendarSectionIn}
         </section>
         <section className="listSection">
-          {htmlListBudles}
+          <EntryList></EntryList>
         </section>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end' }} className="calendarContainer__bottomButtons">
