@@ -1,5 +1,5 @@
 import React from "react";
-import "./Bundle.scss";
+import "../Bundle/Bundle.scss";
 import getAllTagBundles from "../../queries/getAllTagBundles";
 import { Box } from "@mui/system";
 import CircularProgress from "@mui/material/CircularProgress";

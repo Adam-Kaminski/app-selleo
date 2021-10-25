@@ -1,3 +1,29 @@
+// odkomentujcie/zakomentujcie sobie które chcecie - bo bez podwodziedzi jest wolniej... przy commitach nie przejmujcie się tym, ale zostawcie zakomentowane tak jak będzieci mieli, ja później przy pushach będę wam zmieniać...
+// jak coś bo mogę zapomnieć po prostu czasem
+// module.exports = {
+//   "env": {
+//     "browser": true,
+//     "es2021": true
+//   },
+//   "extends": [
+//       "eslint:recommended",
+//       "plugin:react/recommended"
+//   ],
+//   "parserOptions": {
+//       "ecmaFeatures": {
+//           "jsx": true
+//       },
+//       "ecmaVersion": 12,
+//       "sourceType": "module"
+//   },
+//   "plugins": [
+//       "react"
+//   ],
+//   "rules": {
+//     "react/prop-types": "off"
+//   }
+// };
+
 module.exports = {
   env: {
     browser: true,

@@ -1,7 +1,6 @@
 import React from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import logo from "../logo.png";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/system";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -19,7 +18,7 @@ const NavBar = ({ handleLogin }) => {
     <>
       <Box className="nav-container">
         <Link to="/">
-          <img src={logo} alt="selleo logo" className="logo" />
+          <img src="../../logo.png" alt="selleo logo" className="logo" />
         </Link>
         <BottomNavigation showLabels>
           <Link to="/dashboard/calendar">
