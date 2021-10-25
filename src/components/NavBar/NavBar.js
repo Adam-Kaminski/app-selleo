@@ -18,7 +18,7 @@ const NavBar = ({ handleLogin }) => {
     <>
       <Box className="nav-container">
         <Link to="/">
-          <img src="../../logo.png" alt="selleo logo" className="logo" />
+          <img src="/assets/img/selleo_worklog.png" alt="selleo logo" className="logo" />
         </Link>
         <BottomNavigation showLabels>
           <Link to="/dashboard/calendar">
