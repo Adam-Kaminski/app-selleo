@@ -1,15 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    // "module": "commonjs",
-    // "baseUrl": "./src",
     "jsx": "react"
   },
   "include": ["./src/**/*"]
-  // "exclude": ["./node_modules"]
-  // "compilerOptions": {
-  //   "baseUrl": "./src",
-  //   "checkJs": true,
-  //   "jsx": "react-jsx"
-  // }
 }
