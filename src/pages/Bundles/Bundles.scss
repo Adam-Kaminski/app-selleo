@@ -1,17 +1,8 @@
-.bundle {
-  display: flex;
-  justify-content: space-between;
-
-  &__left {
-    width: 50%;
-  }
-
-  &__right {
-    width: 50%;
-  }
-
+.bundles {
   &__list {
-    padding: 0;
+    max-width: 500px;
+    margin: 0 auto;
+    display: block;
 
     a {
       color: #000;
