@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import tagBundlebyID from '../../queries/tagBundlebyID';
 import { Box } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
+import tagBundlebyID from '../../queries/tagBundlebyID';
 import './Bundle.scss';
 
 const Bundle = () => {

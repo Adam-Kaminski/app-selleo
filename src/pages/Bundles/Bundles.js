@@ -1,6 +1,5 @@
 import React from 'react';
 import './Bundles.scss';
-import getAllTagBundles from '../../queries/getAllTagBundles';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link } from 'react-router-dom';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -9,6 +8,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import getAllTagBundles from '../../queries/getAllTagBundles';
 
 const Bundle = () => {
   const { data, loading, error } = getAllTagBundles();
