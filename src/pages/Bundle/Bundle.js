@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-//import { ContactSupportOutlined } from "@mui/icons-material";
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import tagBundlebyID from "../../queries/tagBundlebyID";
-import { Box } from "@mui/system";
-import CircularProgress from "@mui/material/CircularProgress";
+// import { ContactSupportOutlined } from "@mui/icons-material";
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Box } from '@mui/system';
+import CircularProgress from '@mui/material/CircularProgress';
+import tagBundlebyID from '../../queries/tagBundlebyID';
 
 const Bundle = () => {
   const { id } = useParams();
@@ -14,7 +14,7 @@ const Bundle = () => {
 
   if (loading)
     return (
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
     );

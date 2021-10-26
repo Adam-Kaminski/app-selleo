@@ -30,6 +30,6 @@ const ProjectSelect = () => {
       </FormControl>
     </Box>
   );
-}
+};
 
 export default ProjectSelect;

@@ -1,13 +1,13 @@
-import React from "react";
-import NavBar from "../../components/NavBar";
-import { Switch, Route } from "react-router-dom";
-import Bundles from "../Bundles";
-import Bundle from "../Bundle";
-import Calendar from "../Calendar";
-import Settings from "../Settings";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import NavBar from '../../components/NavBar';
+import Bundles from '../Bundles';
+import Bundle from '../Bundle';
+import Calendar from '../Calendar';
+import Settings from '../Settings';
 
 const Dashboard = ({ handleLogin }) => {
-  const username = localStorage.getItem("username");
+  const username = localStorage.getItem('username');
 
   return (
     <>

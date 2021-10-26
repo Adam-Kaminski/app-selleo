@@ -3,5 +3,15 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "auto-rename-tag.activationOnLanguage": ["html", "xml", "php", "javascript"]
+  "auto-rename-tag.activationOnLanguage": ["html", "xml", "php", "javascript"],
+  "editor.formatOnSave": true,
+  "editor.suggest.preview": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "javascript.preferences.quoteStyle": "single"
 }

@@ -4,7 +4,7 @@ import blue from '@material-ui/core/colors/blue';
 
 const ThemeMUI = createTheme({
   palette: {
-    type: "ligth",
+    type: 'ligth',
     primary: {
       main: indigo[900],
     },
@@ -13,10 +13,10 @@ const ThemeMUI = createTheme({
     },
     background: {
       paper: '#fdfdfd',
-    }
+    },
   },
   typography: {
-    fontFamily:'Roboto',
+    fontFamily: 'Roboto',
     fontSize: 14,
   },
 });

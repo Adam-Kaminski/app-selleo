@@ -1,29 +1,32 @@
-// odkomentujcie/zakomentujcie sobie które chcecie - bo bez podwodziedzi jest wolniej... przy commitach nie przejmujcie się tym, ale zostawcie zakomentowane tak jak będzieci mieli, ja później przy pushach będę wam zmieniać...
-// jak coś bo mogę zapomnieć po prostu czasem
 module.exports = {
-  "env": {
-    "browser": true,
-    "es2021": true
+  env: {
+    browser: true,
+    es2021: true,
   },
-  "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended"
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'airbnb-base',
+    'plugin:prettier/recommended',
   ],
-  "parserOptions": {
-      "ecmaFeatures": {
-          "jsx": true
-      },
-      "ecmaVersion": 12,
-      "sourceType": "module"
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 12,
+    sourceType: 'module',
   },
-  "plugins": [
-      "react"
-  ],
-  "rules": {
-    "react/prop-types": "off"
-  }
+  plugins: ['import', 'jsx-a11y', 'react', 'prettier'],
+  rules: {
+    'no-unused-vars': 'warn',
+    'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 0,
+    'no-underscore-dangle': 'off',
+    'prettier/prettier': ['error', { singleQuote: true, parser: 'flow', printWidth: 100 }],
+  },
 };
 
+// old config
 // module.exports = {
 //   env: {
 //     browser: true,

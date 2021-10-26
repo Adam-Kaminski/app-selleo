@@ -1,5 +1,4 @@
-import React from "react";
-import "./Settings.scss";
+import './Settings.scss';
 
 const Settings = () => {
   return (
