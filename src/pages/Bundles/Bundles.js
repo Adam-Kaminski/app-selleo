@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Bundles.scss';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link } from 'react-router-dom';
@@ -12,6 +12,7 @@ import getAllTagBundles from '../../queries/getAllTagBundles';
 
 const Bundle = () => {
   const { data, loading, error } = getAllTagBundles();
+  const [newBundleName, setNewBundleName] = useState('');
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -36,6 +37,11 @@ const Bundle = () => {
     p: 4,
   };
 
+  const HandleNewBundle = (e) => {
+    e.preventDefault();
+    console.log(newBundleName);
+  };
+
   return (
     <>
       <Modal
@@ -44,11 +50,17 @@ const Bundle = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style} component="form">
+        <Box sx={style} component="form" onSubmit={HandleNewBundle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Add new bundle
           </Typography>
-          <OutlinedInput id="modal-modal-description" sx={{ mt: 2, width: '100%' }}></OutlinedInput>
+          <OutlinedInput
+            id="modal-modal-description"
+            sx={{ mt: 2, width: '100%' }}
+            placeholder="Name"
+            onChange={(e) => setNewBundleName(e.target.value)}
+            value={newBundleName}
+          ></OutlinedInput>
           <Button
             sx={{ width: '100%', display: 'block', margin: '10px 0' }}
             type="submit"

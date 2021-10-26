@@ -6,6 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import './NavBar.scss';
 
 const NavBar = ({ handleLogin }) => {
   const logOut = () => {
