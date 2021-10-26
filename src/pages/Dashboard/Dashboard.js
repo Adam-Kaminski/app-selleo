@@ -5,6 +5,7 @@ import Bundles from '../Bundles';
 import Bundle from '../Bundle';
 import Calendar from '../Calendar';
 import Settings from '../Settings';
+import './Dasboard.scss';
 
 const Dashboard = ({ handleLogin }) => {
   const username = localStorage.getItem('username');
@@ -12,7 +13,7 @@ const Dashboard = ({ handleLogin }) => {
   return (
     <>
       <NavBar handleLogin={handleLogin} />
-      <div className="wrapper">
+      <div className="main wrapper">
         <h2>Witaj, {username}</h2>
         <Switch>
           <Route path="/dashboard/bundles">

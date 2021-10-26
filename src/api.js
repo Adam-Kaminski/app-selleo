@@ -12,7 +12,6 @@ export const getNewClient = (username) => {
       headers: {
         ...headers,
         'user-name': username || '',
-        // 'user-name': username ? username : '',
       },
     };
   });
