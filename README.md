@@ -71,6 +71,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### Links
 
 [example project in react/MUI](https://github.com/codedthemes/berry-free-react-admin-template)
+<https://github.com/Lkubok/react-file-structure-example/tree/main/src>
+<https://github.com/dawidholisz/workshops-context-app>
+<https://github.com/Lkubok/react-formik-presentation>
+[Backend queries](https://worklog-on-steroids.herokuapp.com/api/ql_open)
+
+### Material UI - MUI
+
+[colors for elements](https://mui.com/customization/palette/)
 
 ### esLint, prettier
 
