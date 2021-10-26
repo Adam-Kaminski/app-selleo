@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-vars */
-// import { ContactSupportOutlined } from "@mui/icons-material";
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import tagBundlebyID from '../../queries/tagBundlebyID';
 import { Box } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
-import tagBundlebyID from '../../queries/tagBundlebyID';
+import './Bundle.scss';
 
 const Bundle = () => {
   const { id } = useParams();
@@ -24,11 +23,26 @@ const Bundle = () => {
 
   return (
     <>
-      <ul className="bundle-list">
-        {tagBundle.tags.map((tag) => {
-          return <li key="">{tag.name}</li>;
-        })}
-      </ul>
+      <div className="bundle">
+        <div className="bundle__left">
+          <div className="bundle__name">
+            <h3>Name:</h3>
+            {tagBundle.name}
+          </div>
+          <div className="bundle__desc">
+            <h3>Description:</h3>
+            {tagBundle.description}
+          </div>
+        </div>
+        <div className="bundle__right">
+          <h3>Tags:</h3>
+          <ul className="bundle__list">
+            {tagBundle.tags.map((tag) => {
+              return <li key="">{tag.name}</li>;
+            })}
+          </ul>
+        </div>
+      </div>
     </>
   );
 };
