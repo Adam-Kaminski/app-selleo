@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import TimePickerInput from '../TimePickerInput';
 import ProjectSelect from '../ProjectSelect/ProjectSelect';
 import TagInput from '../TagInput';
+import './EntryList.scss';
 
 const EntryList = () => {
   const newDatetime = new Date();
@@ -13,17 +14,27 @@ const EntryList = () => {
   newDatetime.setMinutes(30);
   return (
     <>
-      <h1>Bunles List</h1>
-      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <h1>Entry List</h1>
+      <List
+        sx={{
+          width: '100%',
+          bgcolor: 'background.paper',
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}
+      >
         {[0, 1, 2, 3].map((value) => {
           return (
             <ListItem
+              className="entryList"
               key={value}
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                justifyContent: 'flex-start',
+                justifyContent: 'center',
               }}
             >
               <TimePickerInput valueTimeProp={{ newDatetime }} />
@@ -36,14 +47,14 @@ const EntryList = () => {
                 variant="contained"
                 sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
               >
-                <AddCircleOutlineIcon></AddCircleOutlineIcon>
+                <AddCircleOutlineIcon />
               </Button>
               <Button
-                color="secondary"
+                color="error"
                 variant="contained"
                 sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
               >
-                <DeleteOutlineIcon></DeleteOutlineIcon>
+                <DeleteOutlineIcon />
               </Button>
             </ListItem>
           );

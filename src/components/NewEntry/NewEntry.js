@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { GET_ALL_ENTRIES } from '../../queries/useAllEntries';
 
 const CREATE_ENTRY = gql`

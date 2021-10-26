@@ -3,39 +3,23 @@ import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { title: 'Se7en', year: 1995 },
-  { title: 'The Silence of the Lambs', year: 1991 },
-  { title: "It's a Wonderful Life", year: 1946 },
-  { title: 'Life Is Beautiful', year: 1997 },
-  { title: 'The Usual Suspects', year: 1995 },
-  { title: 'Léon: The Professional', year: 1994 },
-  { title: 'Spirited Away', year: 2001 },
-  { title: 'Saving Private Ryan', year: 1998 },
-  { title: 'Once Upon a Time in the West', year: 1968 },
-  { title: 'American History X', year: 1998 },
-  { title: 'Interstellar', year: 2014 },
-  { title: 'Casablanca', year: 1942 },
-  { title: 'City Lights', year: 1931 },
-  { title: 'Psycho', year: 1960 },
-  { title: 'The Green Mile', year: 1999 },
-  { title: 'The Intouchables', year: 2011 },
-  { title: 'Modern Times', year: 1936 },
-  { title: 'Raiders of the Lost Ark', year: 1981 },
-  { title: 'Rear Window', year: 1954 },
-  { title: 'The Pianist', year: 2002 },
-  { title: 'The Departed', year: 2006 },
-  { title: 'Terminator 2: Judgment Day', year: 1991 },
-  { title: 'Back to the Future', year: 1985 },
-  { title: 'Whiplash', year: 2014 },
-  { title: 'Gladiator', year: 2000 },
-  { title: 'Memento', year: 2000 },
-  { title: 'The Prestige', year: 2006 },
-  { title: 'The Lion King', year: 1994 },
-  { title: 'Apocalypse Now', year: 1979 },
-  { title: 'Alien', year: 1979 },
-  { title: 'Sunset Boulevard', year: 1950 },
+const tagsArray = [
+  { name: 'Se7en' },
+  { name: 'The Silence of the Lambs' },
+  { name: "It's a Wonderful Life" },
+  { name: 'Life Is Beautiful' },
+  { name: 'The Usual Suspects' },
+  { name: 'Léon: The Professional' },
 ];
+
+// tag structure
+// name: String!
+// description: String
+// creatorId: MongoID
+// _id: MongoID!
+// updatedAt: Date
+// createdAt: Date
+// creator: Profile
 
 const filter = createFilterOptions();
 
@@ -48,12 +32,12 @@ const TagInput = () => {
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
           setValue({
-            title: newValue,
+            name: newValue,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
           setValue({
-            title: newValue.inputValue,
+            name: newValue.inputValue,
           });
         } else {
           setValue(newValue);
@@ -64,11 +48,11 @@ const TagInput = () => {
 
         const { inputValue } = params;
         // Suggest the creation of a new value
-        const isExisting = options.some((option) => inputValue === option.title);
+        const isExisting = options.some((option) => inputValue === option.name);
         if (inputValue !== '' && !isExisting) {
           filtered.push({
             inputValue,
-            title: `Add "${inputValue}"`,
+            name: `Add "${inputValue}"`,
           });
         }
 
@@ -78,7 +62,7 @@ const TagInput = () => {
       clearOnBlur
       handleHomeEndKeys
       id="free-solo-with-text-demo"
-      options={top100Films}
+      options={tagsArray}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -89,12 +73,12 @@ const TagInput = () => {
           return option.inputValue;
         }
         // Regular option
-        return option.title;
+        return option.name;
       }}
-      renderOption={(props, option) => <li {...props}>{option.title}</li>}
+      renderOption={(props, option) => <li {...props}>{option.name}</li>}
       sx={{ width: 300 }}
       freeSolo
-      renderInput={(params) => <TextField {...params} label="Free solo with text demo" />}
+      renderInput={(params) => <TextField {...params} label="Wybierz tag lub dodaj nowy tag" />}
     />
   );
 };
