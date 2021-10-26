@@ -1,16 +1,16 @@
-import React from "react";
-import "../Bundle/Bundle.scss";
-import getAllTagBundles from "../../queries/getAllTagBundles";
-import { Box } from "@mui/system";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Link } from "react-router-dom";
+import React from 'react';
+import '../Bundle/Bundle.scss';
+import { Box } from '@mui/system';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Link } from 'react-router-dom';
+import getAllTagBundles from '../../queries/getAllTagBundles';
 
 const Bundle = () => {
   const { data, loading, error } = getAllTagBundles();
 
   if (loading)
     return (
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
     );
@@ -21,10 +21,7 @@ const Bundle = () => {
       <ul className="bundle-list">
         {data.map((singleTagBundle) => {
           return (
-            <Link
-              key={singleTagBundle._id}
-              to={`/dashboard/bundle/${singleTagBundle._id}`}
-            >
+            <Link key={singleTagBundle._id} to={`/dashboard/bundle/${singleTagBundle._id}`}>
               <li>
                 {singleTagBundle.name}
                 <span>{singleTagBundle.description}</span>

@@ -1,6 +1,6 @@
-import { gql, useMutation } from "@apollo/client";
-import React, { useState } from "react";
-import { GET_ALL_ENTRIES } from "../../queries/useAllEntries";
+import { gql, useMutation } from '@apollo/client';
+import React, { useState } from 'react';
+import { GET_ALL_ENTRIES } from '../../queries/useAllEntries';
 
 const CREATE_ENTRY = gql`
   mutation CreateEntry($record: EntryCreateTypeInput) {
@@ -16,9 +16,9 @@ const CREATE_ENTRY = gql`
 `;
 
 const NewEntry = () => {
-  const [newEntryValue, setNewEntryValue] = useState("");
+  const [newEntryValue, setNewEntryValue] = useState('');
   const [createEntry] = useMutation(CREATE_ENTRY, {
-    refetchQueries: [GET_ALL_ENTRIES, "GetAllEntries"]
+    refetchQueries: [GET_ALL_ENTRIES, 'GetAllEntries'],
   });
 
   const handleSubmit = (event) => {
@@ -28,24 +28,21 @@ const NewEntry = () => {
         record: {
           startTime: '10:10',
           endTime: '10:10',
-          tagBundleName: "111",
-          tagName: newEntryValue
-        }
-      }
+          tagBundleName: '111',
+          tagName: newEntryValue,
+        },
+      },
     });
-    setNewEntryValue("");
+    setNewEntryValue('');
   };
 
   return (
     <>
       <h1>New Entry</h1>
       <form onSubmit={handleSubmit}>
-      <input
-        value={newEntryValue}
-        onChange={(event) => setNewEntryValue(event.target.value)}
-      />
-      <button>ADD ENTRY</button>
-    </form>
+        <input value={newEntryValue} onChange={(event) => setNewEntryValue(event.target.value)} />
+        <button>ADD ENTRY</button>
+      </form>
     </>
   );
 };

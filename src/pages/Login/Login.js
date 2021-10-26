@@ -1,37 +1,31 @@
-import React from "react";
-import FormControl from "@mui/material/FormControl";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import { useState } from "react";
+import FormControl from '@mui/material/FormControl';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import { useState } from 'react';
 
 const Login = ({ handleLogin }) => {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("username", username);
-    console.log("login");
+    localStorage.setItem('username', username);
+    console.log('login');
     handleLogin(username);
   };
 
   return (
     <div className="login-box">
       <img className="logo" src="/assets/img/logo.png" />
-      <Box
-        onSubmit={handleSubmit}
-        component="form"
-        noValidate
-        autoComplete="off"
-      >
-        <FormControl sx={{ width: "25ch" }}>
+      <Box onSubmit={handleSubmit} component="form" noValidate autoComplete="off">
+        <FormControl sx={{ width: '25ch' }}>
           <OutlinedInput
             onChange={(e) => setUsername(e.target.value)}
             value={username}
             placeholder="Nazwa użytkownika"
           />
           <Button
-            sx={{ marginTop: "10px" }}
+            sx={{ marginTop: '10px' }}
             type="submit"
             variant="contained"
             color="primary"

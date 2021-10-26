@@ -46,13 +46,11 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-
-
 This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web 
+### Making a Progressive Web
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
@@ -68,8 +66,19 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
+## Project information, notes, tips
 
-### Skróty 
+### Links
+
+[example project in react/MUI](https://github.com/codedthemes/berry-free-react-admin-template)
+
+### esLint, prettier
+
+<https://github.com/prettier/eslint-plugin-prettier>
+<https://blog.bitsrc.io/how-to-set-up-airbnb-style-guide-for-react-projects-fc7dfb1f3d68>
+[ESLint, Prettier i VS Code - Czysty JS z automatu - Kanał Przeprogramowani](https://www.youtube.com/watch?v=u2yUxhzpht4)
+
+### Shortcuts for React
 
 rfc
 
@@ -77,12 +86,8 @@ rfc
 import React from 'react';
 
 const Projectselect = () => {
-  return (
-    <div>
-      
-    </div>
-  );
-}
+  return <div></div>;
+};
 
 export default Projectselect;
 ```

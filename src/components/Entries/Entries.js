@@ -1,18 +1,17 @@
-import React from "react";
-import useAllEntries from "../../queries/useAllEntries";
-
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import useAllEntries from '../../queries/useAllEntries';
 
 const Entries = () => {
   const { data, loading, error } = useAllEntries();
 
-  if (loading)
+  if (loading) {
     return (
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: 'flex' }}>
         <CircularProgress />
       </Box>
     );
+  }
   if (error) return <div>error</div>;
 
   return (

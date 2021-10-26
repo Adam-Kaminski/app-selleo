@@ -1,8 +1,17 @@
 {
-    "recommendations": [
-        "esbenp.prettier-vscode",
-        "coenraads.bracket-pair-colorizer",
-        "dsznajder.es7-react-js-snippets",
-        "formulahendry.auto-rename-tag"
-    ]
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "coenraads.bracket-pair-colorizer",
+    "dsznajder.es7-react-js-snippets",
+    "formulahendry.auto-rename-tag",
+    "apollographql.vscode-apollo",
+    "GraphQL.vscode-graphql",
+    "dbaeumer.vscode-eslint",
+    "skyran.js-jsx-snippets",
+    "DavidAnson.vscode-markdownlint",
+    "christian-kohler.path-intellisense",
+    "glen-84.sass-lint",
+    "mrmlnc.vscode-scss",
+    "NuclleaR.vscode-extension-auto-import"
+  ]
 }

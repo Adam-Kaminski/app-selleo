@@ -1,4 +1,4 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery } from '@apollo/client';
 
 export const GET_ALL_TAG_BUNDLES = gql`
   query GetAllTagBundles {

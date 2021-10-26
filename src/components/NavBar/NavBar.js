@@ -1,17 +1,16 @@
-import React from "react";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import { Link } from "react-router-dom";
-import { Box } from "@mui/system";
-import LogoutIcon from "@mui/icons-material/Logout";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import SettingsIcon from "@mui/icons-material/Settings";
-import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import { Link } from 'react-router-dom';
+import { Box } from '@mui/system';
+import LogoutIcon from '@mui/icons-material/Logout';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import SettingsIcon from '@mui/icons-material/Settings';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 
 const NavBar = ({ handleLogin }) => {
   const logOut = () => {
-    localStorage.setItem("username", "");
-    handleLogin("");
+    localStorage.setItem('username', '');
+    handleLogin('');
   };
 
   return (
@@ -22,25 +21,13 @@ const NavBar = ({ handleLogin }) => {
         </Link>
         <BottomNavigation showLabels>
           <Link to="/dashboard/calendar">
-            <BottomNavigationAction
-              label="kalendarz"
-              showLabel
-              icon={<CalendarTodayIcon />}
-            />
+            <BottomNavigationAction label="kalendarz" showLabel icon={<CalendarTodayIcon />} />
           </Link>
           <Link to="/dashboard/bundles">
-            <BottomNavigationAction
-              icon={<PlaylistAddCheckIcon />}
-              label="bundle"
-              showLabel
-            />
+            <BottomNavigationAction icon={<PlaylistAddCheckIcon />} label="bundle" showLabel />
           </Link>
           <Link to="/dashboard/settings">
-            <BottomNavigationAction
-              icon={<SettingsIcon />}
-              label="ustawienia"
-              showLabel
-            />
+            <BottomNavigationAction icon={<SettingsIcon />} label="ustawienia" showLabel />
           </Link>
           <BottomNavigationAction
             onClick={logOut}
