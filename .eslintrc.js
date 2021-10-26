@@ -35,6 +35,7 @@ module.exports = {
     'react/destructuring-assignment': 'warn',
     'no-debugger': 'warn',
     'no-console': 'warn',
+    'no-plusplus': 'off',
   },
 };
 

@@ -15,7 +15,16 @@ const EntryList = () => {
   return (
     <>
       <h1>Entry List</h1>
-      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <List
+        sx={{
+          width: '100%',
+          bgcolor: 'background.paper',
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}
+      >
         {[0, 1, 2, 3].map((value) => {
           return (
             <ListItem
@@ -25,7 +34,7 @@ const EntryList = () => {
                 display: 'flex',
                 flexDirection: 'row',
                 flexWrap: 'wrap',
-                justifyContent: 'flex-start',
+                justifyContent: 'center',
               }}
             >
               <TimePickerInput valueTimeProp={{ newDatetime }} />
