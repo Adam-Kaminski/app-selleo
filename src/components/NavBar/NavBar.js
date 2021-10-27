@@ -17,23 +17,44 @@ const NavBar = ({ handleLogin }) => {
 
   return (
     <>
-      <Box className="nav-container">
+      <Box className="header">
         <Link to="/">
-          <img src="/assets/img/selleo_worklog.png" alt="selleo logo" className="logo" />
+          <img className="header__logo" src="/assets/img/logo.png" alt="logo" />
         </Link>
+
         <BottomNavigation showLabels>
+          <div className="logged-user">
+            <AccountCircleIcon />
+            <h3>{localStorage.getItem('username')}</h3>
+          </div>
+
           <Link to="/dashboard/calendar">
-            <BottomNavigationAction label="kalendarz" showLabel icon={<CalendarTodayIcon />} />
+            <BottomNavigationAction
+              className="header__nav-item"
+              label="kalendarz"
+              showLabel
+              icon={<CalendarTodayIcon />}
+            />
           </Link>
           <Link to="/dashboard/bundles">
-            <BottomNavigationAction icon={<PlaylistAddCheckIcon />} label="bundle" showLabel />
+            <BottomNavigationAction
+              className="header__nav-item"
+              icon={<PlaylistAddCheckIcon />}
+              label="bundle"
+              showLabel
+            />
           </Link>
           <Link to="/dashboard/settings">
-            <BottomNavigationAction icon={<SettingsIcon />} label="ustawienia" showLabel />
+            <BottomNavigationAction
+              className="header__nav-item"
+              icon={<SettingsIcon />}
+              label="ustawienia"
+              showLabel
+            />
           </Link>
           <BottomNavigationAction
+            className="header__nav-item-logout"
             onClick={logOut}
-            className="nav-logout"
             label="wyloguj"
             icon={<LogoutIcon />}
             showLabel

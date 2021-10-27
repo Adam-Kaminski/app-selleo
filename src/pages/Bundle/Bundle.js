@@ -29,18 +29,20 @@ const Bundle = () => {
         <div className="bundle__left">
           <div className="bundle__name">
             <h3>Name:</h3>
-            {tagBundle.name}
+            <p>{tagBundle.name}</p>
           </div>
           <div className="bundle__desc">
             <h3>Description:</h3>
-            {tagBundle.description}
-            {dataID._id === tagBundle.creatorId && (
-              <EditBundleDesc editDesc={tagBundle.description} bundleID={id} />
-            )}
+            <p>
+              {tagBundle.description}
+              {dataID._id === tagBundle.creatorId && (
+                <EditBundleDesc editDesc={tagBundle.description} bundleID={id} />
+              )}
+            </p>
           </div>
         </div>
         <div className="bundle__right">
-          <h3>Tags:</h3>
+          {tagBundle.tags.length > 0 && <h3>Tags:</h3>}
           <ul className="bundle__list">
             {tagBundle.tags.map((tag) => {
               return <li key="">{tag.name}</li>;
