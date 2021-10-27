@@ -1,0 +1,24 @@
+.settings {
+  display: flex;
+  justify-content: space-between;
+
+  &__user {
+    padding-bottom: 10px;
+    width: 50%;
+  }
+
+  &__bundles {
+    width: 50%;
+  }
+
+  &__checkbox {
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+    cursor: pointer;
+    text-align: left;
+    align-items: center;
+    height: 50px;
+    width: 90%;
+  }
+}
