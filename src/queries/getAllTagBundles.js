@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 
 export const GET_ALL_TAG_BUNDLES = gql`
   query GetAllTagBundles {
-    tagBundleMany {
+    tagBundleMany(sort: CREATEDAT_DESC) {
       _id
       name
       description

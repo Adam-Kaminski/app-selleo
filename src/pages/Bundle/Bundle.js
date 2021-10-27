@@ -4,6 +4,7 @@ import { Box } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
 import tagBundlebyID from '../../queries/tagBundlebyID';
 import './Bundle.scss';
+import EditBundleDesc from '../../components/EditBundleDesc/EditBundleDesc';
 
 const Bundle = () => {
   const { id } = useParams();
@@ -32,6 +33,7 @@ const Bundle = () => {
           <div className="bundle__desc">
             <h3>Description:</h3>
             {tagBundle.description}
+            <EditBundleDesc editDesc={tagBundle.description} />
           </div>
         </div>
         <div className="bundle__right">

@@ -10,18 +10,20 @@ const CREATE_TAG_BUNDLE = gql`
   }
 `;
 
-const AddTagBundle = (newBundleName) => {
+const useAddTagBundle = () => {
   const [createBundle] = useMutation(CREATE_TAG_BUNDLE, {
-    refetchQueries: [GET_ALL_TAG_BUNDLES, 'getAllTagBundles'],
+    refetchQueries: [GET_ALL_TAG_BUNDLES, 'GetAllEntries'],
   });
 
-  createBundle({
-    variables: {
-      name: newBundleName,
-    },
-  });
+  const createNewBundle = (newBundleName) => {
+    createBundle({
+      variables: {
+        name: newBundleName,
+      },
+    });
+  };
 
-  return <>{console.log('new value:', newBundleName)}</>;
+  return { addBundle: createNewBundle };
 };
 
-export default AddTagBundle;
+export default useAddTagBundle;
