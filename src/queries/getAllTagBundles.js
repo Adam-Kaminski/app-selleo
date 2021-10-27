@@ -6,6 +6,7 @@ export const GET_ALL_TAG_BUNDLES = gql`
       _id
       name
       description
+      creatorId
       tags {
         name
       }
