@@ -70,10 +70,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ### Links
 
-[example project in react/MUI](https://github.com/codedthemes/berry-free-react-admin-template)
-<https://github.com/Lkubok/react-file-structure-example/tree/main/src>
-<https://github.com/dawidholisz/workshops-context-app>
-<https://github.com/Lkubok/react-formik-presentation>
+[example project in react/MUI](https://github.com/codedthemes/berry-free-react-admin-template)  
+<https://github.com/Lkubok/react-file-structure-example/tree/main/src>  
+<https://github.com/dawidholisz/workshops-context-app>  
+<https://github.com/Lkubok/react-formik-presentation>  
 [Backend queries](https://worklog-on-steroids.herokuapp.com/api/ql_open)
 
 ### Material UI - MUI
@@ -82,11 +82,11 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ### esLint, prettier
 
-<https://github.com/prettier/eslint-plugin-prettier>
-<https://blog.bitsrc.io/how-to-set-up-airbnb-style-guide-for-react-projects-fc7dfb1f3d68>
+<https://github.com/prettier/eslint-plugin-prettier>  
+<https://blog.bitsrc.io/how-to-set-up-airbnb-style-guide-for-react-projects-fc7dfb1f3d68>  
 [ESLint, Prettier i VS Code - Czysty JS z automatu - Kanał Przeprogramowani](https://www.youtube.com/watch?v=u2yUxhzpht4)
 
-### Shortcuts for React
+### Shortcuts for React in vscode
 
 rfc
 
