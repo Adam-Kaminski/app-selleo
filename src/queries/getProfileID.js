@@ -10,7 +10,7 @@ export const GET_PROFILE_ID = gql`
 
 const getProfileID = () => {
   const { data, loading, error } = useQuery(GET_PROFILE_ID);
-  return { data: data?.getProfile, loading, error };
+  return { dataID: data?.getProfile, loadingID: loading, errorID: error };
 };
 
 export default getProfileID;

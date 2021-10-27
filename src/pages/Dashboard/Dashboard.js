@@ -1,11 +1,12 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NavBar from '../../components/NavBar';
 import Bundles from '../Bundles';
 import Bundle from '../Bundle';
 import Calendar from '../Calendar';
 import Settings from '../Settings';
-import './Dasboard.scss';
+import './Dashboard.scss';
 
 const Dashboard = ({ handleLogin }) => {
   const username = localStorage.getItem('username');
@@ -14,7 +15,10 @@ const Dashboard = ({ handleLogin }) => {
     <>
       <NavBar handleLogin={handleLogin} />
       <div className="main wrapper">
-        <h2>Witaj, {username}</h2>
+        <div className="logged-user">
+          <AccountCircleIcon />
+          <h3>{username}</h3>
+        </div>
         <Switch>
           <Route path="/dashboard/bundles">
             <Bundles />

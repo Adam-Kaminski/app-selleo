@@ -11,7 +11,7 @@ const Bundle = () => {
   const { id } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data } = getProfileID();
+  const { dataID, loadingID, errorID } = getProfileID();
 
   const { tagBundle, loading, error } = tagBundlebyID(id, currentPage);
 
@@ -34,7 +34,7 @@ const Bundle = () => {
           <div className="bundle__desc">
             <h3>Description:</h3>
             {tagBundle.description}
-            {data._id === tagBundle.creatorId && (
+            {dataID._id === tagBundle.creatorId && (
               <EditBundleDesc editDesc={tagBundle.description} bundleID={id} />
             )}
           </div>
