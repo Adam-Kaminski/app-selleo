@@ -1,14 +1,16 @@
-*{
+* {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-html, body{
+html,
+body {
   position: relative;
 }
-body { 
+body {
   margin: 0;
   padding: 0;
+  padding-bottom: 100px;
 }
 
 .login-box {
