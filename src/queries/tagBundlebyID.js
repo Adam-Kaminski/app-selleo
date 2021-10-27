@@ -7,6 +7,7 @@ export const TAG_BUNDLE_BY_ID = gql`
     tagBundleById(_id: $bundleID) {
       _id
       name
+      creatorId
       description
       tags(skip: 0, limit: 10) {
         name
