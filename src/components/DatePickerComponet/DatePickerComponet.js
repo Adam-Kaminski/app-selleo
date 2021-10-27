@@ -47,11 +47,11 @@ const maxDate = new Date(todayState.getTime());
 
 const DatePickerComponet = () => {
   const [choosenDayDate, setChoosenDayDate] = useState(new Date(todayState.getTime()));
+  const [valueDatePicker, setValueDatePicker] = useState(new Date(todayState.getTime()));
   const [choosenDayString, setChoosenDayString] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
-  const [valueDatePicker, setValueDatePicker] = useState(new Date(todayState.getTime()));
 
   function nextDay() {
     let currentDay = choosenDayDate.getDate();
@@ -95,6 +95,7 @@ const DatePickerComponet = () => {
   useEffect(() => {
     const newDateString = getDateString(choosenDayDate);
     setChoosenDayString(newDateString);
+    setValueDatePicker(choosenDayDate);
   }, [choosenDayDate]);
 
   const htmlModal = (
