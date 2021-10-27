@@ -45,6 +45,14 @@ const styleModal = {
 const minDate = new Date('2000-01-01T00:00:00.000');
 const maxDate = new Date(todayState.getTime());
 
+const isToday = (dateValue) => {
+  return (
+    dateValue.getDate() === today.getDate() &&
+    dateValue.getMonth() === today.getMonth() &&
+    dateValue.getFullYear() === today.getFullYear()
+  );
+};
+
 const DatePickerComponet = () => {
   const [choosenDayDate, setChoosenDayDate] = useState(new Date(todayState.getTime()));
   const [valueDatePicker, setValueDatePicker] = useState(new Date(todayState.getTime()));
@@ -153,13 +161,15 @@ const DatePickerComponet = () => {
         <Button variant="contained" onClick={() => prevDay()}>
           <ArrowBackIcon />
         </Button>
-        <h1>{choosenDayString}</h1>
-        <Button variant="contained" onClick={() => nextDay()}>
+        <h1 style={{ width: '125px', textAlign: 'center' }}>
+          {isToday(choosenDayDate) ? 'Dzisiaj' : choosenDayString}
+        </h1>
+        <Button variant="contained" onClick={() => nextDay()} disabled={isToday(choosenDayDate)}>
           <ArrowForwardIcon />
         </Button>
       </Box>
       <Button variant="contained" onClick={() => setChoosenDayDate(new Date(todayState.getTime()))}>
-        <h2>Dziś: {todayString}</h2>
+        <h2>Dzisiaj: {todayString}</h2>
       </Button>
       <Button variant="contained" onClick={() => handleOpenModal()}>
         <TodayIcon />
