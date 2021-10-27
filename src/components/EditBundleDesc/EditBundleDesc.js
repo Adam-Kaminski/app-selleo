@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
-import { Link } from 'react-router-dom';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import editBundleDesc from '../../queries/editBundleDesc';
 
-const EditBundleDesc = ({ editDesc }) => {
+const EditBundleDesc = ({ editDesc, bundleID }) => {
   const [desc, setDesc] = useState(editDesc);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // Creator ID: 6173da5a59ad24a08eb1702c
+  const { descEdit } = editBundleDesc();
 
   const style = {
     position: 'absolute',
@@ -30,7 +28,7 @@ const EditBundleDesc = ({ editDesc }) => {
 
   const HandleNewBundle = (e) => {
     e.preventDefault();
-    setDesc('');
+    descEdit(bundleID, desc);
     handleClose();
   };
 
@@ -43,15 +41,21 @@ const EditBundleDesc = ({ editDesc }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style} component="form" onSubmit={HandleNewBundle}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            style={{ marginBottom: '10px' }}
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+          >
             Edit description
           </Typography>
-          <OutlinedInput
+          <TextareaAutosize
+            minRows={6}
             id="modal-modal-description"
-            sx={{ mt: 2, width: '100%' }}
-            value={desc}
+            style={{ fontSize: '18px', width: '100%' }}
+            defaultValue={desc}
             onChange={(e) => setDesc(e.target.value)}
-          ></OutlinedInput>
+          ></TextareaAutosize>
           <Button
             sx={{ width: '100%', display: 'block', margin: '10px 0' }}
             type="submit"
