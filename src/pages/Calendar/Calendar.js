@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import EntryList from '../../components/EntryList';
 import DatePickerComponet from '../../components/DatePickerComponet';
+import EntryList from '../../components/EntryList';
 import './Calendar.scss';
 
 const Calendar = () => {
@@ -25,13 +24,6 @@ const Calendar = () => {
         <section className="listSection">
           <EntryList />
         </section>
-      </Box>
-      <Box
-        sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end' }}
-        className="calendarContainer__bottomButtons"
-      >
-        <Button variant="contained">Stop/Start</Button>
-        <Button variant="contained">ClipCopy</Button>
       </Box>
     </Box>
   );
