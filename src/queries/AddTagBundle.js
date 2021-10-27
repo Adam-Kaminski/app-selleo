@@ -3,36 +3,25 @@ import React, { useState } from 'react';
 import { GET_ALL_TAG_BUNDLES } from './getAllTagBundles';
 
 const CREATE_TAG_BUNDLE = gql`
-  mutation AddTagBundle($name: String!) {
-    tagBundleCreateOne(record: { name: "$name" })
+  mutation AddNewTagBundle($name: String!) {
+    tagBundleCreateOne(record: { name: $name }) {
+      recordId
+    }
   }
 `;
 
-const AddTagBundle = () => {
-  const [newBundleName, setNewBundleName] = useState('');
-  const [createEntry] = useMutation(CREATE_TAG_BUNDLE, {
+const AddTagBundle = (newBundleName) => {
+  const [createBundle] = useMutation(CREATE_TAG_BUNDLE, {
     refetchQueries: [GET_ALL_TAG_BUNDLES, 'getAllTagBundles'],
   });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    createEntry({
-      variables: {
-        name: '111000',
-      },
-    });
-    setNewBundleName('');
-  };
+  createBundle({
+    variables: {
+      name: newBundleName,
+    },
+  });
 
-  return (
-    <>
-      <h1>New Entry</h1>
-      <form onSubmit={handleSubmit}>
-        <input value={newBundleName} onChange={(event) => setNewBundleName(event.target.value)} />
-        <button>ADD ENTRY</button>
-      </form>
-    </>
-  );
+  return <>{console.log('new value:', newBundleName)}</>;
 };
 
 export default AddTagBundle;

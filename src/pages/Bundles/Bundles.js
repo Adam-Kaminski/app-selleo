@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import getAllTagBundles from '../../queries/getAllTagBundles';
+import AddTagBundle from '../../queries/AddTagBundle';
 
 const Bundle = () => {
   const { data, loading, error } = getAllTagBundles();
@@ -40,6 +41,7 @@ const Bundle = () => {
   const HandleNewBundle = (e) => {
     e.preventDefault();
     console.log(newBundleName);
+    <AddTagBundle newBundleName={newBundleName} />;
   };
 
   return (
