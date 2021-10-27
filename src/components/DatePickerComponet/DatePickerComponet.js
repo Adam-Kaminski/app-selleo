@@ -1,11 +1,18 @@
 /* eslint-disable no-unused-expressions */
+import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import TodayIcon from '@mui/icons-material/Today';
 import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import isWeekend from 'date-fns/isWeekend';
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import StaticDatePicker from '@mui/lab/StaticDatePicker';
+import TodayIcon from '@mui/icons-material/Today';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import plLocale from 'date-fns/locale/pl';
 import './DatePickerComponet.scss';
-import { useEffect, useState } from 'react';
 
 function getDateString(date) {
   const dateDayNumber = date.getDate();
@@ -23,9 +30,28 @@ const today = new Date();
 const todayState = new Date(today.getTime() - 100);
 const todayString = getDateString(today);
 
+const styleModal = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  maxWidth: 500,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+const minDate = new Date('2000-01-01T00:00:00.000');
+const maxDate = new Date(todayState.getTime());
+
 const DatePickerComponet = () => {
   const [choosenDayDate, setChoosenDayDate] = useState(new Date(todayState.getTime()));
   const [choosenDayString, setChoosenDayString] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
+  const [valueDatePicker, setValueDatePicker] = useState(new Date(todayState.getTime()));
 
   function nextDay() {
     let currentDay = choosenDayDate.getDate();
@@ -59,10 +85,48 @@ const DatePickerComponet = () => {
     setChoosenDayDate(newDate);
   }
 
+  function chooseDayInDatePicker(newDate) {
+    if (today.getTime() > newDate.getTime()) {
+      setValueDatePicker(newDate);
+      setChoosenDayDate(newDate);
+    }
+  }
+
   useEffect(() => {
     const newDateString = getDateString(choosenDayDate);
     setChoosenDayString(newDateString);
   }, [choosenDayDate]);
+
+  const htmlModal = (
+    <Modal open={openModal} onClose={handleClose}>
+      <Box sx={styleModal}>
+        <Box
+          sx={{
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <h2>Wybierz datę</h2>
+          <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
+            <StaticDatePicker
+              openTo="day"
+              value={valueDatePicker}
+              minDate={minDate}
+              maxDate={maxDate}
+              shouldDisableDate={isWeekend}
+              onChange={(newValueDate) => {
+                chooseDayInDatePicker(newValueDate);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </Box>
+      </Box>
+    </Modal>
+  );
 
   return (
     <Box
@@ -96,9 +160,10 @@ const DatePickerComponet = () => {
       <Button variant="contained" onClick={() => setChoosenDayDate(new Date(todayState.getTime()))}>
         <h2>Dziś: {todayString}</h2>
       </Button>
-      <Button variant="contained">
+      <Button variant="contained" onClick={() => handleOpenModal()}>
         <TodayIcon />
       </Button>
+      {htmlModal}
     </Box>
   );
 };
