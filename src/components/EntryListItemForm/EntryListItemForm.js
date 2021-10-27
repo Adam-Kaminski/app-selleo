@@ -83,7 +83,17 @@ const EntryListItemForm = () => {
                       setValueTime1(newValue1);
                       setFieldValue('timeDate1', newValue1);
                     }}
-                    renderInput={(params1) => <TextField onBlur={handleSubmit} {...params1} />}
+                    onAccept={() => {
+                      handleSubmit();
+                    }}
+                    renderInput={(params1) => (
+                      <TextField
+                        onBlur={() => {
+                          handleSubmit();
+                        }}
+                        {...params1}
+                      />
+                    )}
                     isInvalid={errors.timeDate1}
                   />
                 </div>
@@ -91,7 +101,7 @@ const EntryListItemForm = () => {
               <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
                 <div
                   style={{ width: '110px' }}
-                  className={!touched.timeDate2 && errors.timeDate2 ? 'error' : ''}
+                  className={touched.timeDate2 && errors.timeDate2 ? 'error' : ''}
                 >
                   <TimePicker
                     name="timeDate2"
@@ -100,7 +110,17 @@ const EntryListItemForm = () => {
                       setValueTime2(newValue2);
                       setFieldValue('timeDate2', newValue2);
                     }}
-                    renderInput={(params2) => <TextField onBlur={handleSubmit} {...params2} />}
+                    onAccept={() => {
+                      handleSubmit();
+                    }}
+                    renderInput={(params2) => (
+                      <TextField
+                        onBlur={() => {
+                          handleSubmit();
+                        }}
+                        {...params2}
+                      />
+                    )}
                     isInvalid={errors.timeDate2}
                   />
                 </div>
@@ -146,8 +166,9 @@ const EntryListItemForm = () => {
                     setValueTag({
                       name: newValue.inputValue,
                     });
-                    setFieldValue('tag', newValue.inputValue);
                     // save to backend
+                    // and add to frontend
+                    // setFieldValue('tag', newValue.inputValue);
                   } else {
                     setValueTag(newValue);
                     if (newValue && newValue.name) {
@@ -157,7 +178,6 @@ const EntryListItemForm = () => {
                     }
                   }
                 }}
-                isInvalid={errors.tag}
                 filterOptions={(options, params) => {
                   const filtered = filter(options, params);
                   const { inputValue } = params;
@@ -172,6 +192,9 @@ const EntryListItemForm = () => {
                 }}
                 selectOnFocus
                 clearOnBlur
+                onBlur={() => {
+                  handleSubmit();
+                }}
                 handleHomeEndKeys
                 id="free-solo-with-text-demo"
                 options={tagsArray}
@@ -194,7 +217,12 @@ const EntryListItemForm = () => {
                   <TextField {...params} label="Wybierz tag lub dodaj nowy tag" />
                 )}
               />
-              <Button color="primary" variant="contained" type="submit" disabled={!isValid}>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => handleSubmit()}
+                disabled={!isValid}
+              >
                 Submit
               </Button>
             </Box>
