@@ -11,6 +11,7 @@ import TimePickerInput from '../TimePickerInput';
 import ProjectSelect from '../ProjectSelect/ProjectSelect';
 import TagInput from '../TagInput';
 import './EntryList.scss';
+import EntryListItemForm from '../EntryListItemForm/EntryListItemForm';
 
 const EntryList = () => {
   const newDatetime = new Date();
@@ -119,6 +120,7 @@ const EntryList = () => {
           <CopyAllIcon />
         </Button>
       </Box>
+      <EntryListItemForm />
     </>
   );
 };
