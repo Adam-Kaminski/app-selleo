@@ -20,8 +20,6 @@ const Bundle = () => {
     );
   if (error) return <div>error</div>;
 
-  console.log(tagBundle);
-
   return (
     <>
       <div className="bundle">
