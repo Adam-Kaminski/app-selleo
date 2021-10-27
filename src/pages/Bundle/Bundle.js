@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
+import getProfileID from '../../queries/getProfileID';
 import tagBundlebyID from '../../queries/tagBundlebyID';
 import './Bundle.scss';
 import EditBundleDesc from '../../components/EditBundleDesc/EditBundleDesc';
@@ -9,6 +10,8 @@ import EditBundleDesc from '../../components/EditBundleDesc/EditBundleDesc';
 const Bundle = () => {
   const { id } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
+
+  const { data } = getProfileID();
 
   const { tagBundle, loading, error } = tagBundlebyID(id, currentPage);
 
@@ -31,7 +34,9 @@ const Bundle = () => {
           <div className="bundle__desc">
             <h3>Description:</h3>
             {tagBundle.description}
-            <EditBundleDesc editDesc={tagBundle.description} />
+            {data._id === tagBundle.creatorId && (
+              <EditBundleDesc editDesc={tagBundle.description} bundleID={id} />
+            )}
           </div>
         </div>
         <div className="bundle__right">
