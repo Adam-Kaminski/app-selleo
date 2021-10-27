@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Formik } from 'formik';
-import * as yup from 'yup';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -11,225 +10,224 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
+import calendarEntrySchema from '../../schemas/calendarEntrySchema/calendarEntrySchema';
 
-const calendarEntrySchema = yup.object().shape({
-  timeDate1: yup.date().default(null).required(),
-  timeDate2: yup
-    .date()
-    .default(null)
-    .required()
-    .min(yup.ref('timeDate1'), 'Drugi wybrany czas musi być późniejszy niż pierwszy'),
-  project: yup.string().default('').required(),
-  tag: yup.string().default('').required(),
-});
-
-const initialValues = {
-  timeDate1: null,
-  timeDate2: null,
-  project: '',
-  tag: '',
-};
-
-const projectsArray = ['FirmaTest1', 'FirmaTest2', 'FirmaTest3'];
-const tagsArray = [
-  { name: 'Se7en' },
-  { name: 'The Silence of the Lambs' },
-  { name: "It's a Wonderful Life" },
-  { name: 'Life Is Beautiful' },
-  { name: 'The Usual Suspects' },
-  { name: 'Léon: The Professional' },
-];
-const filter = createFilterOptions();
-
-const EntryListItemForm = () => {
+const EntryListItemForm = ({ initialValues }, { projectsArray }, { tagsArray }, { filter }) => {
   const [valueTime1, setValueTime1] = useState(null);
   const [valueTime2, setValueTime2] = useState(null);
   const [projectState, setProjectState] = useState('');
   const [valueTag, setValueTag] = useState(null);
 
   return (
-    <Formik
-      validationSchema={calendarEntrySchema}
-      onSubmit={(event) => {
-        console.log('submit', event);
-      }}
-      initialValues={initialValues}
-      isInitialValid={false}
-    >
-      {({ touched, isValid, errors, setFieldValue, handleSubmit }) => {
-        return (
-          <form>
-            <Box
-              className="entryListBox"
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-              }}
-            >
-              <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-                <div
-                  style={{ width: '110px' }}
-                  className={touched.timeDate1 && errors.timeDate1 ? 'error' : ''}
-                >
-                  <TimePicker
-                    name="timeDate1"
-                    value={valueTime1}
-                    onChange={(newValue1) => {
-                      setValueTime1(newValue1);
-                      setFieldValue('timeDate1', newValue1);
-                    }}
-                    onAccept={() => {
-                      handleSubmit();
-                    }}
-                    renderInput={(params1) => (
-                      <TextField
-                        onBlur={() => {
-                          handleSubmit();
-                        }}
-                        {...params1}
-                      />
-                    )}
-                    isInvalid={errors.timeDate1}
-                  />
-                </div>
-              </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-                <div
-                  style={{ width: '110px' }}
-                  className={touched.timeDate2 && errors.timeDate2 ? 'error' : ''}
-                >
-                  <TimePicker
-                    name="timeDate2"
-                    value={valueTime2}
-                    onChange={(newValue2) => {
-                      setValueTime2(newValue2);
-                      setFieldValue('timeDate2', newValue2);
-                    }}
-                    onAccept={() => {
-                      handleSubmit();
-                    }}
-                    renderInput={(params2) => (
-                      <TextField
-                        onBlur={() => {
-                          handleSubmit();
-                        }}
-                        {...params2}
-                      />
-                    )}
-                    isInvalid={errors.timeDate2}
-                  />
-                </div>
-              </LocalizationProvider>
-              <Box sx={{ width: 150 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Projekt</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={projectState}
-                    label="Projekt"
-                    onChange={(newValueProject) => {
-                      const indexArray = newValueProject.target.value;
-                      setProjectState(indexArray);
-                      setFieldValue('project', projectsArray[indexArray]);
-                    }}
-                    isInvalid={errors.project}
-                    onBlur={() => {
-                      handleSubmit();
-                    }}
-                  >
-                    {projectsArray.map((project, index) => {
-                      return (
-                        <MenuItem key={index.toString()} value={index}>
-                          {project}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Box>
-              <Autocomplete
-                value={valueTag}
-                onChange={(event, newValue) => {
-                  if (typeof newValue === 'string') {
-                    setValueTag({
-                      name: newValue,
-                    });
-                    setFieldValue('tag', newValue);
-                  } else if (newValue && newValue.inputValue) {
-                    // Create a new value from the user input
-                    setValueTag({
-                      name: newValue.inputValue,
-                    });
-                    // save to backend
-                    // and add to frontend
-                    // setFieldValue('tag', newValue.inputValue);
-                  } else {
-                    setValueTag(newValue);
-                    if (newValue && newValue.name) {
-                      setFieldValue('tag', newValue.name);
-                    } else {
-                      setFieldValue('tag', null);
-                    }
-                  }
+    <>
+      <Formik
+        validationSchema={calendarEntrySchema}
+        onSubmit={(event) => {
+          console.log('submit', event);
+        }}
+        initialValues={initialValues}
+        isInitialValid={false}
+      >
+        {({ touched, isValid, errors, setFieldValue, handleSubmit }) => {
+          return (
+            <form>
+              <Box
+                className="entryListBox"
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  justifyContent: 'center',
                 }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
-                  const { inputValue } = params;
-                  const isExisting = options.some((option) => inputValue === option.name);
-                  if (inputValue !== '' && !isExisting) {
-                    filtered.push({
-                      inputValue,
-                      name: `Dodaj: "${inputValue}"`,
-                    });
-                  }
-                  return filtered;
-                }}
-                selectOnFocus
-                clearOnBlur
-                onBlur={() => {
-                  handleSubmit();
-                }}
-                handleHomeEndKeys
-                id="free-solo-with-text-demo"
-                options={tagsArray}
-                getOptionLabel={(option) => {
-                  // Value selected with enter, right from the input
-                  if (typeof option === 'string') {
-                    return option;
-                  }
-                  // Add "xxx" option created dynamically
-                  if (option.inputValue) {
-                    return option.inputValue;
-                  }
-                  // Regular option
-                  return option.name;
-                }}
-                renderOption={(props, option) => <li {...props}>{option.name}</li>}
-                sx={{ width: 300 }}
-                freeSolo
-                renderInput={(params) => (
-                  <TextField {...params} label="Wybierz tag lub dodaj nowy tag" />
-                )}
-              />
-              <Button
-                color="primary"
-                variant="contained"
-                onClick={() => handleSubmit()}
-                disabled={!isValid}
               >
-                Submit
-              </Button>
-            </Box>
-          </form>
-        );
-      }}
-    </Formik>
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
+                  <div
+                    style={{ width: '110px' }}
+                    className={touched.timeDate1 && errors.timeDate1 ? 'error' : ''}
+                  >
+                    <TimePicker
+                      name="timeDate1"
+                      value={valueTime1}
+                      onChange={(newValue1) => {
+                        setValueTime1(newValue1);
+                        setFieldValue('timeDate1', newValue1);
+                      }}
+                      onAccept={() => {
+                        handleSubmit();
+                      }}
+                      renderInput={(params1) => (
+                        <TextField
+                          onBlur={() => {
+                            handleSubmit();
+                          }}
+                          {...params1}
+                        />
+                      )}
+                      isInvalid={errors.timeDate1}
+                    />
+                  </div>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
+                  <div
+                    style={{ width: '110px' }}
+                    className={touched.timeDate2 && errors.timeDate2 ? 'error' : ''}
+                  >
+                    <TimePicker
+                      name="timeDate2"
+                      value={valueTime2}
+                      onChange={(newValue2) => {
+                        setValueTime2(newValue2);
+                        setFieldValue('timeDate2', newValue2);
+                      }}
+                      onAccept={() => {
+                        handleSubmit();
+                      }}
+                      renderInput={(params2) => (
+                        <TextField
+                          onBlur={() => {
+                            handleSubmit();
+                          }}
+                          {...params2}
+                        />
+                      )}
+                      isInvalid={errors.timeDate2}
+                    />
+                  </div>
+                </LocalizationProvider>
+                <Box sx={{ width: 150 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Projekt</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={projectState}
+                      label="Projekt"
+                      onChange={(newValueProject) => {
+                        const indexArray = newValueProject.target.value;
+                        setProjectState(indexArray);
+                        setFieldValue('project', projectsArray[indexArray]);
+                      }}
+                      isInvalid={errors.project}
+                      onBlur={() => {
+                        handleSubmit();
+                      }}
+                    >
+                      {projectsArray.map((project, index) => {
+                        return (
+                          <MenuItem key={index.toString()} value={index}>
+                            {project}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Autocomplete
+                  value={valueTag}
+                  onChange={(event, newValue) => {
+                    if (typeof newValue === 'string') {
+                      setValueTag({
+                        name: newValue,
+                      });
+                      setFieldValue('tag', newValue);
+                    } else if (newValue && newValue.inputValue) {
+                      // Create a new value from the user input
+                      setValueTag({
+                        name: newValue.inputValue,
+                      });
+                      // save to backend
+                      // and add to frontend
+                      // setFieldValue('tag', newValue.inputValue);
+                    } else {
+                      setValueTag(newValue);
+                      if (newValue && newValue.name) {
+                        setFieldValue('tag', newValue.name);
+                      } else {
+                        setFieldValue('tag', null);
+                      }
+                    }
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
+                    const { inputValue } = params;
+                    const isExisting = options.some((option) => inputValue === option.name);
+                    if (inputValue !== '' && !isExisting) {
+                      filtered.push({
+                        inputValue,
+                        name: `Dodaj: "${inputValue}"`,
+                      });
+                    }
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  onBlur={() => {
+                    handleSubmit();
+                  }}
+                  handleHomeEndKeys
+                  id="free-solo-with-text-demo"
+                  options={tagsArray}
+                  getOptionLabel={(option) => {
+                    // Value selected with enter, right from the input
+                    if (typeof option === 'string') {
+                      return option;
+                    }
+                    // Add "xxx" option created dynamically
+                    if (option.inputValue) {
+                      return option.inputValue;
+                    }
+                    // Regular option
+                    return option.name;
+                  }}
+                  renderOption={(props, option) => <li {...props}>{option.name}</li>}
+                  sx={{ width: 300 }}
+                  freeSolo
+                  renderInput={(params) => (
+                    <TextField {...params} label="Wybierz tag lub dodaj nowy tag" />
+                  )}
+                />
+                <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={() => handleSubmit()}
+                  disabled={!isValid}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </form>
+          );
+        }}
+      </Formik>
+      <Box
+        sx={{
+          width: '110px',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+        >
+          <AddCircleOutlineIcon />
+        </Button>
+        <Button
+          color="error"
+          variant="contained"
+          sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+        >
+          <DeleteOutlineIcon />
+        </Button>
+      </Box>
+    </>
   );
 };
 
