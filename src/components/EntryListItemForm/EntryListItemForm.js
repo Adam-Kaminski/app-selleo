@@ -7,6 +7,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TimePicker from '@mui/lab/TimePicker';
 import plLocale from 'date-fns/locale/pl';
+import './EntryListItemForm.scss';
 
 const calendarEntrySchema = yup.object().shape({
   timeDate1: yup.date().default(null).required(),
@@ -37,7 +38,10 @@ const EntryListItemForm = () => {
         return (
           <form>
             <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-              <div style={{ width: '110px' }}>
+              <div
+                style={{ width: '110px' }}
+                className={touched.timeDate1 && errors.timeDate1 ? 'error' : ''}
+              >
                 <TimePicker
                   name="timeDate1"
                   value={valueTime1}
@@ -45,30 +49,32 @@ const EntryListItemForm = () => {
                     setValueTime1(newValue1);
                     setFieldValue('timeDate1', newValue1);
                   }}
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   renderInput={(params1) => <TextField {...params1} />}
-                  isInvalid={touched.timeDate1 && errors.timeDate1}
+                  isInvalid={errors.timeDate1}
                 />
               </div>
             </LocalizationProvider>
             <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-              <div style={{ width: '110px' }}>
+              <div
+                style={{ width: '110px' }}
+                className={!touched.timeDate2 && errors.timeDate2 ? 'error' : ''}
+              >
                 <TimePicker
                   name="timeDate2"
                   value={valueTime2}
                   onChange={(newValue2) => {
                     setValueTime2(newValue2);
-                    setFieldValue('timeDate2', newValue2, false);
+                    setFieldValue('timeDate2', newValue2);
                     // if (errors.timeDate2 !== undefined) console.log('1----błąd');
                   }}
                   // onError={(reason, value) => {
                   //   console.log('2---reason', reason);
                   //   console.log('2---value', value);
                   // }}
-                  className={errors.timeDate2 !== undefined ? 'error' : 'notError'}
-                  onBlur={handleBlur}
+                  // onBlur={handleBlur}
                   renderInput={(params2) => <TextField {...params2} />}
-                  isInvalid={touched.timeDate2 && errors.timeDate2}
+                  isInvalid={errors.timeDate2}
                 />
               </div>
             </LocalizationProvider>
