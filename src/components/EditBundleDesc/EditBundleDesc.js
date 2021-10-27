@@ -19,7 +19,7 @@ const EditBundleDesc = ({ editDesc, bundleID }) => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 600,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -52,12 +52,12 @@ const EditBundleDesc = ({ editDesc, bundleID }) => {
           <TextareaAutosize
             minRows={6}
             id="modal-modal-description"
-            style={{ fontSize: '18px', width: '100%' }}
+            style={{ fontSize: '18px', width: '100%', padding: '10px' }}
             defaultValue={desc}
             onChange={(e) => setDesc(e.target.value)}
           ></TextareaAutosize>
           <Button
-            sx={{ width: '100%', display: 'block', margin: '10px 0' }}
+            sx={{ width: '100%', display: 'block', marginTop: '10px' }}
             type="submit"
             variant="contained"
             color="primary"
@@ -69,7 +69,7 @@ const EditBundleDesc = ({ editDesc, bundleID }) => {
 
       <Button
         onClick={handleOpen}
-        sx={{ width: '80%', display: 'block', margin: '10px 0' }}
+        sx={{ width: '60%', display: 'block', margin: '20px auto 0px auto' }}
         type="submit"
         variant="contained"
         color="primary"

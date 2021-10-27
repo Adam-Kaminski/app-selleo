@@ -15,10 +15,6 @@ const Dashboard = ({ handleLogin }) => {
     <>
       <NavBar handleLogin={handleLogin} />
       <div className="main wrapper">
-        <div className="logged-user">
-          <AccountCircleIcon />
-          <h3>{username}</h3>
-        </div>
         <Switch>
           <Route path="/dashboard/bundles">
             <Bundles />

@@ -53,7 +53,7 @@ const AddNewBundle = () => {
             value={newBundleName}
           ></OutlinedInput>
           <Button
-            sx={{ width: '100%', display: 'block', margin: '10px 0' }}
+            sx={{ width: '100%', display: 'block', marginTop: '20px' }}
             type="submit"
             variant="contained"
             color="primary"
