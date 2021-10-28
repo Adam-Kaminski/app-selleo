@@ -15,8 +15,6 @@ import './EntryList.scss';
 const initialValuesEmpties = {
   timeDate1: null,
   timeDate2: null,
-  timeDate1String: '11:11',
-  timeDate2String: '',
   bundle: 'FirmaTest1',
   tag: '',
 };
@@ -72,7 +70,7 @@ const tagsArrayExample = [
 
 const EntryList = () => {
   const [entries, setEntries] = useState(entriesExmaple);
-  const [bundles, setBundles] = useState(bundleArrayExample);
+  const [bundles] = useState(bundleArrayExample);
   const [tags, setTags] = useState(tagsArrayExample);
   const newDatetime = new Date();
   newDatetime.setHours(11);

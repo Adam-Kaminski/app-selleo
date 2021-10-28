@@ -18,7 +18,6 @@ const Entries = () => {
     <div>
       <h1>My entries</h1>
       {data.map((singleEntry) => {
-        console.log(singleEntry);
         return (
           <div key={singleEntry._id}>
             <span>startTime: {singleEntry.startTime}</span>
