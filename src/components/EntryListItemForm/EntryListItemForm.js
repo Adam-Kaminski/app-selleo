@@ -15,20 +15,6 @@ import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 
-// model - entry
-// const entriesExmaple = [
-//   {
-//     startTime: '11:00',
-//     endTime: '12:00',
-//     order: 0,
-//     _id: '0',
-//     tag: 'Tag1 dla test1',
-//     tagId: '1',
-//     tagBundle: 'FirmaTest1',
-//     tagBundleId: '0',
-//   },
-// ];
-
 const EntryListItemForm = ({
   entries,
   bundleArray,
@@ -105,23 +91,25 @@ const EntryListItemForm = ({
   };
 
   useEffect(() => {
-    const startTime = entries.startTime.split(':');
-    const endTime = entries.endTime.split(':');
-    if (startTime.length === 2) {
-      const newTime1 = new Date();
-      newTime1.setHours(startTime[0], startTime[1]);
-      setValueTime1(newTime1);
-      formik.setFieldValue('timeDate1', newTime1);
+    if (entries && entries.order > -200) {
+      const startTime = entries.startTime.split(':');
+      const endTime = entries.endTime.split(':');
+      if (startTime.length === 2) {
+        const newTime1 = new Date();
+        newTime1.setHours(startTime[0], startTime[1]);
+        setValueTime1(newTime1);
+        formik.setFieldValue('timeDate1', newTime1);
+      }
+      if (endTime.length === 2) {
+        const newTime2 = new Date();
+        newTime2.setHours(endTime[0], endTime[1]);
+        setValueTime2(newTime2);
+        formik.setFieldValue('timeDate2', newTime2);
+      }
+      handleSelectBundle(bundleArray.findIndex((item) => item._id === entries.tagBundleId));
+      handleSelectAddTag(entries.tag);
+      setChangesInEntry(false);
     }
-    if (endTime.length === 2) {
-      const newTime2 = new Date();
-      newTime2.setHours(endTime[0], endTime[1]);
-      setValueTime2(newTime2);
-      formik.setFieldValue('timeDate2', newTime2);
-    }
-    handleSelectBundle(bundleArray.findIndex((item) => item._id === entries.tagBundleId));
-    handleSelectAddTag(entries.tag);
-    setChangesInEntry(false);
   }, [initialStart]);
 
   useEffect(() => {

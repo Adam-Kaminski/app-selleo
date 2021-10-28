@@ -21,6 +21,17 @@ const initialValuesEmpties = {
   tag: '',
 };
 
+const entrySeed = {
+  startTime: '',
+  endTime: '',
+  order: -201,
+  _id: null,
+  tag: '',
+  tagId: '',
+  tagBundle: '',
+  tagBundleId: '',
+};
+
 const entriesExmaple = [
   {
     startTime: '11:00',
@@ -59,14 +70,31 @@ const tagsArrayExample = [
   { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
 ];
 
-const filter = createFilterOptions();
-
 const EntryList = () => {
+  const [entries, setEntries] = useState(entriesExmaple);
   const [bundles, setBundles] = useState(bundleArrayExample);
   const [tags, setTags] = useState(tagsArrayExample);
   const newDatetime = new Date();
   newDatetime.setHours(11);
   newDatetime.setMinutes(30);
+
+  const addLineBeforeFirst = () => {
+    const emptyEntry = { ...entrySeed };
+    emptyEntry._id = `new${entries.length}`;
+    setEntries([emptyEntry, ...entries]);
+  };
+  const addLine = (entryId) => {
+    const emptyEntry = { ...entrySeed };
+    const newArray = [...entries];
+    const index = entries.findIndex((item) => item._id === entryId);
+    emptyEntry._id = `new${entries.length}`;
+    newArray.splice(index + 1, 0, emptyEntry);
+    setEntries(newArray);
+  };
+  const removeLine = (entryId) => {
+    setEntries(entries.filter((entryItem) => entryItem._id !== entryId));
+  };
+
   return (
     <>
       <List
@@ -103,13 +131,16 @@ const EntryList = () => {
               variant="contained"
               color="success"
               sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+              onClick={() => {
+                addLineBeforeFirst();
+              }}
             >
               <AddCircleOutlineIcon />
             </Button>
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
-        {entriesExmaple.map((entryItem) => {
+        {entries?.map((entryItem) => {
           return (
             <ListItem
               key={entryItem._id}
@@ -141,6 +172,9 @@ const EntryList = () => {
                   variant="contained"
                   color="success"
                   sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+                  onClick={() => {
+                    addLine(entryItem._id);
+                  }}
                 >
                   <AddCircleOutlineIcon />
                 </Button>
@@ -148,6 +182,9 @@ const EntryList = () => {
                   color="error"
                   variant="contained"
                   sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+                  onClick={() => {
+                    removeLine(entryItem._id);
+                  }}
                 >
                   <DeleteOutlineIcon />
                 </Button>
