@@ -15,7 +15,29 @@ import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 
-const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setTagsState }) => {
+// model - entry
+// const entriesExmaple = [
+//   {
+//     startTime: '11:00',
+//     endTime: '12:00',
+//     order: 0,
+//     _id: '0',
+//     tag: 'Tag1 dla test1',
+//     tagId: '1',
+//     tagBundle: 'FirmaTest1',
+//     tagBundleId: '0',
+//   },
+// ];
+
+const EntryListItemForm = ({
+  entries,
+  bundleArray,
+  tagsArray,
+  filter,
+  setTagsState,
+  initialValues,
+}) => {
+  const [changesInEntry, setChangesInEntry] = useState(false);
   const [valueTime1, setValueTime1] = useState(null);
   const [valueTime2, setValueTime2] = useState(null);
   const [bundleIndexState, setBundleIndexState] = useState('');
@@ -23,6 +45,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
   const [valueTag, setValueTag] = useState(null);
   const [tagsArrayCurrent, setTagsArrayCurrent] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+  const [initialStart] = useState('initial');
 
   const showSnackbarMsg = (msg, variant) => {
     enqueueSnackbar(msg, { variant });
@@ -32,7 +55,10 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
     initialValues,
     onSubmit: (event) => {
       console.log('submit', event);
-      showSnackbarMsg('run Submit', 'success');
+      console.log('changesInEntry', changesInEntry);
+      if (changesInEntry) {
+        showSnackbarMsg('run Submit', 'success');
+      }
     },
     validationSchema: calendarEntrySchema,
     isInitialValid: false,
@@ -42,7 +68,6 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
     const bundleObj = bundleArray[indexArray];
     setValueTag('');
     formik.setFieldValue('tag', '');
-    setTagsArrayCurrent(tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleObj._id));
     setBundleIndexState(indexArray);
     setBundleId(bundleObj._id);
     formik.setFieldValue('bundleId', bundleObj._id);
@@ -80,9 +105,33 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
   };
 
   useEffect(() => {
+    const startTime = entries.startTime.split(':');
+    const endTime = entries.endTime.split(':');
+    if (startTime.length === 2) {
+      const newTime1 = new Date();
+      newTime1.setHours(startTime[0], startTime[1]);
+      setValueTime1(newTime1);
+      formik.setFieldValue('timeDate1', newTime1);
+    }
+    if (endTime.length === 2) {
+      const newTime2 = new Date();
+      newTime2.setHours(endTime[0], endTime[1]);
+      setValueTime2(newTime2);
+      formik.setFieldValue('timeDate2', newTime2);
+    }
+    handleSelectBundle(0);
+    handleSelectAddTag('newTagName');
+    setChangesInEntry(false);
+  }, [initialStart]);
+
+  useEffect(() => {
     const newTagArray = tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId);
     if (newTagArray) setTagsArrayCurrent(newTagArray);
   }, [tagsArray]);
+
+  useEffect(() => {
+    setTagsArrayCurrent(tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId));
+  }, [bundleId]);
 
   return (
     <form>
@@ -96,7 +145,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
         }}
       >
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-          <div style={{ width: '110px' }} className={formik.errors.timeDate1 ? 'error' : ''}>
+          <div style={{ width: '110px' }}>
             <TimePicker
               name="timeDate1"
               value={valueTime1}
@@ -105,6 +154,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
                 formik.setFieldValue('timeDate1', newValue1);
               }}
               onAccept={() => {
+                setChangesInEntry(true);
                 formik.handleSubmit();
               }}
               renderInput={(params1) => (
@@ -112,7 +162,6 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
                   onBlur={() => {
                     formik.handleSubmit();
                   }}
-                  value={formik.values.timeDate1String}
                   {...params1}
                 />
               )}
@@ -121,7 +170,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
           </div>
         </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-          <div style={{ width: '110px' }} className={formik.errors.timeDate2 ? 'error' : ''}>
+          <div style={{ width: '110px' }}>
             <TimePicker
               name="timeDate2"
               value={valueTime2}
@@ -130,6 +179,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
                 formik.setFieldValue('timeDate2', newValue2);
               }}
               onAccept={() => {
+                setChangesInEntry(true);
                 formik.handleSubmit();
               }}
               renderInput={(params2) => (
@@ -156,6 +206,9 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
               onChange={(newValueBundle) => {
                 handleSelectBundle(newValueBundle.target.value);
               }}
+              onAccept={() => {
+                setChangesInEntry(true);
+              }}
               isInvalid={formik.errors.bundle}
               onBlur={() => {
                 formik.handleSubmit();
@@ -176,6 +229,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setT
           value={valueTag}
           onChange={(event, newValue) => {
             handleSelectAddTag(newValue);
+            setChangesInEntry(true);
           }}
           filterOptions={(options, params) => {
             const filtered = filter(options, params);

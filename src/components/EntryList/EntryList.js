@@ -116,6 +116,7 @@ const EntryList = () => {
         >
           <EntryListItemForm
             initialValues={initialValuesEmpties}
+            entries={entriesExmaple[0]}
             bundleArray={bundles}
             tagsArray={tags}
             setTagsState={setTags}
