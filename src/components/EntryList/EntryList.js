@@ -10,6 +10,7 @@ import StopIcon from '@mui/icons-material/Stop';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CircularProgress from '@mui/material/CircularProgress';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import getAllTagBundles from '../../queries/getAllTagBundles';
 import getEntryByData from '../../queries/getEntryByData';
 import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
@@ -82,23 +83,70 @@ function getTimeStringFromDate(date) {
 
 const EntryList = () => {
   const [entries, setEntries] = useState(entriesExmaple);
-  const [bundles] = useState(bundleArrayExample);
+  const [bundles, setBundles] = useState(bundleArrayExample);
   const [tags, setTags] = useState(tagsArrayExample);
 
-  const { data, loading, error } = getEntryByData('2021-10-28T00:00:00.000');
+  const {
+    data: dataEntriesNew,
+    loading: loadingEntriesNew,
+    error: errorEntriesNew,
+  } = getEntryByData('2021-10-28T00:00:00.000');
+  const {
+    data: dataTagBundles,
+    loading: loadingTagBundles,
+    error: errorTagBundles,
+  } = getAllTagBundles();
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    if (dataEntriesNew && dataEntriesNew !== undefined && typeof dataEntriesNew !== 'undefined') {
+      const newEntries = dataEntriesNew.map((entry) => {
+        const newEntry = {
+          startTime: entry.startTime || '',
+          endTime: entry.endTime || '',
+          order: entry.order || '',
+          _id: entry._id || null,
+          tag: entry.tag.name || '',
+          tagId: entry.tag._id || '',
+          tagBundle: entry.tag.tagBundle.name || '',
+          tagBundleId: entry.tag.tagBundle._id || '',
+        };
+        return newEntry;
+      });
+      setEntries(newEntries);
+    }
+  }, [dataEntriesNew]);
 
-  if (loading) {
+  useEffect(() => {
+    if (dataTagBundles && dataTagBundles !== undefined) {
+      const newTagBundles = dataTagBundles.map((bundleItem) => {
+        const newBundle = {
+          _id: bundleItem._id,
+          name: bundleItem.name,
+        };
+        return newBundle;
+      });
+      setBundles(newTagBundles);
+      console.log(newTagBundles);
+    }
+  }, [dataTagBundles]);
+
+  if (loadingTagBundles && loadingEntriesNew) {
     return (
-      <Box sx={{ display: 'flex' }}>
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <CircularProgress />
       </Box>
     );
   }
-  if (error) return <div>error</div>;
+  if (errorEntriesNew && errorTagBundles) return <div>errors</div>;
 
   const addLineBeforeFirst = () => {
     const emptyEntry = { ...entrySeed };
@@ -179,7 +227,7 @@ const EntryList = () => {
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
-        {entries?.map((entryItem) => {
+        {entries.map((entryItem) => {
           return (
             <ListItem
               key={entryItem._id}
