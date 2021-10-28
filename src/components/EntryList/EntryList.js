@@ -11,7 +11,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CircularProgress from '@mui/material/CircularProgress';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import getAllTagBundles from '../../queries/getAllTagBundles';
-import getEntryByData from '../../queries/getEntryByData';
+import getEntryByData from '../../queries/getEntryByDate';
 import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
 
