@@ -15,8 +15,6 @@ import './EntryList.scss';
 const initialValuesEmpties = {
   timeDate1: null,
   timeDate2: null,
-  timeDate1String: '11:11',
-  timeDate2String: '',
   bundle: 'FirmaTest1',
   tag: '',
 };
@@ -70,9 +68,19 @@ const tagsArrayExample = [
   { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
 ];
 
+function getTimeStringFromDate(date) {
+  let minutes = date.getMinutes();
+  let hours = date.getHours();
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  hours = hours < 10 ? `0${hours}` : hours;
+  console.log(minutes, 'minutes');
+  console.log(hours, 'hours');
+  return `${hours}:${minutes}`;
+}
+
 const EntryList = () => {
   const [entries, setEntries] = useState(entriesExmaple);
-  const [bundles, setBundles] = useState(bundleArrayExample);
+  const [bundles] = useState(bundleArrayExample);
   const [tags, setTags] = useState(tagsArrayExample);
   const newDatetime = new Date();
   newDatetime.setHours(11);
@@ -93,6 +101,23 @@ const EntryList = () => {
   };
   const removeLine = (entryId) => {
     setEntries(entries.filter((entryItem) => entryItem._id !== entryId));
+  };
+
+  const handleCopyToClipboard = () => {
+    let string = '';
+    entries.forEach((entry, index) => {
+      string += `${entry.startTime} ${entry.endTime} ${entry.tagBundle}-${entry.tag}\n`;
+    });
+    navigator.clipboard.writeText(string);
+  };
+
+  const handleNewEntryStartStop = () => {
+    // const newEntries = [...entries];
+    // const now = getTimeStringFromDate(new Date());
+    // newEntries[newEntries.length - 1].endTime = now;
+    // newEntries.push({ ...entrySeed });
+    // newEntries[newEntries.length - 1].startTime = now;
+    // setEntries(newEntries);
   };
 
   return (
@@ -154,11 +179,13 @@ const EntryList = () => {
             >
               <EntryListItemForm
                 initialValues={initialValuesEmpties}
-                entries={entryItem}
+                entryItem={entryItem}
                 bundleArray={bundles}
                 tagsArray={tags}
                 setTagsState={setTags}
                 filter={createFilterOptions()}
+                // setEntries={setEntries}
+                // entries={entries}
               />
               <Box
                 sx={{
@@ -202,11 +229,16 @@ const EntryList = () => {
         }}
         className="calendarContainer__bottomButtons"
       >
-        <Button variant="contained" color="error">
+        <Button variant="contained" color="error" onClick={() => handleNewEntryStartStop()}>
           <StopIcon />
           <PlayArrowIcon />
         </Button>
-        <Button variant="contained">
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleCopyToClipboard();
+          }}
+        >
           <CopyAllIcon />
         </Button>
       </Box>

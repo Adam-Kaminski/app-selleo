@@ -15,13 +15,25 @@ import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 
+function getTimeStringFromDate(date) {
+  let minutes = date.getMinutes();
+  let hours = date.getHours();
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  hours = hours < 10 ? `0${hours}` : hours;
+  console.log(minutes, 'minutes');
+  console.log(hours, 'hours');
+  return `${hours}:${minutes}`;
+}
+
 const EntryListItemForm = ({
-  entries,
+  entryItem,
   bundleArray,
   tagsArray,
   filter,
   setTagsState,
   initialValues,
+  // setEntries,
+  // entries,
 }) => {
   const [changesInEntry, setChangesInEntry] = useState(false);
   const [valueTime1, setValueTime1] = useState(null);
@@ -41,14 +53,31 @@ const EntryListItemForm = ({
     initialValues,
     onSubmit: (event) => {
       console.log('submit', event);
-      console.log('changesInEntry', changesInEntry);
+      console.log('changesInEntry:', changesInEntry);
       if (changesInEntry) {
-        showSnackbarMsg(`run Submit for line: ${entries.order}`, 'success');
+        showSnackbarMsg(`run Submit for line: ${entryItem.order}`, 'success');
       }
     },
     validationSchema: calendarEntrySchema,
     isInitialValid: false,
   });
+
+  const updateEntries = () => {
+    const startTime = getTimeStringFromDate(valueTime1);
+    const endTime = getTimeStringFromDate(valueTime2);
+    const entryToSave = {
+      ...entryItem,
+      startTime,
+      endTime,
+      tag: formik.values.tag,
+      tagBundle: formik.values.bundle,
+      tagBundleId: formik.values.bundleId,
+    };
+    // const entriesNew = [...entries];
+    // const index = entriesNew.findIndex((i) => i._id === entryToSave._id);
+    // entriesNew[index] = entryToSave;
+    // setEntries(entriesNew);
+  };
 
   const handleSelectBundle = (indexArray) => {
     const bundleObj = bundleArray[indexArray];
@@ -91,9 +120,9 @@ const EntryListItemForm = ({
   };
 
   useEffect(() => {
-    if (entries && entries.order > -200) {
-      const startTime = entries.startTime.split(':');
-      const endTime = entries.endTime.split(':');
+    if (entryItem && entryItem.order > -200) {
+      const startTime = entryItem.startTime.split(':');
+      const endTime = entryItem.endTime.split(':');
       if (startTime.length === 2) {
         const newTime1 = new Date();
         newTime1.setHours(startTime[0], startTime[1]);
@@ -106,8 +135,8 @@ const EntryListItemForm = ({
         setValueTime2(newTime2);
         formik.setFieldValue('timeDate2', newTime2);
       }
-      handleSelectBundle(bundleArray.findIndex((item) => item._id === entries.tagBundleId));
-      handleSelectAddTag(entries.tag);
+      handleSelectBundle(bundleArray.findIndex((item) => item._id === entryItem.tagBundleId));
+      handleSelectAddTag(entryItem.tag);
       setChangesInEntry(false);
     }
   }, [initialStart]);
