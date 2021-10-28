@@ -111,6 +111,8 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
                       label="Bundle"
                       name="bundle"
                       onChange={(newValueBundle) => {
+                        setValueTag('');
+                        setFieldValue('tag', '');
                         const indexArray = newValueBundle.target.value;
                         const bundleObj = bundleArray[indexArray];
                         setBundleState(indexArray);
@@ -199,6 +201,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
                     <TextField {...params} label="Wybierz tag lub dodaj nowy tag" />
                   )}
                   disabled={errors.bundle}
+                  isInvalid={errors.tag}
                 />
               </Box>
             </form>
