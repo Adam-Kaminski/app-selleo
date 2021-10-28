@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
@@ -8,7 +8,9 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import StopIcon from '@mui/icons-material/Stop';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CircularProgress from '@mui/material/CircularProgress';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import getEntryByData from '../../queries/getEntryByData';
 import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
 
@@ -82,9 +84,21 @@ const EntryList = () => {
   const [entries, setEntries] = useState(entriesExmaple);
   const [bundles] = useState(bundleArrayExample);
   const [tags, setTags] = useState(tagsArrayExample);
-  const newDatetime = new Date();
-  newDatetime.setHours(11);
-  newDatetime.setMinutes(30);
+
+  const { data, loading, error } = getEntryByData('2021-10-28T00:00:00.000');
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+  if (error) return <div>error</div>;
 
   const addLineBeforeFirst = () => {
     const emptyEntry = { ...entrySeed };

@@ -10,6 +10,10 @@ import './index.css';
 const username = localStorage.getItem('username');
 
 const client = getNewClient(username);
+// wyciągnięte do function componentu
+// useState
+// useMemo
+// context
 
 ReactDOM.render(
   <StyledEngineProvider injectFirst>
