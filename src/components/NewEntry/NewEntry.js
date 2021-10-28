@@ -28,7 +28,7 @@ const NewEntry = () => {
         record: {
           startTime: '10:10',
           endTime: '10:10',
-          tagBundleName: '111',
+          tagBundleName: 'Lorem Ipsum',
           tagName: newEntryValue,
         },
       },
