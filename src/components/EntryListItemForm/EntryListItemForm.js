@@ -1,90 +1,270 @@
-import { useState } from 'react';
-import { Formik } from 'formik';
-import * as yup from 'yup';
-import Button from '@mui/material/Button';
+import { useState, useEffect } from 'react';
+import { useFormik } from 'formik';
+import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TimePicker from '@mui/lab/TimePicker';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Autocomplete from '@mui/material/Autocomplete';
+import { useSnackbar } from 'notistack';
 import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
+import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 
-const calendarEntrySchema = yup.object().shape({
-  timeDate1: yup.date().default(null).required(),
-  timeDate2: yup
-    .date()
-    .default(null)
-    .required()
-    .min(yup.ref('timeDate1'), 'Drugi wybrany czas musi być późniejszy niż pierwszy'),
-});
-
-const initialValues = {
-  timeDate1: null,
-  timeDate2: null,
-};
-
-const EntryListItemForm = () => {
+const EntryListItemForm = ({
+  entries,
+  bundleArray,
+  tagsArray,
+  filter,
+  setTagsState,
+  initialValues,
+}) => {
+  const [changesInEntry, setChangesInEntry] = useState(false);
   const [valueTime1, setValueTime1] = useState(null);
   const [valueTime2, setValueTime2] = useState(null);
+  const [bundleIndexState, setBundleIndexState] = useState('');
+  const [bundleId, setBundleId] = useState('');
+  const [valueTag, setValueTag] = useState(null);
+  const [tagsArrayCurrent, setTagsArrayCurrent] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+  const [initialStart] = useState('initial');
+
+  const showSnackbarMsg = (msg, variant) => {
+    enqueueSnackbar(msg, { variant });
+  };
+
+  const formik = useFormik({
+    initialValues,
+    onSubmit: (event) => {
+      console.log('submit', event);
+      console.log('changesInEntry', changesInEntry);
+      if (changesInEntry) {
+        showSnackbarMsg(`run Submit for line: ${entries.order}`, 'success');
+      }
+    },
+    validationSchema: calendarEntrySchema,
+    isInitialValid: false,
+  });
+
+  const handleSelectBundle = (indexArray) => {
+    const bundleObj = bundleArray[indexArray];
+    setValueTag('');
+    formik.setFieldValue('tag', '');
+    setBundleIndexState(indexArray);
+    setBundleId(bundleObj._id);
+    formik.setFieldValue('bundleId', bundleObj._id);
+    formik.setFieldValue('bundle', bundleObj.name);
+  };
+
+  const handleSelectAddTag = (newValue) => {
+    if (typeof newValue === 'string') {
+      setValueTag({
+        name: newValue,
+      });
+      formik.setFieldValue('tag', newValue);
+    } else if (newValue && newValue.inputValue) {
+      // Create a new value from the user input
+      setValueTag({
+        name: newValue.inputValue,
+      });
+      const newTag = {
+        _id: '0',
+        name: newValue.inputValue,
+        tagBundleId: formik.values.bundleId,
+      };
+      setTagsState([...tagsArray, newTag]);
+      // and add to frontend
+      // save to backend
+      // formik.setFieldValue('tag', newValue.inputValue);
+    } else {
+      setValueTag(newValue);
+      if (newValue && newValue.name) {
+        formik.setFieldValue('tag', newValue.name);
+      } else {
+        formik.setFieldValue('tag', null);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (entries && entries.order > -200) {
+      const startTime = entries.startTime.split(':');
+      const endTime = entries.endTime.split(':');
+      if (startTime.length === 2) {
+        const newTime1 = new Date();
+        newTime1.setHours(startTime[0], startTime[1]);
+        setValueTime1(newTime1);
+        formik.setFieldValue('timeDate1', newTime1);
+      }
+      if (endTime.length === 2) {
+        const newTime2 = new Date();
+        newTime2.setHours(endTime[0], endTime[1]);
+        setValueTime2(newTime2);
+        formik.setFieldValue('timeDate2', newTime2);
+      }
+      handleSelectBundle(bundleArray.findIndex((item) => item._id === entries.tagBundleId));
+      handleSelectAddTag(entries.tag);
+      setChangesInEntry(false);
+    }
+  }, [initialStart]);
+
+  useEffect(() => {
+    const newTagArray = tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId);
+    if (newTagArray) setTagsArrayCurrent(newTagArray);
+  }, [tagsArray]);
+
+  useEffect(() => {
+    setTagsArrayCurrent(tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId));
+  }, [bundleId]);
 
   return (
-    <Formik
-      validationSchema={calendarEntrySchema}
-      onSubmit={console.log}
-      initialValues={initialValues}
-      isInitialValid={false}
-    >
-      {({ handleBlur, values, touched, isValid, errors, setFieldValue }) => {
-        return (
-          <form>
-            <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-              <div
-                style={{ width: '110px' }}
-                className={touched.timeDate1 && errors.timeDate1 ? 'error' : ''}
-              >
-                <TimePicker
-                  name="timeDate1"
-                  value={valueTime1}
-                  onChange={(newValue1) => {
-                    setValueTime1(newValue1);
-                    setFieldValue('timeDate1', newValue1);
+    <form>
+      <Box
+        className="entryListBox"
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}
+      >
+        <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
+          <div style={{ width: '110px' }}>
+            <TimePicker
+              name="timeDate1"
+              value={valueTime1}
+              onChange={(newValue1) => {
+                setValueTime1(newValue1);
+                formik.setFieldValue('timeDate1', newValue1);
+                setChangesInEntry(true);
+              }}
+              onAccept={() => {
+                formik.handleSubmit();
+                setChangesInEntry(true);
+              }}
+              renderInput={(params1) => {
+                return (
+                  <TextField
+                    onBlur={() => {
+                      formik.handleSubmit();
+                    }}
+                    isInvalid={formik.errors.valueTime1String}
+                    {...params1}
+                  />
+                );
+              }}
+              isInvalid={formik.errors.timeDate1}
+            />
+          </div>
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
+          <div style={{ width: '110px' }}>
+            <TimePicker
+              name="timeDate2"
+              value={valueTime2}
+              onChange={(newValue2) => {
+                setValueTime2(newValue2);
+                formik.setFieldValue('timeDate2', newValue2);
+                setChangesInEntry(true);
+              }}
+              onAccept={() => {
+                formik.handleSubmit();
+                setChangesInEntry(true);
+              }}
+              renderInput={(params2) => (
+                <TextField
+                  onBlur={() => {
+                    formik.handleSubmit();
                   }}
-                  // onBlur={handleBlur}
-                  renderInput={(params1) => <TextField {...params1} />}
-                  isInvalid={errors.timeDate1}
+                  {...params2}
                 />
-              </div>
-            </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-              <div
-                style={{ width: '110px' }}
-                className={!touched.timeDate2 && errors.timeDate2 ? 'error' : ''}
-              >
-                <TimePicker
-                  name="timeDate2"
-                  value={valueTime2}
-                  onChange={(newValue2) => {
-                    setValueTime2(newValue2);
-                    setFieldValue('timeDate2', newValue2);
-                    // if (errors.timeDate2 !== undefined) console.log('1----błąd');
-                  }}
-                  // onError={(reason, value) => {
-                  //   console.log('2---reason', reason);
-                  //   console.log('2---value', value);
-                  // }}
-                  // onBlur={handleBlur}
-                  renderInput={(params2) => <TextField {...params2} />}
-                  isInvalid={errors.timeDate2}
-                />
-              </div>
-            </LocalizationProvider>
-            <Button color="primary" variant="contained" type="submit" disabled={!isValid}>
-              Submit
-            </Button>
-          </form>
-        );
-      }}
-    </Formik>
+              )}
+              isInvalid={formik.errors.timeDate2}
+            />
+          </div>
+        </LocalizationProvider>
+        <Box sx={{ width: 150 }}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Bundle</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={bundleIndexState}
+              label="Bundle"
+              name="bundle"
+              onChange={(newValueBundle) => {
+                handleSelectBundle(newValueBundle.target.value);
+              }}
+              onAccept={() => {
+                setChangesInEntry(true);
+              }}
+              isInvalid={formik.errors.bundle}
+              onBlur={() => {
+                formik.handleSubmit();
+              }}
+            >
+              {bundleArray.map((bundle, index) => {
+                return (
+                  <MenuItem key={bundle._id} value={index}>
+                    {bundle.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </Box>
+        <Autocomplete
+          name="tag"
+          value={valueTag}
+          onChange={(event, newValue) => {
+            handleSelectAddTag(newValue);
+            setChangesInEntry(true);
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+            const { inputValue } = params;
+            const isExisting = options.some((option) => inputValue === option.name);
+            if (inputValue !== '' && !isExisting) {
+              filtered.push({
+                inputValue,
+                name: `Utwórz i dodaj nowy Tag: "${inputValue}"`,
+              });
+            }
+            return filtered;
+          }}
+          selectOnFocus
+          clearOnBlur
+          onBlur={() => {
+            formik.handleSubmit();
+          }}
+          handleHomeEndKeys
+          id="free-solo-with-text-demo"
+          options={tagsArrayCurrent}
+          getOptionLabel={(option) => {
+            // Value selected with enter, right from the input
+            if (typeof option === 'string') {
+              return option;
+            }
+            // Add "xxx" option created dynamically
+            if (option.inputValue) {
+              return option.inputValue;
+            }
+            // Regular option
+            return option.name;
+          }}
+          renderOption={(props, option) => <li {...props}>{option.name}</li>}
+          sx={{ width: 300 }}
+          freeSolo
+          renderInput={(params) => <TextField {...params} label="Wybierz tag lub dodaj nowy Tag" />}
+          disabled={formik.errors.bundle}
+          isInvalid={formik.errors.tag}
+        />
+      </Box>
+    </form>
   );
 };
 

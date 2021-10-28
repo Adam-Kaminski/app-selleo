@@ -1,22 +1,100 @@
+import { useState } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import StopIcon from '@mui/icons-material/Stop';
-import TimePickerInput from '../TimePickerInput';
-import ProjectSelect from '../ProjectSelect/ProjectSelect';
-import TagInput from '../TagInput';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
-import EntryListItemForm from '../EntryListItemForm/EntryListItemForm';
+
+const initialValuesEmpties = {
+  timeDate1: null,
+  timeDate2: null,
+  timeDate1String: '11:11',
+  timeDate2String: '',
+  bundle: 'FirmaTest1',
+  tag: '',
+};
+
+const entrySeed = {
+  startTime: '',
+  endTime: '',
+  order: -201,
+  _id: null,
+  tag: '',
+  tagId: '',
+  tagBundle: '',
+  tagBundleId: '',
+};
+
+const entriesExmaple = [
+  {
+    startTime: '11:00',
+    endTime: '12:00',
+    order: 0,
+    _id: '0',
+    tag: 'Tag1 dla test1',
+    tagId: '1',
+    tagBundle: 'FirmaTest1',
+    tagBundleId: '0',
+  },
+  {
+    startTime: '12:00',
+    endTime: '13:00',
+    order: 1,
+    _id: '1',
+    tag: 'Tag2 dla test2',
+    tagId: '2',
+    tagBundle: 'FirmaTest2',
+    tagBundleId: '1',
+  },
+];
+
+const bundleArrayExample = [
+  { _id: '0', name: 'FirmaTest1' },
+  { _id: '1', name: 'FirmaTest2' },
+  { _id: '2', name: 'FirmaTest3' },
+];
+
+const tagsArrayExample = [
+  { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
+  { _id: '1', name: 'Tag1 dla test1', tagBundleId: '0' },
+  { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
+  { _id: '3', name: 'Tag2 dla test1', tagBundleId: '0' },
+  { _id: '4', name: 'Tag1 dla test3', tagBundleId: '2' },
+  { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
+];
 
 const EntryList = () => {
+  const [entries, setEntries] = useState(entriesExmaple);
+  const [bundles, setBundles] = useState(bundleArrayExample);
+  const [tags, setTags] = useState(tagsArrayExample);
   const newDatetime = new Date();
   newDatetime.setHours(11);
   newDatetime.setMinutes(30);
+
+  const addLineBeforeFirst = () => {
+    const emptyEntry = { ...entrySeed };
+    emptyEntry._id = `new${entries.length}`;
+    setEntries([emptyEntry, ...entries]);
+  };
+  const addLine = (entryId) => {
+    const emptyEntry = { ...entrySeed };
+    const newArray = [...entries];
+    const index = entries.findIndex((item) => item._id === entryId);
+    emptyEntry._id = `new${entries.length}`;
+    newArray.splice(index + 1, 0, emptyEntry);
+    setEntries(newArray);
+  };
+  const removeLine = (entryId) => {
+    setEntries(entries.filter((entryItem) => entryItem._id !== entryId));
+  };
+
   return (
     <>
       <List
@@ -53,17 +131,20 @@ const EntryList = () => {
               variant="contained"
               color="success"
               sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+              onClick={() => {
+                addLineBeforeFirst();
+              }}
             >
               <AddCircleOutlineIcon />
             </Button>
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
-        {[0, 1, 2, 3].map((value) => {
+        {entries?.map((entryItem) => {
           return (
             <ListItem
+              key={entryItem._id}
               className="entryList"
-              key={value}
               sx={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -71,11 +152,14 @@ const EntryList = () => {
                 justifyContent: 'center',
               }}
             >
-              <TimePickerInput valueTimeProp={{ newDatetime }} />
-              <TimePickerInput valueTimeProp={{ newDatetime }} />
-
-              <ProjectSelect />
-              <TagInput />
+              <EntryListItemForm
+                initialValues={initialValuesEmpties}
+                entries={entryItem}
+                bundleArray={bundles}
+                tagsArray={tags}
+                setTagsState={setTags}
+                filter={createFilterOptions()}
+              />
               <Box
                 sx={{
                   width: '110px',
@@ -88,6 +172,9 @@ const EntryList = () => {
                   variant="contained"
                   color="success"
                   sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+                  onClick={() => {
+                    addLine(entryItem._id);
+                  }}
                 >
                   <AddCircleOutlineIcon />
                 </Button>
@@ -95,6 +182,9 @@ const EntryList = () => {
                   color="error"
                   variant="contained"
                   sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+                  onClick={() => {
+                    removeLine(entryItem._id);
+                  }}
                 >
                   <DeleteOutlineIcon />
                 </Button>
@@ -120,7 +210,6 @@ const EntryList = () => {
           <CopyAllIcon />
         </Button>
       </Box>
-      <EntryListItemForm />
     </>
   );
 };
