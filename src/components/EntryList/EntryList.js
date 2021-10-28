@@ -8,7 +8,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import './EntryList.scss';
-// import EntryListItemForm from '../EntryListItemForm';
+import EntryListItemForm from '../EntryListItemForm';
 
 const initialValuesEmpties = {
   timeDate1: null,
@@ -17,19 +17,19 @@ const initialValuesEmpties = {
   tag: '',
 };
 
-const projectsArrayExample = [
-  { id: '0', name: 'FirmaTest1' },
-  { id: '1', name: 'FirmaTest2' },
-  { id: '2', name: 'FirmaTest3' },
+const bundleArrayExample = [
+  { _id: '0', name: 'FirmaTest1' },
+  { _id: '1', name: 'FirmaTest2' },
+  { _id: '2', name: 'FirmaTest3' },
 ];
 
 const tagsArrayExample = [
-  { _id: '0', name: 'Se7en', tagBundleId: '' },
-  { _id: '1', name: 'The Silence of the Lambs', tagBundleId: '' },
-  { _id: '2', name: "It's a Wonderful Life", tagBundleId: '' },
-  { _id: '3', name: 'Life Is Beautiful', tagBundleId: '' },
-  { _id: '4', name: 'The Usual Suspects', tagBundleId: '' },
-  { _id: '5', name: 'Léon: The Professional', tagBundleId: '' },
+  { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
+  { _id: '1', name: 'Tag1 dla test1', tagBundleId: '0' },
+  { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
+  { _id: '3', name: 'Tag2 dla test1', tagBundleId: '0' },
+  { _id: '4', name: 'Tag1 dla test3', tagBundleId: '2' },
+  { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
 ];
 
 const filter = createFilterOptions();
@@ -80,13 +80,28 @@ const EntryList = () => {
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
-        {[0, 1, 2, 3].map((value) => {
+        {/* {[0, 1, 2, 3].map((value) => {
           return (
             <ListItem className="entryList" key={value}>
-              {/* <EntryListItemForm /> */}
             </ListItem>
           );
-        })}
+        })} */}
+        <ListItem
+          className="entryList"
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}
+        >
+          <EntryListItemForm
+            initialValues={initialValuesEmpties}
+            bundleArray={bundleArrayExample}
+            tagsArray={tagsArrayExample}
+            filter={filter}
+          />
+        </ListItem>
       </List>
       <Box
         sx={{

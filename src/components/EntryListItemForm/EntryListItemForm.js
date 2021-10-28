@@ -17,11 +17,12 @@ import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 
-const EntryListItemForm = ({ initialValues }, { projectsArray }, { tagsArray }, { filter }) => {
+const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) => {
   const [valueTime1, setValueTime1] = useState(null);
   const [valueTime2, setValueTime2] = useState(null);
-  const [projectState, setProjectState] = useState('');
+  const [bundleState, setBundleState] = useState('');
   const [valueTag, setValueTag] = useState(null);
+  const [tagsArrayCurrent, setTagsArrayCurrent] = useState([]);
 
   return (
     <>
@@ -46,10 +47,7 @@ const EntryListItemForm = ({ initialValues }, { projectsArray }, { tagsArray }, 
                 }}
               >
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-                  <div
-                    style={{ width: '110px' }}
-                    className={touched.timeDate1 && errors.timeDate1 ? 'error' : ''}
-                  >
+                  <div style={{ width: '110px' }} className={errors.timeDate1 ? 'error' : ''}>
                     <TimePicker
                       name="timeDate1"
                       value={valueTime1}
@@ -73,10 +71,7 @@ const EntryListItemForm = ({ initialValues }, { projectsArray }, { tagsArray }, 
                   </div>
                 </LocalizationProvider>
                 <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
-                  <div
-                    style={{ width: '110px' }}
-                    className={touched.timeDate2 && errors.timeDate2 ? 'error' : ''}
-                  >
+                  <div style={{ width: '110px' }} className={errors.timeDate2 ? 'error' : ''}>
                     <TimePicker
                       name="timeDate2"
                       value={valueTime2}
@@ -101,26 +96,31 @@ const EntryListItemForm = ({ initialValues }, { projectsArray }, { tagsArray }, 
                 </LocalizationProvider>
                 <Box sx={{ width: 150 }}>
                   <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Projekt</InputLabel>
+                    <InputLabel id="demo-simple-select-label">Bundle</InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={projectState}
-                      label="Projekt"
-                      onChange={(newValueProject) => {
-                        const indexArray = newValueProject.target.value;
-                        setProjectState(indexArray);
-                        setFieldValue('project', projectsArray[indexArray]);
+                      value={bundleState}
+                      label="Bundle"
+                      name="bundle"
+                      onChange={(newValueBundle) => {
+                        const indexArray = newValueBundle.target.value;
+                        const bundleObj = bundleArray[indexArray];
+                        setBundleState(indexArray);
+                        setFieldValue('bundle', bundleObj.name);
+                        setTagsArrayCurrent(
+                          tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleObj._id)
+                        );
                       }}
-                      isInvalid={errors.project}
+                      isInvalid={errors.bundle}
                       onBlur={() => {
                         handleSubmit();
                       }}
                     >
-                      {projectsArray.map((project, index) => {
+                      {bundleArray.map((bundle, index) => {
                         return (
-                          <MenuItem key={index.toString()} value={index}>
-                            {project}
+                          <MenuItem key={bundle._id} value={index}>
+                            {bundle.name}
                           </MenuItem>
                         );
                       })}
@@ -128,6 +128,7 @@ const EntryListItemForm = ({ initialValues }, { projectsArray }, { tagsArray }, 
                   </FormControl>
                 </Box>
                 <Autocomplete
+                  name="tag"
                   value={valueTag}
                   onChange={(event, newValue) => {
                     if (typeof newValue === 'string') {
@@ -171,7 +172,7 @@ const EntryListItemForm = ({ initialValues }, { projectsArray }, { tagsArray }, 
                   }}
                   handleHomeEndKeys
                   id="free-solo-with-text-demo"
-                  options={tagsArray}
+                  options={tagsArrayCurrent}
                   getOptionLabel={(option) => {
                     // Value selected with enter, right from the input
                     if (typeof option === 'string') {
@@ -190,15 +191,8 @@ const EntryListItemForm = ({ initialValues }, { projectsArray }, { tagsArray }, 
                   renderInput={(params) => (
                     <TextField {...params} label="Wybierz tag lub dodaj nowy tag" />
                   )}
+                  disabled={errors.bundle}
                 />
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={() => handleSubmit()}
-                  disabled={!isValid}
-                >
-                  Submit
-                </Button>
               </Box>
             </form>
           );
