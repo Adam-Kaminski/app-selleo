@@ -13,6 +13,7 @@ import Select from '@mui/material/Select';
 import Autocomplete from '@mui/material/Autocomplete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { useSnackbar } from 'notistack';
 import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
@@ -23,6 +24,11 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
   const [bundleState, setBundleState] = useState('');
   const [valueTag, setValueTag] = useState(null);
   const [tagsArrayCurrent, setTagsArrayCurrent] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showSnackbarMsg = (msg, variant) => {
+    enqueueSnackbar(msg, { variant });
+  };
 
   return (
     <>
@@ -30,6 +36,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
         validationSchema={calendarEntrySchema}
         onSubmit={(event) => {
           console.log('submit', event);
+          showSnackbarMsg('run Submit', 'success');
         }}
         initialValues={initialValues}
         isInitialValid={false}
@@ -210,6 +217,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
           variant="contained"
           color="success"
           sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+          onClick={() => showSnackbarMsg('run Submit', 'success')}
         >
           <AddCircleOutlineIcon />
         </Button>

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/client';
 import { StyledEngineProvider } from '@mui/material/styles';
+import { SnackbarProvider } from 'notistack';
 import App from './App';
 import { getNewClient } from './api';
 import './index.css';
@@ -14,7 +15,9 @@ ReactDOM.render(
   <StyledEngineProvider injectFirst>
     <React.StrictMode>
       <ApolloProvider client={client}>
-        <App />
+        <SnackbarProvider maxSnack={4}>
+          <App />
+        </SnackbarProvider>
       </ApolloProvider>
     </React.StrictMode>
   </StyledEngineProvider>,
