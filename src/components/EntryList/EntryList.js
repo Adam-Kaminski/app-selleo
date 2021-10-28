@@ -93,6 +93,14 @@ const EntryList = () => {
     setEntries(entries.filter((entryItem) => entryItem._id !== entryId));
   };
 
+  const handleCopyToClipboard = () => {
+    let string = '';
+    entries.forEach((entry, index) => {
+      string += `${entry.startTime} ${entry.endTime} ${entry.tagBundle}-${entry.tag}\n`;
+    });
+    navigator.clipboard.writeText(string);
+  };
+
   return (
     <>
       <List
@@ -204,7 +212,12 @@ const EntryList = () => {
           <StopIcon />
           <PlayArrowIcon />
         </Button>
-        <Button variant="contained">
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleCopyToClipboard();
+          }}
+        >
           <CopyAllIcon />
         </Button>
       </Box>

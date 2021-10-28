@@ -15,6 +15,14 @@ import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 
+function getTimeStringFromDate(date) {
+  let minutes = date.getMinutes();
+  let hours = date.getMinutes();
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  hours = hours < 10 ? `0${hours}` : hours;
+  return `${hours}:${minutes}`;
+}
+
 const EntryListItemForm = ({
   entries,
   bundleArray,
@@ -41,8 +49,21 @@ const EntryListItemForm = ({
     initialValues,
     onSubmit: (event) => {
       console.log('submit', event);
-      console.log('changesInEntry', changesInEntry);
+      console.log('changesInEntry:', changesInEntry);
       if (changesInEntry) {
+        const startTime = getTimeStringFromDate(valueTime1);
+        const endTime = getTimeStringFromDate(valueTime2);
+        const entryOld = entries;
+        const entryToSave = {
+          ...entryOld,
+          startTime,
+          endTime,
+          tag: event.tag,
+          tagBundle: event.bundle,
+          tagBundleId: event.bundleId,
+        };
+        console.log('entryToSave:', entryToSave);
+        // setEntries();
         showSnackbarMsg(`run Submit for line: ${entries.order}`, 'success');
       }
     },
