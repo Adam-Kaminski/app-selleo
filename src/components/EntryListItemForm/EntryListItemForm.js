@@ -150,6 +150,7 @@ const EntryListItemForm = ({
   }, [tagsArray]);
 
   useEffect(() => {
+    // setTagsArrayCurrent(tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId));
     setTagsArrayCurrent(tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId));
   }, [bundleId]);
 
