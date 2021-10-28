@@ -19,9 +19,6 @@ const Settings = () => {
   const bundleIDhandler = (bundleID) => () => {
     toggleBundle(bundleID);
   };
-
-  // const [profileBundles, setProfileBundles] = useState[dataID.tagBundlesIds];
-
   return (
     <div className="settings">
       <div className="settings__user">
@@ -36,7 +33,7 @@ const Settings = () => {
               <FormControlLabel
                 className="settings__checkbox"
                 key={singleTagBundle._id}
-                control={<Checkbox defaultChecked />}
+                control={<Checkbox />}
                 label={singleTagBundle.name}
                 onClick={bundleIDhandler(singleTagBundle._id)}
               />
