@@ -57,16 +57,37 @@ const entriesExmaple = [
 ];
 
 const bundleArrayExample = [
-  { _id: '0', name: 'FirmaTest1' },
-  { _id: '1', name: 'FirmaTest2' },
-  { _id: '2', name: 'FirmaTest3' },
+  {
+    _id: '0',
+    name: 'FirmaTest1',
+    tags: [
+      { _id: '1', name: 'Tag1 dla test1', tagBundleId: '0' },
+      { _id: '3', name: 'Tag2 dla test1', tagBundleId: '0' },
+    ],
+  },
+  {
+    _id: '1',
+    name: 'FirmaTest2',
+    tags: [
+      { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
+      { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
+    ],
+  },
+  {
+    _id: '2',
+    name: 'FirmaTest3',
+    tags: [
+      { _id: '4', name: 'Tag1 dla test3', tagBundleId: '2' },
+      { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
+    ],
+  },
 ];
 
 const tagsArrayExample = [
-  { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
   { _id: '1', name: 'Tag1 dla test1', tagBundleId: '0' },
-  { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
   { _id: '3', name: 'Tag2 dla test1', tagBundleId: '0' },
+  { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
+  { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
   { _id: '4', name: 'Tag1 dla test3', tagBundleId: '2' },
   { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
 ];
@@ -117,7 +138,9 @@ const EntryList = () => {
   }, [dataEntriesNew]);
 
   useEffect(() => {
+    console.log(dataTagBundles);
     if (dataTagBundles && dataTagBundles !== undefined) {
+      console.log(dataTagBundles);
       const newTagBundles = dataTagBundles.map((bundleItem) => {
         const newBundle = {
           _id: bundleItem._id,
