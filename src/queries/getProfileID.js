@@ -4,6 +4,7 @@ export const GET_PROFILE_ID = gql`
   query GetID {
     getProfile {
       _id
+      tagBundlesIds
     }
   }
 `;
