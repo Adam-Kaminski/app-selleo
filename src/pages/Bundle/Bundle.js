@@ -35,7 +35,7 @@ const Bundle = () => {
             <h3>Description:</h3>
             <p>
               {tagBundle.description}
-              {dataID._id === tagBundle.creatorId && (
+              {dataID?._id === tagBundle.creatorId && (
                 <EditBundleDesc editDesc={tagBundle.description} bundleID={id} />
               )}
             </p>
