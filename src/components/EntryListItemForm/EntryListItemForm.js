@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -18,13 +18,19 @@ import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 
-const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) => {
+const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter, setTagsState }) => {
   const [valueTime1, setValueTime1] = useState(null);
   const [valueTime2, setValueTime2] = useState(null);
-  const [bundleState, setBundleState] = useState('');
+  const [bundleIndexState, setBundleIndexState] = useState('');
+  const [bundleId, setBundleId] = useState('');
   const [valueTag, setValueTag] = useState(null);
   const [tagsArrayCurrent, setTagsArrayCurrent] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    const newTagArray = tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId);
+    if (newTagArray) setTagsArrayCurrent(newTagArray);
+  }, [tagsArray]);
 
   const showSnackbarMsg = (msg, variant) => {
     enqueueSnackbar(msg, { variant });
@@ -41,7 +47,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
         initialValues={initialValues}
         isInitialValid={false}
       >
-        {({ touched, isValid, errors, setFieldValue, handleSubmit }) => {
+        {({ errors, setFieldValue, handleSubmit, values }) => {
           return (
             <form>
               <Box
@@ -70,6 +76,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
                           onBlur={() => {
                             handleSubmit();
                           }}
+                          value={values.timeDate1String}
                           {...params1}
                         />
                       )}
@@ -107,7 +114,7 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={bundleState}
+                      value={bundleIndexState}
                       label="Bundle"
                       name="bundle"
                       onChange={(newValueBundle) => {
@@ -115,11 +122,13 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
                         setFieldValue('tag', '');
                         const indexArray = newValueBundle.target.value;
                         const bundleObj = bundleArray[indexArray];
-                        setBundleState(indexArray);
-                        setFieldValue('bundle', bundleObj.name);
                         setTagsArrayCurrent(
                           tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleObj._id)
                         );
+                        setBundleIndexState(indexArray);
+                        setBundleId(bundleObj._id);
+                        setFieldValue('bundleId', bundleObj._id);
+                        setFieldValue('bundle', bundleObj.name);
                       }}
                       isInvalid={errors.bundle}
                       onBlur={() => {
@@ -150,8 +159,14 @@ const EntryListItemForm = ({ initialValues, bundleArray, tagsArray, filter }) =>
                       setValueTag({
                         name: newValue.inputValue,
                       });
-                      // save to backend
+                      const newTag = {
+                        _id: '0',
+                        name: newValue.inputValue,
+                        tagBundleId: values.bundleId,
+                      };
+                      setTagsState([...tagsArray, newTag]);
                       // and add to frontend
+                      // save to backend
                       // setFieldValue('tag', newValue.inputValue);
                     } else {
                       setValueTag(newValue);

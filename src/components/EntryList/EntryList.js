@@ -8,14 +8,30 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import './EntryList.scss';
+import { useState } from 'react';
 import EntryListItemForm from '../EntryListItemForm';
 
 const initialValuesEmpties = {
   timeDate1: null,
   timeDate2: null,
-  project: '',
+  timeDate1String: '11:11',
+  timeDate2String: '',
+  bundle: 'FirmaTest1',
   tag: '',
 };
+
+const entriesExmaple = [
+  {
+    startTime: '11:00',
+    endTime: '12:00',
+    order: 0,
+    _id: '0',
+    tag: 'Tag1 dla test1',
+    tagId: '1',
+    tagBundle: 'FirmaTest1',
+    tagBundleId: '0',
+  },
+];
 
 const bundleArrayExample = [
   { _id: '0', name: 'FirmaTest1' },
@@ -35,6 +51,8 @@ const tagsArrayExample = [
 const filter = createFilterOptions();
 
 const EntryList = () => {
+  const [bundles, setBundles] = useState(bundleArrayExample);
+  const [tags, setTags] = useState(tagsArrayExample);
   const newDatetime = new Date();
   newDatetime.setHours(11);
   newDatetime.setMinutes(30);
@@ -97,9 +115,10 @@ const EntryList = () => {
         >
           <EntryListItemForm
             initialValues={initialValuesEmpties}
-            bundleArray={bundleArrayExample}
-            tagsArray={tagsArrayExample}
-            filter={filter}
+            bundleArray={bundles}
+            tagsArray={tags}
+            setTagsState={setTags}
+            filter={createFilterOptions()}
           />
         </ListItem>
       </List>
