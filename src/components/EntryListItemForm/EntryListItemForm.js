@@ -57,7 +57,7 @@ const EntryListItemForm = ({
       console.log('submit', event);
       console.log('changesInEntry', changesInEntry);
       if (changesInEntry) {
-        showSnackbarMsg('run Submit', 'success');
+        showSnackbarMsg(`run Submit for line: ${entries.order}`, 'success');
       }
     },
     validationSchema: calendarEntrySchema,
@@ -119,8 +119,8 @@ const EntryListItemForm = ({
       setValueTime2(newTime2);
       formik.setFieldValue('timeDate2', newTime2);
     }
-    handleSelectBundle(0);
-    handleSelectAddTag('newTagName');
+    handleSelectBundle(bundleArray.findIndex((item) => item._id === entries.tagBundleId));
+    handleSelectAddTag(entries.tag);
     setChangesInEntry(false);
   }, [initialStart]);
 
@@ -152,19 +152,23 @@ const EntryListItemForm = ({
               onChange={(newValue1) => {
                 setValueTime1(newValue1);
                 formik.setFieldValue('timeDate1', newValue1);
+                setChangesInEntry(true);
               }}
               onAccept={() => {
-                setChangesInEntry(true);
                 formik.handleSubmit();
+                setChangesInEntry(true);
               }}
-              renderInput={(params1) => (
-                <TextField
-                  onBlur={() => {
-                    formik.handleSubmit();
-                  }}
-                  {...params1}
-                />
-              )}
+              renderInput={(params1) => {
+                return (
+                  <TextField
+                    onBlur={() => {
+                      formik.handleSubmit();
+                    }}
+                    isInvalid={formik.errors.valueTime1String}
+                    {...params1}
+                  />
+                );
+              }}
               isInvalid={formik.errors.timeDate1}
             />
           </div>
@@ -177,10 +181,11 @@ const EntryListItemForm = ({
               onChange={(newValue2) => {
                 setValueTime2(newValue2);
                 formik.setFieldValue('timeDate2', newValue2);
+                setChangesInEntry(true);
               }}
               onAccept={() => {
-                setChangesInEntry(true);
                 formik.handleSubmit();
+                setChangesInEntry(true);
               }}
               renderInput={(params2) => (
                 <TextField

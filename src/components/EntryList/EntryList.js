@@ -32,6 +32,16 @@ const entriesExmaple = [
     tagBundle: 'FirmaTest1',
     tagBundleId: '0',
   },
+  {
+    startTime: '12:00',
+    endTime: '13:00',
+    order: 1,
+    _id: '1',
+    tag: 'Tag2 dla test2',
+    tagId: '2',
+    tagBundle: 'FirmaTest2',
+    tagBundleId: '1',
+  },
 ];
 
 const bundleArrayExample = [
@@ -99,53 +109,52 @@ const EntryList = () => {
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
-        {/* {[0, 1, 2, 3].map((value) => {
+        {entriesExmaple.map((entryItem) => {
           return (
-            <ListItem className="entryList" key={value}>
+            <ListItem
+              key={entryItem._id}
+              className="entryList"
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+              }}
+            >
+              <EntryListItemForm
+                initialValues={initialValuesEmpties}
+                entries={entryItem}
+                bundleArray={bundles}
+                tagsArray={tags}
+                setTagsState={setTags}
+                filter={createFilterOptions()}
+              />
+              <Box
+                sx={{
+                  width: '110px',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="success"
+                  sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+                >
+                  <AddCircleOutlineIcon />
+                </Button>
+                <Button
+                  color="error"
+                  variant="contained"
+                  sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+                >
+                  <DeleteOutlineIcon />
+                </Button>
+              </Box>
             </ListItem>
           );
-        })} */}
-        <ListItem
-          className="entryList"
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-          }}
-        >
-          <EntryListItemForm
-            initialValues={initialValuesEmpties}
-            entries={entriesExmaple[0]}
-            bundleArray={bundles}
-            tagsArray={tags}
-            setTagsState={setTags}
-            filter={createFilterOptions()}
-          />
-          <Box
-            sx={{
-              width: '110px',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Button
-              variant="contained"
-              color="success"
-              sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
-            >
-              <AddCircleOutlineIcon />
-            </Button>
-            <Button
-              color="error"
-              variant="contained"
-              sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
-            >
-              <DeleteOutlineIcon />
-            </Button>
-          </Box>
-        </ListItem>
+        })}
       </List>
       <Box
         sx={{
