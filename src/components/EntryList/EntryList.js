@@ -1,15 +1,16 @@
+import { useState } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import StopIcon from '@mui/icons-material/Stop';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-import './EntryList.scss';
-import { useState } from 'react';
 import EntryListItemForm from '../EntryListItemForm';
+import './EntryList.scss';
 
 const initialValuesEmpties = {
   timeDate1: null,
@@ -120,6 +121,29 @@ const EntryList = () => {
             setTagsState={setTags}
             filter={createFilterOptions()}
           />
+          <Box
+            sx={{
+              width: '110px',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Button
+              variant="contained"
+              color="success"
+              sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+            >
+              <AddCircleOutlineIcon />
+            </Button>
+            <Button
+              color="error"
+              variant="contained"
+              sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+            >
+              <DeleteOutlineIcon />
+            </Button>
+          </Box>
         </ListItem>
       </List>
       <Box
