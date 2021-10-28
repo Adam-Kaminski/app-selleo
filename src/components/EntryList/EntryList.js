@@ -8,7 +8,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import './EntryList.scss';
-import EntryListItemForm from '../EntryListItemForm';
+// import EntryListItemForm from '../EntryListItemForm';
 
 const initialValuesEmpties = {
   timeDate1: null,
@@ -83,7 +83,7 @@ const EntryList = () => {
         {[0, 1, 2, 3].map((value) => {
           return (
             <ListItem className="entryList" key={value}>
-              <EntryListItemForm />
+              {/* <EntryListItemForm /> */}
             </ListItem>
           );
         })}
@@ -105,7 +105,6 @@ const EntryList = () => {
           <CopyAllIcon />
         </Button>
       </Box>
-      <EntryListItemForm />
     </>
   );
 };

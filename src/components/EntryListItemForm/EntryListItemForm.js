@@ -15,7 +15,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
-import calendarEntrySchema from '../../schemas/calendarEntrySchema/calendarEntrySchema';
+import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 
 const EntryListItemForm = ({ initialValues }, { projectsArray }, { tagsArray }, { filter }) => {
   const [valueTime1, setValueTime1] = useState(null);
