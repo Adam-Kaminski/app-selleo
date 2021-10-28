@@ -68,6 +68,16 @@ const tagsArrayExample = [
   { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
 ];
 
+function getTimeStringFromDate(date) {
+  let minutes = date.getMinutes();
+  let hours = date.getHours();
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  hours = hours < 10 ? `0${hours}` : hours;
+  console.log(minutes, 'minutes');
+  console.log(hours, 'hours');
+  return `${hours}:${minutes}`;
+}
+
 const EntryList = () => {
   const [entries, setEntries] = useState(entriesExmaple);
   const [bundles] = useState(bundleArrayExample);
@@ -99,6 +109,15 @@ const EntryList = () => {
       string += `${entry.startTime} ${entry.endTime} ${entry.tagBundle}-${entry.tag}\n`;
     });
     navigator.clipboard.writeText(string);
+  };
+
+  const handleNewEntryStartStop = () => {
+    // const newEntries = [...entries];
+    // const now = getTimeStringFromDate(new Date());
+    // newEntries[newEntries.length - 1].endTime = now;
+    // newEntries.push({ ...entrySeed });
+    // newEntries[newEntries.length - 1].startTime = now;
+    // setEntries(newEntries);
   };
 
   return (
@@ -160,11 +179,13 @@ const EntryList = () => {
             >
               <EntryListItemForm
                 initialValues={initialValuesEmpties}
-                entries={entryItem}
+                entryItem={entryItem}
                 bundleArray={bundles}
                 tagsArray={tags}
                 setTagsState={setTags}
                 filter={createFilterOptions()}
+                // setEntries={setEntries}
+                // entries={entries}
               />
               <Box
                 sx={{
@@ -208,7 +229,7 @@ const EntryList = () => {
         }}
         className="calendarContainer__bottomButtons"
       >
-        <Button variant="contained" color="error">
+        <Button variant="contained" color="error" onClick={() => handleNewEntryStartStop()}>
           <StopIcon />
           <PlayArrowIcon />
         </Button>
