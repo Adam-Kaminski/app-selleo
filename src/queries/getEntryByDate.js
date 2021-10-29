@@ -7,9 +7,16 @@ export const GET_BY_DATE = gql`
       _id
       startTime
       endTime
+      order
       tag {
+        _id
         name
+        tagBundle {
+          _id
+          name
+        }
       }
+      creatorId
     }
   }
 `;
