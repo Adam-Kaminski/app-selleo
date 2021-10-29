@@ -14,6 +14,7 @@ import getAllTagBundles from '../../queries/getAllTagBundles';
 import getEntryByData from '../../queries/getEntryByDate';
 import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
+import { retunrDateFormatString } from '../../utils/dateHelper';
 
 const initialValuesEmpties = {
   timeDate1: null,
@@ -85,7 +86,7 @@ const bundleArrayExample = [
 
 // const filter = createFilterOptions();
 
-const EntryList = () => {
+const EntryList = ({ stateDateCurrent }) => {
   const [entries, setEntries] = useState([]);
   const [bundles, setBundles] = useState([]);
 
@@ -98,7 +99,7 @@ const EntryList = () => {
     data: dataEntriesNew,
     loading: loadingEntriesNew,
     error: errorEntriesNew,
-  } = getEntryByData('2021-10-28T00:00:00.000');
+  } = getEntryByData(retunrDateFormatString(stateDateCurrent));
 
   useEffect(() => {
     if (dataEntriesNew && dataEntriesNew !== undefined && typeof dataEntriesNew !== 'undefined') {

@@ -75,7 +75,6 @@ const EntryListItemForm = ({
   };
 
   const handleSelectBundle = (indexArray) => {
-    console.log(indexArray);
     const bundleObj = bundleArray[indexArray];
     if (bundleObj) {
       setValueTag('');
@@ -132,13 +131,12 @@ const EntryListItemForm = ({
       entryItem.tagBundleId.length > 5
     ) {
       const indexArrayBundles = bundleArray.findIndex((item) => item._id === entryItem.tagBundleId);
-      console.log(indexArrayBundles);
       if (indexArrayBundles + 1) {
         const bundleItem = bundleArray[indexArrayBundles];
         setBundleIndexState(indexArrayBundles);
+        setBundleSelected(bundleItem);
         if (entryItem.tag) {
           setTagSelected(entryItem.tag);
-          setBundleSelected(bundleItem);
         }
       }
     }
