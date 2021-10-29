@@ -2,8 +2,8 @@ import { gql, useMutation } from '@apollo/client';
 import { GET_ALL_TAG_BUNDLES } from './getAllTagBundles';
 
 const ADD_BUNDLE_TO_PROFILE = gql`
-  mutation AddBundletoUser($bundleID: ID) {
-    assignBundleId(bundleId: $bundleID) {
+  mutation AddBundletoUser($bundleId: ID) {
+    assignBundleId(bundleId: $bundleId) {
       _id
     }
   }
