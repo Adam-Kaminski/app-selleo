@@ -17,7 +17,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 50px;
+      height: 60px;
 
       &:hover {
         background-color: #f0f8ff;
@@ -30,6 +30,7 @@
       }
     }
   }
-  &__user {
+  .tags {
+    margin-top: 10px;
   }
 }
