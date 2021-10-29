@@ -47,7 +47,7 @@ const EditBundleDesc = ({ editDesc, bundleID }) => {
             variant="h6"
             component="h2"
           >
-            Edit description
+            Edycja opisu
           </Typography>
           <TextareaAutosize
             minRows={6}
@@ -62,7 +62,7 @@ const EditBundleDesc = ({ editDesc, bundleID }) => {
             variant="contained"
             color="primary"
           >
-            Edit
+            Edytuj
           </Button>
         </Box>
       </Modal>
@@ -74,7 +74,7 @@ const EditBundleDesc = ({ editDesc, bundleID }) => {
         variant="contained"
         color="primary"
       >
-        Edit
+        Edytuj
       </Button>
     </>
   );

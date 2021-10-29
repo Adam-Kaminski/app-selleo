@@ -43,12 +43,12 @@ const AddNewBundle = () => {
       >
         <Box sx={style} component="form" onSubmit={HandleNewBundle}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Add new bundle
+            Dodaj nowy bundle
           </Typography>
           <OutlinedInput
             id="modal-modal-description"
             sx={{ mt: 2, width: '100%' }}
-            placeholder="Name"
+            placeholder="Nazwa"
             onChange={(e) => setNewBundleName(e.target.value)}
             value={newBundleName}
           ></OutlinedInput>
@@ -58,7 +58,7 @@ const AddNewBundle = () => {
             variant="contained"
             color="primary"
           >
-            Add
+            Dodaj
           </Button>
         </Box>
       </Modal>
@@ -70,7 +70,7 @@ const AddNewBundle = () => {
         variant="contained"
         color="primary"
       >
-        Add
+        Dodaj bundle
       </Button>
     </>
   );
