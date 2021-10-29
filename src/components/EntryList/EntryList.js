@@ -83,44 +83,26 @@ const bundleArrayExample = [
   },
 ];
 
-const tagsArrayExample = [
-  { _id: '1', name: 'Tag1 dla test1', tagBundleId: '0' },
-  { _id: '3', name: 'Tag2 dla test1', tagBundleId: '0' },
-  { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
-  { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
-  { _id: '4', name: 'Tag1 dla test3', tagBundleId: '2' },
-  { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
-];
-
-function getTimeStringFromDate(date) {
-  let minutes = date.getMinutes();
-  let hours = date.getHours();
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-  hours = hours < 10 ? `0${hours}` : hours;
-  console.log(minutes, 'minutes');
-  console.log(hours, 'hours');
-  return `${hours}:${minutes}`;
-}
+// const filter = createFilterOptions();
 
 const EntryList = () => {
-  const [entries, setEntries] = useState(entriesExmaple);
-  const [bundles, setBundles] = useState(bundleArrayExample);
-  const [tags, setTags] = useState(tagsArrayExample);
+  const [entries, setEntries] = useState([]);
+  const [bundles, setBundles] = useState([]);
 
-  const {
-    data: dataEntriesNew,
-    loading: loadingEntriesNew,
-    error: errorEntriesNew,
-  } = getEntryByData('2021-10-28T00:00:00.000');
   const {
     data: dataTagBundles,
     loading: loadingTagBundles,
     error: errorTagBundles,
   } = getAllTagBundles();
+  const {
+    data: dataEntriesNew,
+    loading: loadingEntriesNew,
+    error: errorEntriesNew,
+  } = getEntryByData('2021-10-28T00:00:00.000');
 
   useEffect(() => {
     if (dataEntriesNew && dataEntriesNew !== undefined && typeof dataEntriesNew !== 'undefined') {
-      const newEntries = dataEntriesNew.map((entry) => {
+      const newEntries = dataEntriesNew.map((entry, index) => {
         const newEntry = {
           startTime: entry.startTime || '',
           endTime: entry.endTime || '',
@@ -130,26 +112,29 @@ const EntryList = () => {
           tagId: entry.tag?._id || '',
           tagBundle: entry.tag?.tagBundle.name || '',
           tagBundleId: entry.tag?.tagBundle._id || '',
+          index,
         };
         return newEntry;
       });
       setEntries(newEntries);
+      console.log('newEntries', newEntries);
     }
   }, [dataEntriesNew]);
 
   useEffect(() => {
-    console.log(dataTagBundles);
     if (dataTagBundles && dataTagBundles !== undefined) {
-      console.log(dataTagBundles);
-      const newTagBundles = dataTagBundles.map((bundleItem) => {
+      // console.log(dataTagBundles);
+      const newTagBundles = dataTagBundles.map((bundleItem, index) => {
         const newBundle = {
-          _id: bundleItem._id,
-          name: bundleItem.name,
+          _id: bundleItem._id || null,
+          name: bundleItem.name || null,
+          tags: bundleItem.tags || [],
+          index,
         };
         return newBundle;
       });
       setBundles(newTagBundles);
-      console.log(newTagBundles);
+      console.log('newTagBundles', newTagBundles);
     }
   }, [dataTagBundles]);
 
@@ -251,6 +236,11 @@ const EntryList = () => {
           </Box>
         </ListItem>
         {entries.map((entryItem) => {
+          let tagSelected = null;
+          const filterSelectOptions = createFilterOptions();
+          if (entryItem.tagId && entryItem.tag) {
+            tagSelected = entryItem.tag;
+          }
           return (
             <ListItem
               key={entryItem._id}
@@ -266,11 +256,8 @@ const EntryList = () => {
                 initialValues={initialValuesEmpties}
                 entryItem={entryItem}
                 bundleArray={bundles}
-                tagsArray={tags}
-                setTagsState={setTags}
-                filter={createFilterOptions()}
-                // setEntries={setEntries}
-                // entries={entries}
+                tagSelected={tagSelected}
+                filterSelectOptions={filterSelectOptions}
               />
               <Box
                 sx={{

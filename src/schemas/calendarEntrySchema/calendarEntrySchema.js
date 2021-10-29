@@ -7,7 +7,7 @@ const calendarEntrySchema = yup.object().shape({
     .default(null)
     .required()
     .min(yup.ref('timeDate1'), 'Drugi wybrany czas musi być późniejszy niż pierwszy'),
-  bundle: yup.string().default('').required(),
+  bundle: yup.string().default('').min(2).required(),
   bundleId: yup.string().default('').required(),
   tag: yup.string().default('').required(),
 });

@@ -14,33 +14,22 @@ import { useSnackbar } from 'notistack';
 import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
-
-function getTimeStringFromDate(date) {
-  let minutes = date.getMinutes();
-  let hours = date.getHours();
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-  hours = hours < 10 ? `0${hours}` : hours;
-  console.log(minutes, 'minutes');
-  console.log(hours, 'hours');
-  return `${hours}:${minutes}`;
-}
+import { getTimeStringFromDate } from '../../utils/dateHelper';
 
 const EntryListItemForm = ({
   entryItem,
   bundleArray,
-  tagsArray,
-  filter,
-  setTagsState,
   initialValues,
-  // setEntries,
-  // entries,
+  tagSelected,
+  filterSelectOptions,
 }) => {
   const [changesInEntry, setChangesInEntry] = useState(false);
   const [valueTime1, setValueTime1] = useState(null);
   const [valueTime2, setValueTime2] = useState(null);
+  const [valueTime1String] = useState(entryItem.startTime);
+  const [valueTime2String] = useState(entryItem.endTime);
   const [bundleIndexState, setBundleIndexState] = useState('');
-  const [bundleId, setBundleId] = useState('');
-  const [valueTag, setValueTag] = useState(null);
+  const [valueTag, setValueTag] = useState(tagSelected);
   const [tagsArrayCurrent, setTagsArrayCurrent] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [initialStart] = useState('initial');
@@ -79,16 +68,26 @@ const EntryListItemForm = ({
     // setEntries(entriesNew);
   };
 
+  const setBundleSelected = (bundleItem) => {
+    setBundleIndexState(bundleItem.index);
+    formik.setFieldValue('bundleId', bundleItem._id);
+    formik.setFieldValue('bundle', bundleItem.name);
+  };
+
   const handleSelectBundle = (indexArray) => {
+    console.log(indexArray);
     const bundleObj = bundleArray[indexArray];
     if (bundleObj) {
       setValueTag('');
       formik.setFieldValue('tag', '');
-      setBundleIndexState(indexArray);
-      setBundleId(bundleObj?._id);
-      formik.setFieldValue('bundleId', bundleObj?._id);
-      formik.setFieldValue('bundle', bundleObj?.name);
+      setBundleSelected(bundleObj);
+      setTagsArrayCurrent(bundleObj.tags || []);
     }
+  };
+
+  const setTagSelected = (name) => {
+    formik.setFieldValue('tag', name);
+    setValueTag(name);
   };
 
   const handleSelectAddTag = (newValue) => {
@@ -107,7 +106,7 @@ const EntryListItemForm = ({
         name: newValue.inputValue,
         tagBundleId: formik.values.bundleId,
       };
-      setTagsState([...tagsArray, newTag]);
+      // setTagsState([...tagsArray, newTag]);
       // and add to frontend
       // save to backend
       // formik.setFieldValue('tag', newValue.inputValue);
@@ -122,37 +121,58 @@ const EntryListItemForm = ({
   };
 
   useEffect(() => {
-    if (entryItem && entryItem.order > -200) {
-      const startTime = entryItem.startTime.split(':');
-      const endTime = entryItem.endTime.split(':');
-      if (startTime.length === 2) {
+    setChangesInEntry(false);
+  }, [initialStart]);
+
+  useEffect(() => {
+    if (
+      bundleArray &&
+      bundleArray.length > 0 &&
+      entryItem.tagBundleId &&
+      entryItem.tagBundleId.length > 5
+    ) {
+      const indexArrayBundles = bundleArray.findIndex((item) => item._id === entryItem.tagBundleId);
+      console.log(indexArrayBundles);
+      if (indexArrayBundles + 1) {
+        const bundleItem = bundleArray[indexArrayBundles];
+        setBundleIndexState(indexArrayBundles);
+        if (entryItem.tag) {
+          setTagSelected(entryItem.tag);
+          setBundleSelected(bundleItem);
+        }
+      }
+    }
+  }, [bundleArray]);
+
+  useEffect(() => {
+    if (valueTag) {
+      formik.setFieldValue('tag', valueTag);
+    }
+  }, [valueTag]);
+
+  useEffect(() => {
+    if (valueTime1String) {
+      const startTime = valueTime1String.split(':');
+      if (startTime && startTime.length === 2) {
         const newTime1 = new Date();
         newTime1.setHours(startTime[0], startTime[1]);
         setValueTime1(newTime1);
         formik.setFieldValue('timeDate1', newTime1);
       }
-      if (endTime.length === 2) {
+    }
+  }, [valueTime1String]);
+
+  useEffect(() => {
+    if (valueTime2String) {
+      const endTime = valueTime2String.split(':');
+      if (endTime && endTime.length === 2) {
         const newTime2 = new Date();
         newTime2.setHours(endTime[0], endTime[1]);
         setValueTime2(newTime2);
         formik.setFieldValue('timeDate2', newTime2);
       }
-      if (entryItem.tagBundleId)
-        handleSelectBundle(bundleArray.findIndex((item) => item._id === entryItem.tagBundleId));
-      if (entryItem.tagId) handleSelectAddTag(entryItem.tag);
-      setChangesInEntry(false);
     }
-  }, [initialStart]);
-
-  useEffect(() => {
-    const newTagArray = tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId);
-    if (newTagArray) setTagsArrayCurrent(newTagArray);
-  }, [tagsArray]);
-
-  useEffect(() => {
-    // setTagsArrayCurrent(tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId));
-    setTagsArrayCurrent(tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId));
-  }, [bundleId]);
+  }, [valueTime2String]);
 
   return (
     <form>
@@ -258,7 +278,7 @@ const EntryListItemForm = ({
             setChangesInEntry(true);
           }}
           filterOptions={(options, params) => {
-            const filtered = filter(options, params);
+            const filtered = filterSelectOptions(options, params);
             const { inputValue } = params;
             const isExisting = options.some((option) => inputValue === option.name);
             if (inputValue !== '' && !isExisting) {
