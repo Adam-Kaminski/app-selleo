@@ -2,18 +2,34 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
+
+import './Bundle.scss';
+import Typography from '@mui/material/Typography';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import EditBundleDesc from '../../components/EditBundleDesc/EditBundleDesc';
+import usePagination from '../../queries/usePagination';
 import getProfileID from '../../queries/getProfileID';
 import tagBundlebyID from '../../queries/tagBundlebyID';
-import './Bundle.scss';
-import EditBundleDesc from '../../components/EditBundleDesc/EditBundleDesc';
 
 const Bundle = () => {
-  const { id } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
+  const [skipPages, setSkipPages] = useState(0);
 
-  const { dataID, loadingID, errorID } = getProfileID();
+  const { id } = useParams();
 
-  const { tagBundle, loading, error } = tagBundlebyID(id, currentPage);
+  const { dataID } = getProfileID();
+
+  const { dataPag } = usePagination(id);
+
+  const handleChange = (event, value) => {
+    setSkipPages((value - 1) * 10);
+    setCurrentPage(value);
+  };
+
+  const { tagBundle, loading, error } = tagBundlebyID(id, skipPages);
+
+  console.log(dataPag?.pageInfo.pageCount);
 
   if (loading)
     return (
@@ -48,6 +64,17 @@ const Bundle = () => {
               return <li key="">{tag.name}</li>;
             })}
           </ul>
+          <div className="pagination">
+            {tagBundle.tags.length > 0 && (
+              <Stack spacing={2}>
+                <Pagination
+                  count={dataPag?.pageInfo.pageCount}
+                  page={currentPage}
+                  onChange={handleChange}
+                />
+              </Stack>
+            )}
+          </div>
         </div>
       </div>
     </>
