@@ -11,7 +11,7 @@ const ADD_BUNDLE_TO_PROFILE = gql`
 
 const addBundletoProfile = () => {
   const [toggleBundleUsage] = useMutation(ADD_BUNDLE_TO_PROFILE, {
-    refetchQueries: [GET_ALL_TAG_BUNDLES, 'getAllTagBundles'],
+    refetchQueries: [GET_ALL_TAG_BUNDLES, 'GetAllEntries'],
   });
 
   const toggleBundle = (bundleId) => {

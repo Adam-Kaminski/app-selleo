@@ -15,7 +15,9 @@ export const GET_ALL_TAG_BUNDLES = gql`
 `;
 
 const getAllTagBundles = () => {
-  const { data, loading, error } = useQuery(GET_ALL_TAG_BUNDLES);
+  const { data, loading, error } = useQuery(GET_ALL_TAG_BUNDLES, {
+    fetchPolicy: 'network-only',
+  });
   return { data: data?.tagBundleMany, loading, error };
 };
 

@@ -31,10 +31,7 @@ const Bundle = () => {
             return (
               <Link key={singleTagBundle._id} to={`/dashboard/bundle/${singleTagBundle._id}`}>
                 <li>
-                  <span>
-                    {singleTagBundle.name}
-                    <span className="tags">Ilość tagów: {singleTagBundle.tags.length}</span>
-                  </span>
+                  {singleTagBundle.name}
                   {dataID?._id === singleTagBundle.creatorId && (
                     <span className="bundles__user">
                       <AccountCircleIcon />
