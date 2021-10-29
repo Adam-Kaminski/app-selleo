@@ -43,9 +43,6 @@ const EntryListItemForm = ({
     onSubmit: (event) => {
       console.log('submit', event);
       console.log('changesInEntry:', changesInEntry);
-      if (changesInEntry) {
-        showSnackbarMsg(`run Submit for line: ${entryItem.order}`, 'success');
-      }
     },
     validationSchema: calendarEntrySchema,
     isInitialValid: false,
@@ -194,19 +191,10 @@ const EntryListItemForm = ({
                 setChangesInEntry(true);
               }}
               onAccept={() => {
-                formik.handleSubmit();
                 setChangesInEntry(true);
               }}
               renderInput={(params1) => {
-                return (
-                  <TextField
-                    onBlur={() => {
-                      formik.handleSubmit();
-                    }}
-                    isInvalid={formik.errors.valueTime1String}
-                    {...params1}
-                  />
-                );
+                return <TextField {...params1} />;
               }}
               isInvalid={formik.errors.timeDate1}
             />
@@ -223,17 +211,9 @@ const EntryListItemForm = ({
                 setChangesInEntry(true);
               }}
               onAccept={() => {
-                formik.handleSubmit();
                 setChangesInEntry(true);
               }}
-              renderInput={(params2) => (
-                <TextField
-                  onBlur={() => {
-                    formik.handleSubmit();
-                  }}
-                  {...params2}
-                />
-              )}
+              renderInput={(params2) => <TextField {...params2} />}
               isInvalid={formik.errors.timeDate2}
             />
           </div>
@@ -254,9 +234,6 @@ const EntryListItemForm = ({
                 setChangesInEntry(true);
               }}
               isInvalid={formik.errors.bundle}
-              onBlur={() => {
-                formik.handleSubmit();
-              }}
             >
               {bundleArray.map((bundle, index) => {
                 return (
@@ -289,9 +266,6 @@ const EntryListItemForm = ({
           }}
           selectOnFocus
           clearOnBlur
-          onBlur={() => {
-            formik.handleSubmit();
-          }}
           handleHomeEndKeys
           id="free-solo-with-text-demo"
           options={tagsArrayCurrent}
