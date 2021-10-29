@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -13,22 +12,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import plLocale from 'date-fns/locale/pl';
 import './DatePickerComponet.scss';
-
-function getDateString(date) {
-  const dateDayNumber = date.getDate();
-  const dateMonthNumber = date.getMonth() + 1;
-  const dateYearNumber = date.getFullYear();
-  let day = '';
-  let month = '';
-  dateDayNumber < 10 ? (day = '0') : (day = '');
-  dateMonthNumber < 10 ? (month = '0') : (month = '');
-  const dateString = `${day}${dateDayNumber}.${month}${dateMonthNumber}.${dateYearNumber}`;
-  return dateString;
-}
-
-const today = new Date();
-const todayState = new Date(today.getTime() - 100);
-const todayString = getDateString(today);
+import { getDateString, today, todayState, todayString } from '../../utils/dateHelper';
 
 const styleModal = {
   position: 'absolute',
@@ -53,8 +37,7 @@ const isToday = (dateValue) => {
   );
 };
 
-const DatePickerComponet = () => {
-  const [choosenDayDate, setChoosenDayDate] = useState(new Date(todayState.getTime()));
+const DatePickerComponet = ({ stateDateCurrent, setStateDateCurrent }) => {
   const [valueDatePicker, setValueDatePicker] = useState(new Date(todayState.getTime()));
   const [choosenDayString, setChoosenDayString] = useState('');
   const [openModal, setOpenModal] = useState(false);
@@ -62,10 +45,10 @@ const DatePickerComponet = () => {
   const handleClose = () => setOpenModal(false);
 
   function nextDay() {
-    let currentDay = choosenDayDate.getDate();
-    const currentMonth = choosenDayDate.getMonth();
-    const currentYear = choosenDayDate.getFullYear();
-    const newDate = new Date(choosenDayDate.getTime());
+    let currentDay = stateDateCurrent.getDate();
+    const currentMonth = stateDateCurrent.getMonth();
+    const currentYear = stateDateCurrent.getFullYear();
+    const newDate = new Date(stateDateCurrent.getTime());
     currentDay++;
     newDate.setDate(currentDay);
     newDate.setMonth(currentMonth);
@@ -74,37 +57,37 @@ const DatePickerComponet = () => {
       newDate.setMonth(currentMonth + 1);
     }
     if (today.getTime() > newDate.getTime()) {
-      setChoosenDayDate(newDate);
+      setStateDateCurrent(newDate);
     }
   }
 
   function prevDay() {
-    let currentDay = choosenDayDate.getDate();
-    const currentMonth = choosenDayDate.getMonth();
-    const currentYear = choosenDayDate.getFullYear();
+    let currentDay = stateDateCurrent.getDate();
+    const currentMonth = stateDateCurrent.getMonth();
+    const currentYear = stateDateCurrent.getFullYear();
     currentDay--;
-    const newDate = new Date(choosenDayDate.getTime());
+    const newDate = new Date(stateDateCurrent.getTime());
     newDate.setDate(currentDay);
     newDate.setMonth(currentMonth);
     newDate.setFullYear(currentYear);
     if (newDate.getDate() > currentDay) {
       newDate.setMonth(currentMonth - 1);
     }
-    setChoosenDayDate(newDate);
+    setStateDateCurrent(newDate);
   }
 
   function chooseDayInDatePicker(newDate) {
     if (today.getTime() > newDate.getTime()) {
       setValueDatePicker(newDate);
-      setChoosenDayDate(newDate);
+      setStateDateCurrent(newDate);
     }
   }
 
   useEffect(() => {
-    const newDateString = getDateString(choosenDayDate);
+    const newDateString = getDateString(stateDateCurrent);
     setChoosenDayString(newDateString);
-    setValueDatePicker(choosenDayDate);
-  }, [choosenDayDate]);
+    setValueDatePicker(stateDateCurrent);
+  }, [stateDateCurrent]);
 
   const htmlModal = (
     <Modal open={openModal} onClose={handleClose}>
@@ -162,13 +145,16 @@ const DatePickerComponet = () => {
           <ArrowBackIcon />
         </Button>
         <h1 style={{ width: '125px', textAlign: 'center' }}>
-          {isToday(choosenDayDate) ? 'Dzisiaj' : choosenDayString}
+          {isToday(stateDateCurrent) ? 'Dzisiaj' : choosenDayString}
         </h1>
-        <Button variant="contained" onClick={() => nextDay()} disabled={isToday(choosenDayDate)}>
+        <Button variant="contained" onClick={() => nextDay()} disabled={isToday(stateDateCurrent)}>
           <ArrowForwardIcon />
         </Button>
       </Box>
-      <Button variant="contained" onClick={() => setChoosenDayDate(new Date(todayState.getTime()))}>
+      <Button
+        variant="contained"
+        onClick={() => setStateDateCurrent(new Date(todayState.getTime()))}
+      >
         <h2>Dzisiaj: {todayString}</h2>
       </Button>
       <Button variant="contained" onClick={() => handleOpenModal()}>

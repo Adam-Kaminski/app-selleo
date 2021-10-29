@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
@@ -8,7 +8,10 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import StopIcon from '@mui/icons-material/Stop';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import CircularProgress from '@mui/material/CircularProgress';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import getAllTagBundles from '../../queries/getAllTagBundles';
+import getEntryByData from '../../queries/getEntryByDate';
 import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
 
@@ -54,16 +57,37 @@ const entriesExmaple = [
 ];
 
 const bundleArrayExample = [
-  { _id: '0', name: 'FirmaTest1' },
-  { _id: '1', name: 'FirmaTest2' },
-  { _id: '2', name: 'FirmaTest3' },
+  {
+    _id: '0',
+    name: 'FirmaTest1',
+    tags: [
+      { _id: '1', name: 'Tag1 dla test1', tagBundleId: '0' },
+      { _id: '3', name: 'Tag2 dla test1', tagBundleId: '0' },
+    ],
+  },
+  {
+    _id: '1',
+    name: 'FirmaTest2',
+    tags: [
+      { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
+      { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
+    ],
+  },
+  {
+    _id: '2',
+    name: 'FirmaTest3',
+    tags: [
+      { _id: '4', name: 'Tag1 dla test3', tagBundleId: '2' },
+      { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
+    ],
+  },
 ];
 
 const tagsArrayExample = [
-  { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
   { _id: '1', name: 'Tag1 dla test1', tagBundleId: '0' },
-  { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
   { _id: '3', name: 'Tag2 dla test1', tagBundleId: '0' },
+  { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
+  { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
   { _id: '4', name: 'Tag1 dla test3', tagBundleId: '2' },
   { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
 ];
@@ -80,11 +104,72 @@ function getTimeStringFromDate(date) {
 
 const EntryList = () => {
   const [entries, setEntries] = useState(entriesExmaple);
-  const [bundles] = useState(bundleArrayExample);
+  const [bundles, setBundles] = useState(bundleArrayExample);
   const [tags, setTags] = useState(tagsArrayExample);
-  const newDatetime = new Date();
-  newDatetime.setHours(11);
-  newDatetime.setMinutes(30);
+
+  const {
+    data: dataEntriesNew,
+    loading: loadingEntriesNew,
+    error: errorEntriesNew,
+  } = getEntryByData('2021-10-28T00:00:00.000');
+  const {
+    data: dataTagBundles,
+    loading: loadingTagBundles,
+    error: errorTagBundles,
+  } = getAllTagBundles();
+
+  useEffect(() => {
+    if (dataEntriesNew && dataEntriesNew !== undefined && typeof dataEntriesNew !== 'undefined') {
+      const newEntries = dataEntriesNew.map((entry) => {
+        const newEntry = {
+          startTime: entry.startTime || '',
+          endTime: entry.endTime || '',
+          order: entry.order || '',
+          _id: entry._id || null,
+          tag: entry.tag.name || '',
+          tagId: entry.tag._id || '',
+          tagBundle: entry.tag.tagBundle.name || '',
+          tagBundleId: entry.tag.tagBundle._id || '',
+        };
+        return newEntry;
+      });
+      setEntries(newEntries);
+    }
+  }, [dataEntriesNew]);
+
+  useEffect(() => {
+    console.log(dataTagBundles);
+    if (dataTagBundles && dataTagBundles !== undefined) {
+      console.log(dataTagBundles);
+      const newTagBundles = dataTagBundles.map((bundleItem) => {
+        const newBundle = {
+          _id: bundleItem._id,
+          name: bundleItem.name,
+        };
+        return newBundle;
+      });
+      setBundles(newTagBundles);
+      console.log(newTagBundles);
+    }
+  }, [dataTagBundles]);
+
+  if (loadingTagBundles && loadingEntriesNew) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+  if (errorEntriesNew && errorTagBundles) return <div>errors</div>;
 
   const addLineBeforeFirst = () => {
     const emptyEntry = { ...entrySeed };
@@ -165,7 +250,7 @@ const EntryList = () => {
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
-        {entries?.map((entryItem) => {
+        {entries.map((entryItem) => {
           return (
             <ListItem
               key={entryItem._id}

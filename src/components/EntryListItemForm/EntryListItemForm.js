@@ -81,12 +81,14 @@ const EntryListItemForm = ({
 
   const handleSelectBundle = (indexArray) => {
     const bundleObj = bundleArray[indexArray];
-    setValueTag('');
-    formik.setFieldValue('tag', '');
-    setBundleIndexState(indexArray);
-    setBundleId(bundleObj._id);
-    formik.setFieldValue('bundleId', bundleObj._id);
-    formik.setFieldValue('bundle', bundleObj.name);
+    if (bundleObj) {
+      setValueTag('');
+      formik.setFieldValue('tag', '');
+      setBundleIndexState(indexArray);
+      setBundleId(bundleObj?._id);
+      formik.setFieldValue('bundleId', bundleObj?._id);
+      formik.setFieldValue('bundle', bundleObj?.name);
+    }
   };
 
   const handleSelectAddTag = (newValue) => {
@@ -135,8 +137,9 @@ const EntryListItemForm = ({
         setValueTime2(newTime2);
         formik.setFieldValue('timeDate2', newTime2);
       }
-      handleSelectBundle(bundleArray.findIndex((item) => item._id === entryItem.tagBundleId));
-      handleSelectAddTag(entryItem.tag);
+      if (entryItem.tagBundleId)
+        handleSelectBundle(bundleArray.findIndex((item) => item._id === entryItem.tagBundleId));
+      if (entryItem.tagId) handleSelectAddTag(entryItem.tag);
       setChangesInEntry(false);
     }
   }, [initialStart]);
@@ -147,6 +150,7 @@ const EntryListItemForm = ({
   }, [tagsArray]);
 
   useEffect(() => {
+    // setTagsArrayCurrent(tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId));
     setTagsArrayCurrent(tagsArray.filter((tagItem) => tagItem.tagBundleId === bundleId));
   }, [bundleId]);
 
