@@ -10,6 +10,7 @@ import StopIcon from '@mui/icons-material/Stop';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CircularProgress from '@mui/material/CircularProgress';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useSnackbar } from 'notistack';
 import getAllTagBundles from '../../queries/getAllTagBundles';
 import getEntryByData from '../../queries/getEntryByDate';
 import EntryListItemForm from '../EntryListItemForm';
@@ -90,6 +91,12 @@ const EntryList = ({ stateDateCurrent }) => {
   const [entries, setEntries] = useState([]);
   const [bundles, setBundles] = useState([]);
 
+  const { enqueueSnackbar } = useSnackbar();
+
+  const showSnackbarMsg = (msg, variant) => {
+    enqueueSnackbar(msg, { variant });
+  };
+
   const {
     data: dataTagBundles,
     loading: loadingTagBundles,
@@ -161,6 +168,7 @@ const EntryList = ({ stateDateCurrent }) => {
     const emptyEntry = { ...entrySeed };
     emptyEntry._id = `new${entries.length}`;
     setEntries([emptyEntry, ...entries]);
+    showSnackbarMsg(`add after line: ${1}`, 'success');
   };
   const addLine = (entryId) => {
     const emptyEntry = { ...entrySeed };
@@ -169,6 +177,7 @@ const EntryList = ({ stateDateCurrent }) => {
     emptyEntry._id = `new${entries.length}`;
     newArray.splice(index + 1, 0, emptyEntry);
     setEntries(newArray);
+    showSnackbarMsg(`add after line: ${index + 1}`, 'success');
   };
   const removeLine = (entryId) => {
     setEntries(entries.filter((entryItem) => entryItem._id !== entryId));
