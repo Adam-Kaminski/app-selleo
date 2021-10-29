@@ -126,10 +126,10 @@ const EntryList = () => {
           endTime: entry.endTime || '',
           order: entry.order || '',
           _id: entry._id || null,
-          tag: entry.tag.name || '',
-          tagId: entry.tag._id || '',
-          tagBundle: entry.tag.tagBundle.name || '',
-          tagBundleId: entry.tag.tagBundle._id || '',
+          tag: entry.tag?.name || '',
+          tagId: entry.tag?._id || '',
+          tagBundle: entry.tag?.tagBundle.name || '',
+          tagBundleId: entry.tag?.tagBundle._id || '',
         };
         return newEntry;
       });
