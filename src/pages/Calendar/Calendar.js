@@ -28,7 +28,7 @@ const Calendar = () => {
           />
         </section>
         <section className="listSection">
-          <EntryList />
+          <EntryList stateDateCurrent={stateDateCurrent} />
         </section>
       </Box>
     </Box>
