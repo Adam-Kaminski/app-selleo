@@ -19,13 +19,6 @@ const Settings = () => {
   const profileBundles = [dataID?.tagBundlesIds];
 
   const bundleIDhandler = (bundleID) => () => {
-    console.log('AAA', bundleID);
-    console.log('AAA', profileBundles);
-    console.log(
-      'AAA',
-      // eslint-disable-next-line
-      profileBundles.indexOf(bundleID) > -1
-    );
     toggleBundle(bundleID);
   };
 
@@ -44,8 +37,7 @@ const Settings = () => {
                 className="settings__checkbox"
                 key={singleTagBundle._id}
                 control={<Checkbox />}
-                // eslint-disable-next-line
-                checked={profileBundles.some((id) => id == singleTagBundle._id)}
+                checked={profileBundles[0].includes(singleTagBundle._id)}
                 label={singleTagBundle.name}
                 onClick={bundleIDhandler(singleTagBundle._id)}
               />
