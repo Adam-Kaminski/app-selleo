@@ -5,6 +5,14 @@ export const GET_PROFILE_ID = gql`
     getProfile {
       _id
       tagBundlesIds
+      tagBundles {
+        _id
+        name
+        tags {
+          _id
+          name
+        }
+      }
     }
   }
 `;

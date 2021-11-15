@@ -44,8 +44,8 @@ const EntryListItemForm = ({
       console.log('submit', event);
       console.log('changesInEntry:', changesInEntry);
     },
-    validationSchema: calendarEntrySchema,
-    isInitialValid: false,
+    // validationSchema: calendarEntrySchema,
+    isInitialValid: true,
   });
 
   const updateEntries = () => {
@@ -74,6 +74,7 @@ const EntryListItemForm = ({
   const handleSelectBundle = (indexArray) => {
     const bundleObj = bundleArray[indexArray];
     if (bundleObj) {
+      console.log(bundleObj);
       setValueTag('');
       formik.setFieldValue('tag', '');
       setBundleSelected(bundleObj);
@@ -97,15 +98,6 @@ const EntryListItemForm = ({
       setValueTag({
         name: newValue.inputValue,
       });
-      const newTag = {
-        _id: '0',
-        name: newValue.inputValue,
-        tagBundleId: formik.values.bundleId,
-      };
-      // setTagsState([...tagsArray, newTag]);
-      // and add to frontend
-      // save to backend
-      // formik.setFieldValue('tag', newValue.inputValue);
     } else {
       setValueTag(newValue);
       if (newValue && newValue.name) {
@@ -114,6 +106,7 @@ const EntryListItemForm = ({
         formik.setFieldValue('tag', null);
       }
     }
+    formik.handleSubmit();
   };
 
   useEffect(() => {

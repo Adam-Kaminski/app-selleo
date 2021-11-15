@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Settings.scss';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import removeBundlefromProfile from '../../queries/removeBundlefromProfile';
 import addBundletoProfile from '../../queries/addBundletoProfile';
 import getProfileID from '../../queries/getProfileID';
 import getAllTagBundles from '../../queries/getAllTagBundles';
@@ -16,10 +17,12 @@ const Settings = () => {
 
   const { toggleBundle } = addBundletoProfile();
 
+  const { removeBundle } = removeBundlefromProfile();
+
   const profileBundles = [dataID?.tagBundlesIds];
 
-  const bundleIDhandler = (bundleID) => () => {
-    toggleBundle(bundleID);
+  const bundleIDhandler = (bundleID, checked) => () => {
+    checked ? removeBundle(bundleID) : toggleBundle(bundleID);
   };
 
   return (
@@ -39,7 +42,10 @@ const Settings = () => {
                 control={<Checkbox />}
                 checked={profileBundles[0].includes(singleTagBundle._id)}
                 label={singleTagBundle.name}
-                onClick={bundleIDhandler(singleTagBundle._id)}
+                onClick={bundleIDhandler(
+                  singleTagBundle._id,
+                  profileBundles[0].includes(singleTagBundle._id)
+                )}
               />
             );
           })}
