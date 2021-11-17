@@ -36,6 +36,7 @@ module.exports = {
     'no-debugger': 'warn',
     'no-console': 'warn',
     'no-plusplus': 'off',
+    'no-unused-expressions': 'off',
   },
 };
 

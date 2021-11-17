@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { GET_ALL_TAG_BUNDLES } from './getAllTagBundles';
+import { GET_PROFILE_ID } from './getProfileID';
 
 const ADD_BUNDLE_TO_PROFILE = gql`
   mutation AddBundletoUser($bundleId: ID) {
@@ -11,11 +11,10 @@ const ADD_BUNDLE_TO_PROFILE = gql`
 
 const addBundletoProfile = () => {
   const [toggleBundleUsage] = useMutation(ADD_BUNDLE_TO_PROFILE, {
-    refetchQueries: [GET_ALL_TAG_BUNDLES, 'GetAllEntries'],
+    refetchQueries: [GET_PROFILE_ID, 'GetID'],
   });
 
   const toggleBundle = (bundleId) => {
-    console.log(bundleId);
     toggleBundleUsage({
       variables: {
         bundleId,

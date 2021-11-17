@@ -16,6 +16,7 @@ import getEntryByData from '../../queries/getEntryByDate';
 import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
 import { retunrDateFormatString } from '../../utils/dateHelper';
+import getProfileID from '../../queries/getProfileID';
 
 const initialValuesEmpties = {
   timeDate1: null,
@@ -98,10 +99,10 @@ const EntryList = ({ stateDateCurrent }) => {
   };
 
   const {
-    data: dataTagBundles,
+    dataID: dataTagBundles,
     loading: loadingTagBundles,
     error: errorTagBundles,
-  } = getAllTagBundles();
+  } = getProfileID();
   const {
     data: dataEntriesNew,
     loading: loadingEntriesNew,
@@ -131,8 +132,7 @@ const EntryList = ({ stateDateCurrent }) => {
 
   useEffect(() => {
     if (dataTagBundles && dataTagBundles !== undefined) {
-      // console.log(dataTagBundles);
-      const newTagBundles = dataTagBundles.map((bundleItem, index) => {
+      const newTagBundles = dataTagBundles.tagBundles.map((bundleItem, index) => {
         const newBundle = {
           _id: bundleItem._id || null,
           name: bundleItem.name || null,
@@ -142,7 +142,6 @@ const EntryList = ({ stateDateCurrent }) => {
         return newBundle;
       });
       setBundles(newTagBundles);
-      console.log('newTagBundles', newTagBundles);
     }
   }, [dataTagBundles]);
 
