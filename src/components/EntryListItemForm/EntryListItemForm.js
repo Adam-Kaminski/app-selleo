@@ -15,6 +15,7 @@ import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 import { getTimeStringFromDate } from '../../utils/dateHelper';
+import createNewEntry from '../../queries/createNewEntry';
 
 const EntryListItemForm = ({
   entryItem,
@@ -23,16 +24,12 @@ const EntryListItemForm = ({
   tagSelected,
   filterSelectOptions,
 }) => {
-  const [changesInEntry, setChangesInEntry] = useState(false);
-  const [valueTime1, setValueTime1] = useState(null);
-  const [valueTime2, setValueTime2] = useState(null);
-  const [valueTime1String] = useState(entryItem.startTime);
-  const [valueTime2String] = useState(entryItem.endTime);
   const [bundleIndexState, setBundleIndexState] = useState('');
   const [valueTag, setValueTag] = useState(tagSelected);
   const [tagsArrayCurrent, setTagsArrayCurrent] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const [initialStart] = useState('initial');
+
+  const { newEntry } = createNewEntry();
 
   const showSnackbarMsg = (msg, variant) => {
     enqueueSnackbar(msg, { variant });
@@ -40,29 +37,24 @@ const EntryListItemForm = ({
 
   const formik = useFormik({
     initialValues,
-    onSubmit: (event) => {
-      console.log('submit', event);
-      console.log('changesInEntry:', changesInEntry);
+    onSubmit: (values) => {
+      console.log('submit', values);
+      const startTime = `${values.timeDate1.getHours()}:${values.timeDate1.getMinutes()}`;
+      const endTime = `${values.timeDate2.getHours()}:${values.timeDate2.getMinutes()}`;
+      newEntry(values.tag.name, values.bundle, startTime, endTime);
     },
     // validationSchema: calendarEntrySchema,
     isInitialValid: true,
   });
 
   const updateEntries = () => {
-    const startTime = getTimeStringFromDate(valueTime1);
-    const endTime = getTimeStringFromDate(valueTime2);
     const entryToSave = {
       ...entryItem,
-      startTime,
-      endTime,
+
       tag: formik.values.tag,
       tagBundle: formik.values.bundle,
       tagBundleId: formik.values.bundleId,
     };
-    // const entriesNew = [...entries];
-    // const index = entriesNew.findIndex((i) => i._id === entryToSave._id);
-    // entriesNew[index] = entryToSave;
-    // setEntries(entriesNew);
   };
 
   const setBundleSelected = (bundleItem) => {
@@ -75,7 +67,6 @@ const EntryListItemForm = ({
     const bundleObj = bundleArray[indexArray];
     if (bundleObj) {
       console.log(bundleObj);
-      setValueTag('');
       formik.setFieldValue('tag', '');
       setBundleSelected(bundleObj);
       setTagsArrayCurrent(bundleObj.tags || []);
@@ -98,6 +89,9 @@ const EntryListItemForm = ({
       setValueTag({
         name: newValue.inputValue,
       });
+      // get bundle id from formik
+      // handle submit new tag
+      // then return formik.handleSubmit with id of created tag
     } else {
       setValueTag(newValue);
       if (newValue && newValue.name) {
@@ -108,10 +102,6 @@ const EntryListItemForm = ({
     }
     formik.handleSubmit();
   };
-
-  useEffect(() => {
-    setChangesInEntry(false);
-  }, [initialStart]);
 
   useEffect(() => {
     if (
@@ -138,30 +128,6 @@ const EntryListItemForm = ({
     }
   }, [valueTag]);
 
-  useEffect(() => {
-    if (valueTime1String) {
-      const startTime = valueTime1String.split(':');
-      if (startTime && startTime.length === 2) {
-        const newTime1 = new Date();
-        newTime1.setHours(startTime[0], startTime[1]);
-        setValueTime1(newTime1);
-        formik.setFieldValue('timeDate1', newTime1);
-      }
-    }
-  }, [valueTime1String]);
-
-  useEffect(() => {
-    if (valueTime2String) {
-      const endTime = valueTime2String.split(':');
-      if (endTime && endTime.length === 2) {
-        const newTime2 = new Date();
-        newTime2.setHours(endTime[0], endTime[1]);
-        setValueTime2(newTime2);
-        formik.setFieldValue('timeDate2', newTime2);
-      }
-    }
-  }, [valueTime2String]);
-
   return (
     <form>
       <Box
@@ -177,14 +143,9 @@ const EntryListItemForm = ({
           <div style={{ width: '110px' }}>
             <TimePicker
               name="timeDate1"
-              value={valueTime1}
+              value={formik.timeDate1}
               onChange={(newValue1) => {
-                setValueTime1(newValue1);
                 formik.setFieldValue('timeDate1', newValue1);
-                setChangesInEntry(true);
-              }}
-              onAccept={() => {
-                setChangesInEntry(true);
               }}
               renderInput={(params1) => {
                 return <TextField {...params1} />;
@@ -197,14 +158,9 @@ const EntryListItemForm = ({
           <div style={{ width: '110px' }}>
             <TimePicker
               name="timeDate2"
-              value={valueTime2}
+              value={formik.timeDate2}
               onChange={(newValue2) => {
-                setValueTime2(newValue2);
                 formik.setFieldValue('timeDate2', newValue2);
-                setChangesInEntry(true);
-              }}
-              onAccept={() => {
-                setChangesInEntry(true);
               }}
               renderInput={(params2) => <TextField {...params2} />}
               isInvalid={formik.errors.timeDate2}
@@ -223,9 +179,6 @@ const EntryListItemForm = ({
               onChange={(newValueBundle) => {
                 handleSelectBundle(newValueBundle.target.value);
               }}
-              onAccept={() => {
-                setChangesInEntry(true);
-              }}
               isInvalid={formik.errors.bundle}
             >
               {bundleArray.map((bundle, index) => {
@@ -243,7 +196,6 @@ const EntryListItemForm = ({
           value={valueTag}
           onChange={(event, newValue) => {
             handleSelectAddTag(newValue);
-            setChangesInEntry(true);
           }}
           filterOptions={(options, params) => {
             const filtered = filterSelectOptions(options, params);
