@@ -27,6 +27,7 @@ const createNewEntry = () => {
   });
 
   const newEntry = (tagName, tagBundleName, startTime, endTime) => {
+    console.log(tagName);
     addNewEntry({
       variables: {
         tagName,

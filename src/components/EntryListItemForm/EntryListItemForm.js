@@ -17,6 +17,18 @@ import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 import { getTimeStringFromDate } from '../../utils/dateHelper';
 import createNewEntry from '../../queries/createNewEntry';
 
+const stringToDate = (stringTime) => {
+  const dateTime = new Date();
+  if (!stringTime) {
+    return dateTime;
+  }
+  const [hours, minutes] = stringTime.split(':');
+  dateTime.setHours(hours);
+  dateTime.setMinutes(minutes);
+
+  return dateTime;
+};
+
 const EntryListItemForm = ({
   entryItem,
   bundleArray,
@@ -25,7 +37,7 @@ const EntryListItemForm = ({
   filterSelectOptions,
 }) => {
   const [bundleIndexState, setBundleIndexState] = useState('');
-  const [valueTag, setValueTag] = useState(tagSelected);
+
   const [tagsArrayCurrent, setTagsArrayCurrent] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -34,16 +46,25 @@ const EntryListItemForm = ({
   const showSnackbarMsg = (msg, variant) => {
     enqueueSnackbar(msg, { variant });
   };
+  // console.log(Object.keys(entryItem));startTime
+
+  const formInitialValues = {
+    ...entryItem,
+    startTime: stringToDate(entryItem.startTime),
+    endTime: stringToDate(entryItem.endTime),
+  };
 
   const formik = useFormik({
-    initialValues,
+    initialValues: formInitialValues,
     onSubmit: (values) => {
       console.log('submit', values);
-      const startTime = `${values.timeDate1.getHours()}:${values.timeDate1.getMinutes()}`;
-      const endTime = `${values.timeDate2.getHours()}:${values.timeDate2.getMinutes()}`;
-      newEntry(values.tag.name, values.bundle, startTime, endTime);
+
+      const startTime = `${values.startTime.getHours()}:${values.startTime.getMinutes()}`;
+      const endTime = `${values.endTime.getHours()}:${values.endTime.getMinutes()}`;
+
+      newEntry(values.tag, values.bundle, startTime, endTime);
     },
-    // validationSchema: calendarEntrySchema,
+
     isInitialValid: true,
   });
 
@@ -75,31 +96,17 @@ const EntryListItemForm = ({
 
   const setTagSelected = (name) => {
     formik.setFieldValue('tag', name);
-    setValueTag(name);
   };
 
   const handleSelectAddTag = (newValue) => {
     if (typeof newValue === 'string') {
-      setValueTag({
-        name: newValue,
-      });
       formik.setFieldValue('tag', newValue);
-    } else if (newValue && newValue.inputValue) {
-      // Create a new value from the user input
-      setValueTag({
-        name: newValue.inputValue,
-      });
-      // get bundle id from formik
-      // handle submit new tag
-      // then return formik.handleSubmit with id of created tag
+    } else if (newValue && newValue.name) {
+      formik.setFieldValue('tag', newValue.name);
     } else {
-      setValueTag(newValue);
-      if (newValue && newValue.name) {
-        formik.setFieldValue('tag', newValue.name);
-      } else {
-        formik.setFieldValue('tag', null);
-      }
+      formik.setFieldValue('tag', null);
     }
+
     formik.handleSubmit();
   };
 
@@ -122,12 +129,6 @@ const EntryListItemForm = ({
     }
   }, [bundleArray]);
 
-  useEffect(() => {
-    if (valueTag) {
-      formik.setFieldValue('tag', valueTag);
-    }
-  }, [valueTag]);
-
   return (
     <form>
       <Box
@@ -142,28 +143,29 @@ const EntryListItemForm = ({
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
           <div style={{ width: '110px' }}>
             <TimePicker
-              name="timeDate1"
-              value={formik.timeDate1}
+              name="startTime"
+              value={formik.values.startTime}
               onChange={(newValue1) => {
-                formik.setFieldValue('timeDate1', newValue1);
+                formik.setFieldValue('startTime', newValue1);
+                console.log(newValue1);
               }}
               renderInput={(params1) => {
                 return <TextField {...params1} />;
               }}
-              isInvalid={formik.errors.timeDate1}
+              isInvalid={formik.errors.startTime}
             />
           </div>
         </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
           <div style={{ width: '110px' }}>
             <TimePicker
-              name="timeDate2"
-              value={formik.timeDate2}
+              name="endTime"
+              value={formik.values.endTime}
               onChange={(newValue2) => {
-                formik.setFieldValue('timeDate2', newValue2);
+                formik.setFieldValue('endTime', newValue2);
               }}
               renderInput={(params2) => <TextField {...params2} />}
-              isInvalid={formik.errors.timeDate2}
+              isInvalid={formik.errors.endTime}
             />
           </div>
         </LocalizationProvider>
@@ -193,7 +195,7 @@ const EntryListItemForm = ({
         </Box>
         <Autocomplete
           name="tag"
-          value={valueTag}
+          value={formik.values.tag}
           onChange={(event, newValue) => {
             handleSelectAddTag(newValue);
           }}
