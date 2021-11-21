@@ -29,16 +29,8 @@ const stringToDate = (stringTime) => {
   return dateTime;
 };
 
-const EntryListItemForm = ({
-  entryItem,
-  bundleArray,
-  initialValues,
-  tagSelected,
-  filterSelectOptions,
-}) => {
-  const [bundleIndexState, setBundleIndexState] = useState('');
-
-  const [tagsArrayCurrent, setTagsArrayCurrent] = useState([]);
+const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
+  const [currentTags, setCurrentTags] = useState([]); // ??
   const { enqueueSnackbar } = useSnackbar();
 
   const { newEntry } = createNewEntry();
@@ -46,7 +38,6 @@ const EntryListItemForm = ({
   const showSnackbarMsg = (msg, variant) => {
     enqueueSnackbar(msg, { variant });
   };
-  // console.log(Object.keys(entryItem));startTime
 
   const formInitialValues = {
     ...entryItem,
@@ -62,7 +53,8 @@ const EntryListItemForm = ({
       const startTime = `${values.startTime.getHours()}:${values.startTime.getMinutes()}`;
       const endTime = `${values.endTime.getHours()}:${values.endTime.getMinutes()}`;
 
-      newEntry(values.tag, values.bundle, startTime, endTime);
+      // check if values are not empty
+      newEntry(values.tagName, values.tagBundleName, startTime, endTime);
     },
 
     isInitialValid: true,
@@ -73,61 +65,34 @@ const EntryListItemForm = ({
       ...entryItem,
 
       tag: formik.values.tag,
-      tagBundle: formik.values.bundle,
+      tagBundleName: formik.values.bundle,
       tagBundleId: formik.values.bundleId,
     };
   };
 
-  const setBundleSelected = (bundleItem) => {
-    setBundleIndexState(bundleItem.index);
-    formik.setFieldValue('bundleId', bundleItem._id);
-    formik.setFieldValue('bundle', bundleItem.name);
-  };
-
-  const handleSelectBundle = (indexArray) => {
-    const bundleObj = bundleArray[indexArray];
-    if (bundleObj) {
-      console.log(bundleObj);
-      formik.setFieldValue('tag', '');
-      setBundleSelected(bundleObj);
-      setTagsArrayCurrent(bundleObj.tags || []);
+  const handleSelectBundle = (bundleName) => {
+    const bundleObject = bundleArray.filter((bundle) => bundle.name === bundleName)[0];
+    formik.setFieldValue('tagName', '');
+    formik.setFieldValue('tagBundleName', bundleName);
+    if (bundleObject) {
+      setCurrentTags(bundleObject.tags || []);
     }
   };
 
-  const setTagSelected = (name) => {
-    formik.setFieldValue('tag', name);
-  };
-
-  const handleSelectAddTag = (newValue) => {
+  const handleSelectChangeTag = (newValue) => {
+    console.log('new tag value', newValue);
     if (typeof newValue === 'string') {
-      formik.setFieldValue('tag', newValue);
+      formik.setFieldValue('tagName', newValue);
+    } else if (newValue && newValue.inputValue) {
+      formik.setFieldValue('tagName', newValue.inputValue);
     } else if (newValue && newValue.name) {
-      formik.setFieldValue('tag', newValue.name);
+      formik.setFieldValue('tagName', newValue.name);
     } else {
-      formik.setFieldValue('tag', null);
+      formik.setFieldValue('tagName', null);
     }
 
     formik.handleSubmit();
   };
-
-  useEffect(() => {
-    if (
-      bundleArray &&
-      bundleArray.length > 0 &&
-      entryItem.tagBundleId &&
-      entryItem.tagBundleId.length > 5
-    ) {
-      const indexArrayBundles = bundleArray.findIndex((item) => item._id === entryItem.tagBundleId);
-      if (indexArrayBundles + 1) {
-        const bundleItem = bundleArray[indexArrayBundles];
-        setBundleIndexState(indexArrayBundles);
-        setBundleSelected(bundleItem);
-        if (entryItem.tag) {
-          setTagSelected(entryItem.tag);
-        }
-      }
-    }
-  }, [bundleArray]);
 
   return (
     <form>
@@ -145,12 +110,11 @@ const EntryListItemForm = ({
             <TimePicker
               name="startTime"
               value={formik.values.startTime}
-              onChange={(newValue1) => {
-                formik.setFieldValue('startTime', newValue1);
-                console.log(newValue1);
+              onChange={(value) => {
+                formik.setFieldValue('startTime', value);
               }}
-              renderInput={(params1) => {
-                return <TextField {...params1} />;
+              renderInput={(params) => {
+                return <TextField {...params} />;
               }}
               isInvalid={formik.errors.startTime}
             />
@@ -161,31 +125,30 @@ const EntryListItemForm = ({
             <TimePicker
               name="endTime"
               value={formik.values.endTime}
-              onChange={(newValue2) => {
-                formik.setFieldValue('endTime', newValue2);
+              onChange={(value) => {
+                formik.setFieldValue('endTime', value);
               }}
-              renderInput={(params2) => <TextField {...params2} />}
+              renderInput={(params) => <TextField {...params} />}
               isInvalid={formik.errors.endTime}
             />
           </div>
         </LocalizationProvider>
+
         <Box sx={{ width: 150 }}>
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Bundle</InputLabel>
+            <InputLabel>Bundle</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={bundleIndexState}
+              value={formik.values.tagBundleName}
               label="Bundle"
-              name="bundle"
-              onChange={(newValueBundle) => {
-                handleSelectBundle(newValueBundle.target.value);
+              name="tagBundleName"
+              onChange={(input) => {
+                handleSelectBundle(input.target.value);
               }}
               isInvalid={formik.errors.bundle}
             >
               {bundleArray.map((bundle, index) => {
                 return (
-                  <MenuItem key={bundle._id} value={index}>
+                  <MenuItem key={bundle._id} value={bundle.name}>
                     {bundle.name}
                   </MenuItem>
                 );
@@ -194,10 +157,10 @@ const EntryListItemForm = ({
           </FormControl>
         </Box>
         <Autocomplete
-          name="tag"
-          value={formik.values.tag}
+          name="tagName"
+          value={formik.values.tagName}
           onChange={(event, newValue) => {
-            handleSelectAddTag(newValue);
+            handleSelectChangeTag(newValue);
           }}
           filterOptions={(options, params) => {
             const filtered = filterSelectOptions(options, params);
@@ -215,7 +178,7 @@ const EntryListItemForm = ({
           clearOnBlur
           handleHomeEndKeys
           id="free-solo-with-text-demo"
-          options={tagsArrayCurrent}
+          options={currentTags}
           getOptionLabel={(option) => {
             // Value selected with enter, right from the input
             if (typeof option === 'string') {

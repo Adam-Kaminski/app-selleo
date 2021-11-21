@@ -62,21 +62,17 @@ const EntryList = ({ stateDateCurrent }) => {
   useEffect(() => {
     if (dataEntriesNew && dataEntriesNew !== undefined && typeof dataEntriesNew !== 'undefined') {
       const newEntries = dataEntriesNew.map((entry, index) => {
-        const newEntry = {
+        return {
           startTime: entry.startTime || '',
           endTime: entry.endTime || '',
           order: entry.order || '',
           _id: entry._id || null,
-          tag: entry.tag?.name || '',
-          tagId: entry.tag?._id || '',
-          tagBundle: entry.tag?.tagBundle.name || '',
-          tagBundleId: entry.tag?.tagBundle._id || '',
+          tagName: entry.tag?.name || '',
+          tagBundleName: entry.tag?.tagBundle.name || '',
           index,
         };
-        return newEntry;
       });
       setEntries(newEntries);
-      console.log('newEntries', newEntries);
     }
   }, [dataEntriesNew]);
 
@@ -195,11 +191,7 @@ const EntryList = ({ stateDateCurrent }) => {
           </Box>
         </ListItem>
         {entries.map((entryItem) => {
-          let tagSelected = null;
           const filterSelectOptions = createFilterOptions();
-          if (entryItem.tagId && entryItem.tag) {
-            tagSelected = entryItem.tag;
-          }
           return (
             <ListItem
               key={entryItem._id}
@@ -212,10 +204,8 @@ const EntryList = ({ stateDateCurrent }) => {
               }}
             >
               <EntryListItemForm
-                initialValues={initialValuesEmpties}
                 entryItem={entryItem}
                 bundleArray={bundles}
-                tagSelected={tagSelected}
                 filterSelectOptions={filterSelectOptions}
               />
               <Box
