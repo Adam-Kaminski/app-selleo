@@ -36,56 +36,6 @@ const entrySeed = {
   tagBundleId: '',
 };
 
-const entriesExmaple = [
-  {
-    startTime: '11:00',
-    endTime: '12:00',
-    order: 0,
-    _id: '0',
-    tag: 'Tag1 dla test1',
-    tagId: '1',
-    tagBundle: 'FirmaTest1',
-    tagBundleId: '0',
-  },
-  {
-    startTime: '12:00',
-    endTime: '13:00',
-    order: 1,
-    _id: '1',
-    tag: 'Tag2 dla test2',
-    tagId: '2',
-    tagBundle: 'FirmaTest2',
-    tagBundleId: '1',
-  },
-];
-
-const bundleArrayExample = [
-  {
-    _id: '0',
-    name: 'FirmaTest1',
-    tags: [
-      { _id: '1', name: 'Tag1 dla test1', tagBundleId: '0' },
-      { _id: '3', name: 'Tag2 dla test1', tagBundleId: '0' },
-    ],
-  },
-  {
-    _id: '1',
-    name: 'FirmaTest2',
-    tags: [
-      { _id: '0', name: 'Tag1 dla test2', tagBundleId: '1' },
-      { _id: '2', name: 'Tag2 dla test2', tagBundleId: '1' },
-    ],
-  },
-  {
-    _id: '2',
-    name: 'FirmaTest3',
-    tags: [
-      { _id: '4', name: 'Tag1 dla test3', tagBundleId: '2' },
-      { _id: '5', name: 'Tag2 dla test3', tagBundleId: '2' },
-    ],
-  },
-];
-
 // const filter = createFilterOptions();
 
 const EntryList = ({ stateDateCurrent }) => {
@@ -112,21 +62,17 @@ const EntryList = ({ stateDateCurrent }) => {
   useEffect(() => {
     if (dataEntriesNew && dataEntriesNew !== undefined && typeof dataEntriesNew !== 'undefined') {
       const newEntries = dataEntriesNew.map((entry, index) => {
-        const newEntry = {
+        return {
           startTime: entry.startTime || '',
           endTime: entry.endTime || '',
           order: entry.order || '',
           _id: entry._id || null,
-          tag: entry.tag?.name || '',
-          tagId: entry.tag?._id || '',
-          tagBundle: entry.tag?.tagBundle.name || '',
-          tagBundleId: entry.tag?.tagBundle._id || '',
+          tagName: entry.tag?.name || '',
+          tagBundleName: entry.tag?.tagBundle.name || '',
           index,
         };
-        return newEntry;
       });
       setEntries(newEntries);
-      console.log('newEntries', newEntries);
     }
   }, [dataEntriesNew]);
 
@@ -245,11 +191,7 @@ const EntryList = ({ stateDateCurrent }) => {
           </Box>
         </ListItem>
         {entries.map((entryItem) => {
-          let tagSelected = null;
           const filterSelectOptions = createFilterOptions();
-          if (entryItem.tagId && entryItem.tag) {
-            tagSelected = entryItem.tag;
-          }
           return (
             <ListItem
               key={entryItem._id}
@@ -262,10 +204,8 @@ const EntryList = ({ stateDateCurrent }) => {
               }}
             >
               <EntryListItemForm
-                initialValues={initialValuesEmpties}
                 entryItem={entryItem}
                 bundleArray={bundles}
-                tagSelected={tagSelected}
                 filterSelectOptions={filterSelectOptions}
               />
               <Box

@@ -11,8 +11,8 @@ export function getTimeStringFromDate(date) {
 export function retunrDateFormatString(date) {
   const dateNew = new Date(date);
   dateNew.setHours(2, 0, 0, 0);
-  const dateSting = dateNew.toISOString();
-  return dateSting.substring(0, dateSting.length - 1);
+  const dateSting = dateNew.toISOString().replace(/T(.*)/, 'T00:00:00.000Z');
+  return dateSting;
 }
 
 export function getDateString(date) {
