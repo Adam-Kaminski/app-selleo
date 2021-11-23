@@ -17,6 +17,7 @@ import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
 import { retunrDateFormatString } from '../../utils/dateHelper';
 import getProfileID from '../../queries/getProfileID';
+import removeMutationEntry from '../../queries/removeEntry';
 
 const initialValuesEmpties = {
   timeDate1: null,
@@ -41,6 +42,8 @@ const entrySeed = {
 const EntryList = ({ stateDateCurrent }) => {
   const [entries, setEntries] = useState([]);
   const [bundles, setBundles] = useState([]);
+
+  const { removeEntry } = removeMutationEntry();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -126,6 +129,7 @@ const EntryList = ({ stateDateCurrent }) => {
   };
   const removeLine = (entryId) => {
     setEntries(entries.filter((entryItem) => entryItem._id !== entryId));
+    removeEntry(entryId);
   };
 
   const handleCopyToClipboard = () => {

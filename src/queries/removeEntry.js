@@ -2,9 +2,9 @@ import { gql, useMutation } from '@apollo/client';
 import { GET_PROFILE_ID } from './getProfileID';
 
 const REMOVE_ENTRY = gql`
-  mutation removeEntry($id: ID!) {
+  mutation removeEntry($id: MongoID!) {
     entryRemoveById(_id: $id) {
-      _id
+      recordId
     }
   }
 `;
