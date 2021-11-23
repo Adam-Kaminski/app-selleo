@@ -50,7 +50,9 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
     onSubmit: (values) => {
       console.log('submit', values);
 
-      const startTime = `${values.startTime.getHours()}:${values.startTime.getMinutes()}`;
+      const startTime = `${values.startTime.getHours()}:${
+        (values.startTime.getMinutes() < 10 ? '0' : '') + values.startTime.getMinutes()
+      }`;
       const endTime = `${values.endTime.getHours()}:${values.endTime.getMinutes()}`;
 
       // check if values are not empty
