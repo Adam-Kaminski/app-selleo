@@ -7,6 +7,7 @@ const CREATE_NEW_ENTRY = gql`
     $tagBundleName: String
     $startTime: String
     $endTime: String
+    $order: Int
   ) {
     createEntry(
       record: {
@@ -14,6 +15,7 @@ const CREATE_NEW_ENTRY = gql`
         tagBundleName: $tagBundleName
         startTime: $startTime
         endTime: $endTime
+        order: $order
       }
     ) {
       _id
@@ -22,22 +24,23 @@ const CREATE_NEW_ENTRY = gql`
 `;
 
 const createNewEntry = () => {
-  const [addNewEntry] = useMutation(CREATE_NEW_ENTRY, {
+  const [addNewEntry, { data }] = useMutation(CREATE_NEW_ENTRY, {
     refetchQueries: [GET_PROFILE_ID, 'GetID'],
   });
 
-  const newEntry = (tagName, tagBundleName, startTime, endTime) => {
+  const newEntry = (tagName, tagBundleName, startTime, endTime, order) => {
     addNewEntry({
       variables: {
         tagName,
         tagBundleName,
         startTime,
         endTime,
+        order,
       },
     });
   };
 
-  return { newEntry };
+  return { newEntry, data };
 };
 
 export default createNewEntry;

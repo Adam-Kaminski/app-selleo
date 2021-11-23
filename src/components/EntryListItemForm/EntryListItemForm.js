@@ -34,7 +34,8 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
   const [currentTags, setCurrentTags] = useState([]); // ??
   const { enqueueSnackbar } = useSnackbar();
 
-  const { newEntry } = createNewEntry();
+  const { newEntry, data } = createNewEntry();
+  console.log(data);
   const { updateEntry } = updateMutationEntry();
 
   const showSnackbarMsg = (msg, variant) => {
@@ -55,19 +56,26 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
       const startTime = `${values.startTime.getHours()}:${
         (values.startTime.getMinutes() < 10 ? '0' : '') + values.startTime.getMinutes()
       }`;
-      const endTime = `${values.endTime.getHours()}:${values.endTime.getMinutes()}`;
+      const endTime = `${values.endTime.getHours()}:${
+        (values.endTime.getMinutes() < 10 ? '0' : '') + values.endTime.getMinutes()
+      }`;
+      const order = 1;
 
-      if (entryItem._id) {
-        console.log('entryItemId', entryItem._id);
-        updateEntry(entryItem._id, values.tagName, values.tagBundleName, startTime, endTime);
-      } else {
-        // check if values are not empty
-        newEntry(values.tagName, values.tagBundleName, startTime, endTime);
+      if (values._id && values.tagName) {
+        updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
+      } else if (values.tagName) {
+        newEntry(values.tagName, values.tagBundleName, startTime, endTime, order);
       }
     },
 
     isInitialValid: true,
   });
+
+  useEffect(() => {
+    if (data?.createEntry?._id) {
+      formik.setFieldValue('_id', data.createEntry._id);
+    }
+  }, [data]);
 
   const handleSelectBundle = (bundleName) => {
     const bundleObject = bundleArray.filter((bundle) => bundle.name === bundleName)[0];
@@ -92,7 +100,6 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
 
     formik.handleSubmit();
   };
-
   return (
     <form>
       <Box
@@ -111,6 +118,7 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
               value={formik.values.startTime}
               onChange={(value) => {
                 formik.setFieldValue('startTime', value);
+                formik.handleSubmit();
               }}
               renderInput={(params) => {
                 return <TextField {...params} />;
@@ -126,6 +134,7 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
               value={formik.values.endTime}
               onChange={(value) => {
                 formik.setFieldValue('endTime', value);
+                formik.handleSubmit();
               }}
               renderInput={(params) => <TextField {...params} />}
               isInvalid={formik.errors.endTime}

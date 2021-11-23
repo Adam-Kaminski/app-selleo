@@ -114,7 +114,6 @@ const EntryList = ({ stateDateCurrent }) => {
 
   const addLineBeforeFirst = () => {
     const emptyEntry = { ...entrySeed };
-    emptyEntry._id = `new${entries.length}`;
     setEntries([emptyEntry, ...entries]);
     showSnackbarMsg(`add after line: ${1}`, 'success');
   };
@@ -122,20 +121,22 @@ const EntryList = ({ stateDateCurrent }) => {
     const emptyEntry = { ...entrySeed };
     const newArray = [...entries];
     const index = entries.findIndex((item) => item._id === entryId);
-    // emptyEntry._id = `new${entries.length}`;
     newArray.splice(index + 1, 0, emptyEntry);
     setEntries(newArray);
     showSnackbarMsg(`add after line: ${index + 1}`, 'success');
   };
+
   const removeLine = (entryId) => {
     setEntries(entries.filter((entryItem) => entryItem._id !== entryId));
-    removeEntry(entryId);
+    if (entryId) {
+      removeEntry(entryId);
+    }
   };
 
   const handleCopyToClipboard = () => {
     let string = '';
     entries.forEach((entry, index) => {
-      string += `${entry.startTime} ${entry.endTime} ${entry.tagBundle}-${entry.tag}\n`;
+      string += `${entry.startTime} ${entry.endTime} ${entry.tagBundleName}-${entry.tagName}\n`;
     });
     navigator.clipboard.writeText(string);
   };
