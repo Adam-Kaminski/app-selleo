@@ -119,7 +119,7 @@ const EntryList = ({ stateDateCurrent }) => {
     const emptyEntry = { ...entrySeed };
     const newArray = [...entries];
     const index = entries.findIndex((item) => item._id === entryId);
-    emptyEntry._id = `new${entries.length}`;
+    // emptyEntry._id = `new${entries.length}`;
     newArray.splice(index + 1, 0, emptyEntry);
     setEntries(newArray);
     showSnackbarMsg(`add after line: ${index + 1}`, 'success');

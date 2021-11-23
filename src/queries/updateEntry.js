@@ -1,14 +1,16 @@
 import { gql, useMutation } from '@apollo/client';
 import { GET_PROFILE_ID } from './getProfileID';
 
-const CREATE_NEW_ENTRY = gql`
-  mutation addNewEntry(
+const UPDATE_ENTRY = gql`
+  mutation updateEntry(
+    $id: ID!
     $tagName: String
     $tagBundleName: String
     $startTime: String
     $endTime: String
   ) {
-    createEntry(
+    updateEntry(
+      _id: $id
       record: {
         tagName: $tagName
         tagBundleName: $tagBundleName
@@ -21,14 +23,16 @@ const CREATE_NEW_ENTRY = gql`
   }
 `;
 
-const createNewEntry = () => {
-  const [addNewEntry] = useMutation(CREATE_NEW_ENTRY, {
+const updateMutationEntry = () => {
+  const [updateNewEntry] = useMutation(UPDATE_ENTRY, {
     refetchQueries: [GET_PROFILE_ID, 'GetID'],
   });
 
-  const newEntry = (tagName, tagBundleName, startTime, endTime) => {
-    addNewEntry({
+  const updateEntry = (id, tagName, tagBundleName, startTime, endTime) => {
+    console.log('id', id);
+    updateNewEntry({
       variables: {
+        id,
         tagName,
         tagBundleName,
         startTime,
@@ -37,7 +41,7 @@ const createNewEntry = () => {
     });
   };
 
-  return { newEntry };
+  return { updateEntry };
 };
 
-export default createNewEntry;
+export default updateMutationEntry;

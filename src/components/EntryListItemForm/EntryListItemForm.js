@@ -16,6 +16,7 @@ import './EntryListItemForm.scss';
 import calendarEntrySchema from '../../schemas/calendarEntrySchema';
 import { getTimeStringFromDate } from '../../utils/dateHelper';
 import createNewEntry from '../../queries/createNewEntry';
+import updateMutationEntry from '../../queries/updateEntry';
 
 const stringToDate = (stringTime) => {
   const dateTime = new Date();
@@ -34,6 +35,7 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const { newEntry } = createNewEntry();
+  const { updateEntry } = updateMutationEntry();
 
   const showSnackbarMsg = (msg, variant) => {
     enqueueSnackbar(msg, { variant });
@@ -55,22 +57,17 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
       }`;
       const endTime = `${values.endTime.getHours()}:${values.endTime.getMinutes()}`;
 
-      // check if values are not empty
-      newEntry(values.tagName, values.tagBundleName, startTime, endTime);
+      if (entryItem._id) {
+        console.log('entryItemId', entryItem._id);
+        updateEntry(entryItem._id, values.tagName, values.tagBundleName, startTime, endTime);
+      } else {
+        // check if values are not empty
+        newEntry(values.tagName, values.tagBundleName, startTime, endTime);
+      }
     },
 
     isInitialValid: true,
   });
-
-  const updateEntries = () => {
-    const entryToSave = {
-      ...entryItem,
-
-      tag: formik.values.tag,
-      tagBundleName: formik.values.bundle,
-      tagBundleId: formik.values.bundleId,
-    };
-  };
 
   const handleSelectBundle = (bundleName) => {
     const bundleObject = bundleArray.filter((bundle) => bundle.name === bundleName)[0];
