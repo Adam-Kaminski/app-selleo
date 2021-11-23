@@ -136,7 +136,7 @@ const EntryList = ({ stateDateCurrent }) => {
   const handleCopyToClipboard = () => {
     let string = '';
     entries.forEach((entry, index) => {
-      string += `${entry.startTime} ${entry.endTime} ${entry.tagBundle}-${entry.tag}\n`;
+      string += `${entry.startTime} ${entry.endTime} ${entry.tagBundleName}-${entry.tagName}\n`;
     });
     navigator.clipboard.writeText(string);
   };
