@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
 import { GET_PROFILE_ID } from './getProfileID';
+import { GET_BY_DATE } from './getEntryByDate';
 
 const REMOVE_ENTRY = gql`
   mutation removeEntry($id: MongoID!) {
@@ -11,7 +12,7 @@ const REMOVE_ENTRY = gql`
 
 const removeMutationEntry = () => {
   const [removeNewEntry] = useMutation(REMOVE_ENTRY, {
-    refetchQueries: [GET_PROFILE_ID, 'GetID'],
+    refetchQueries: [GET_BY_DATE, 'GetEntryByData'],
   });
 
   const removeEntry = (id) => {

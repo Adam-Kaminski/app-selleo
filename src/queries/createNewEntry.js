@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { GET_PROFILE_ID } from './getProfileID';
+import { GET_BY_DATE } from './getEntryByDate';
 
 const CREATE_NEW_ENTRY = gql`
   mutation addNewEntry(
@@ -25,10 +25,11 @@ const CREATE_NEW_ENTRY = gql`
 
 const createNewEntry = () => {
   const [addNewEntry, { data }] = useMutation(CREATE_NEW_ENTRY, {
-    refetchQueries: [GET_PROFILE_ID, 'GetID'],
+    refetchQueries: [GET_BY_DATE, 'GetEntryByData'],
   });
 
   const newEntry = (tagName, tagBundleName, startTime, endTime, order) => {
+    console.log('mutacja');
     addNewEntry({
       variables: {
         tagName,

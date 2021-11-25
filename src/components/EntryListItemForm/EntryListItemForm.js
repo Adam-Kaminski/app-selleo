@@ -31,19 +31,23 @@ const stringToDate = (stringTime) => {
 };
 
 const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
+  console.log('array', bundleArray);
   const [currentTags, setCurrentTags] = useState([]); // ??
   const { enqueueSnackbar } = useSnackbar();
 
   const { newEntry, data } = createNewEntry();
-  console.log(data);
+  // console.log(data);
   const { updateEntry } = updateMutationEntry();
 
   const showSnackbarMsg = (msg, variant) => {
     enqueueSnackbar(msg, { variant });
   };
+  console.log('entryItem:', entryItem);
 
   const formInitialValues = {
     ...entryItem,
+    tagBundleName: entryItem?.tag?.tagBundle.name,
+    tagName: entryItem?.tag?.name,
     startTime: stringToDate(entryItem.startTime),
     endTime: stringToDate(entryItem.endTime),
   };
@@ -59,12 +63,16 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
       const endTime = `${values.endTime.getHours()}:${
         (values.endTime.getMinutes() < 10 ? '0' : '') + values.endTime.getMinutes()
       }`;
-      const order = 1;
 
-      if (values._id && values.tagName) {
-        updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
-      } else if (values.tagName) {
-        newEntry(values.tagName, values.tagBundleName, startTime, endTime, order);
+      if (values._id) {
+        if (
+          (values.tagName && values.tagBundleName) ||
+          (!values.tagName && !values.tagBundleName)
+        ) {
+          updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
+        }
+      } else {
+        newEntry(values.tagName, values.tagBundleName, startTime, endTime, values.order);
       }
     },
 
@@ -111,6 +119,7 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
           justifyContent: 'center',
         }}
       >
+        <div>{formik.values.order}</div>
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
           <div style={{ width: '110px' }}>
             <TimePicker
