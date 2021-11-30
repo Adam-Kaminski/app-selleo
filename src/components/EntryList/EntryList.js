@@ -18,10 +18,17 @@ import './EntryList.scss';
 import { retunrDateFormatString } from '../../utils/dateHelper';
 import getProfileID from '../../queries/getProfileID';
 import createNewEntry from '../../queries/createNewEntry';
+import updateMutationEntry from '../../queries/updateEntry';
 import removeMutationEntry from '../../queries/removeEntry';
 
 const EntryList = ({ stateDateCurrent }) => {
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [startTime, setStartTime] = useState('');
+  const [getID, setGetID] = useState('');
+
   const { newEntry, data } = createNewEntry();
+
+  const { updateEntry } = updateMutationEntry();
 
   const { removeEntry } = removeMutationEntry();
 
@@ -42,7 +49,7 @@ const EntryList = ({ stateDateCurrent }) => {
     error: errorEntriesNew,
   } = getEntryByData(retunrDateFormatString(stateDateCurrent));
 
-  console.log('Bundles:', dataTagBundles);
+  console.log('Entries:', dataEntriesNew);
 
   const bundles = useMemo(() => {
     return (
@@ -76,8 +83,13 @@ const EntryList = ({ stateDateCurrent }) => {
   }
   if (errorEntriesNew && errorTagBundles) return <div>errors</div>;
 
-  const addLine = (order) => {
-    newEntry(null, null, '00:00', '00:00', order);
+  const addLine = (order, id) => {
+    const newTime = new Date();
+    const time = `${newTime.getHours()}:${
+      (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
+    }`;
+
+    newEntry(null, null, time, '00:00', order);
   };
 
   const removeLine = (entryId) => {
@@ -94,13 +106,20 @@ const EntryList = ({ stateDateCurrent }) => {
     navigator.clipboard.writeText(string);
   };
 
-  const handleNewEntryStartStop = () => {
-    // const newEntries = [...entries];
-    // const now = getTimeStringFromDate(new Date());
-    // newEntries[newEntries.length - 1].endTime = now;
-    // newEntries.push({ ...entrySeed });
-    // newEntries[newEntries.length - 1].startTime = now;
-    // setEntries(newEntries);
+  const handleNewEntryStartStop = (order) => {
+    const newTime = new Date();
+    const time = `${newTime.getHours()}:${
+      (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
+    }`;
+
+    if (!timerRunning) {
+      newEntry(null, null, time, '00:00', order);
+      setStartTime(time);
+    } else {
+      updateEntry(data?.createEntry?._id, null, null, startTime, time);
+    }
+
+    setTimerRunning(!timerRunning);
   };
 
   return (
@@ -212,10 +231,11 @@ const EntryList = ({ stateDateCurrent }) => {
           <StopIcon />
           <PlayArrowIcon />
         </Button>
+
         <Button
           variant="contained"
           onClick={() => {
-            handleCopyToClipboard();
+            handleCopyToClipboard(0);
           }}
         >
           <CopyAllIcon />

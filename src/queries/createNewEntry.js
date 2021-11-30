@@ -29,7 +29,6 @@ const createNewEntry = () => {
   });
 
   const newEntry = (tagName, tagBundleName, startTime, endTime, order) => {
-    console.log('mutacja');
     addNewEntry({
       variables: {
         tagName,

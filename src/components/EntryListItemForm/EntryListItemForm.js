@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useFormik } from 'formik';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -31,29 +31,26 @@ const stringToDate = (stringTime) => {
 };
 
 const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
-  console.log('array', bundleArray);
   const [currentTags, setCurrentTags] = useState([]); // ??
-  const { enqueueSnackbar } = useSnackbar();
 
   const { newEntry, data } = createNewEntry();
-  // console.log(data);
+
   const { updateEntry } = updateMutationEntry();
 
-  const showSnackbarMsg = (msg, variant) => {
-    enqueueSnackbar(msg, { variant });
-  };
-  console.log('entryItem:', entryItem);
-
-  const formInitialValues = {
-    ...entryItem,
-    tagBundleName: entryItem?.tag?.tagBundle.name,
-    tagName: entryItem?.tag?.name,
-    startTime: stringToDate(entryItem.startTime),
-    endTime: stringToDate(entryItem.endTime),
-  };
+  const formInitialValues = useMemo(
+    () => ({
+      ...entryItem,
+      tagBundleName: entryItem?.tag?.tagBundle.name,
+      tagName: entryItem?.tag?.name,
+      startTime: stringToDate(entryItem.startTime),
+      endTime: stringToDate(entryItem.endTime),
+    }),
+    [entryItem]
+  );
 
   const formik = useFormik({
     initialValues: formInitialValues,
+    enableReinitialize: true,
     onSubmit: (values) => {
       console.log('submit', values);
 
@@ -84,6 +81,15 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
       formik.setFieldValue('_id', data.createEntry._id);
     }
   }, [data]);
+
+  useEffect(() => {
+    const bundleObject = bundleArray.filter(
+      (bundle) => bundle.name === entryItem?.tag?.tagBundle.name
+    )[0];
+    if (bundleObject) {
+      setCurrentTags(bundleObject.tags || []);
+    }
+  }, []);
 
   const handleSelectBundle = (bundleName) => {
     const bundleObject = bundleArray.filter((bundle) => bundle.name === bundleName)[0];
