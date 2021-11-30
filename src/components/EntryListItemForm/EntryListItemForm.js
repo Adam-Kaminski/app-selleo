@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useFormik } from 'formik';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -32,24 +32,25 @@ const stringToDate = (stringTime) => {
 
 const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
   const [currentTags, setCurrentTags] = useState([]); // ??
-  const { enqueueSnackbar } = useSnackbar();
 
   const { newEntry, data } = createNewEntry();
-  console.log(data);
+
   const { updateEntry } = updateMutationEntry();
 
-  const showSnackbarMsg = (msg, variant) => {
-    enqueueSnackbar(msg, { variant });
-  };
-
-  const formInitialValues = {
-    ...entryItem,
-    startTime: stringToDate(entryItem.startTime),
-    endTime: stringToDate(entryItem.endTime),
-  };
+  const formInitialValues = useMemo(
+    () => ({
+      ...entryItem,
+      tagBundleName: entryItem?.tag?.tagBundle.name,
+      tagName: entryItem?.tag?.name,
+      startTime: stringToDate(entryItem.startTime),
+      endTime: stringToDate(entryItem.endTime),
+    }),
+    [entryItem]
+  );
 
   const formik = useFormik({
     initialValues: formInitialValues,
+    enableReinitialize: true,
     onSubmit: (values) => {
       console.log('submit', values);
 
@@ -59,12 +60,16 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
       const endTime = `${values.endTime.getHours()}:${
         (values.endTime.getMinutes() < 10 ? '0' : '') + values.endTime.getMinutes()
       }`;
-      const order = 1;
 
-      if (values._id && values.tagName) {
-        updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
-      } else if (values.tagName) {
-        newEntry(values.tagName, values.tagBundleName, startTime, endTime, order);
+      if (values._id) {
+        if (
+          (values.tagName && values.tagBundleName) ||
+          (!values.tagName && !values.tagBundleName)
+        ) {
+          updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
+        }
+      } else {
+        newEntry(values.tagName, values.tagBundleName, startTime, endTime, values.order);
       }
     },
 
@@ -76,6 +81,15 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
       formik.setFieldValue('_id', data.createEntry._id);
     }
   }, [data]);
+
+  useEffect(() => {
+    const bundleObject = bundleArray.filter(
+      (bundle) => bundle.name === entryItem?.tag?.tagBundle.name
+    )[0];
+    if (bundleObject) {
+      setCurrentTags(bundleObject.tags || []);
+    }
+  }, []);
 
   const handleSelectBundle = (bundleName) => {
     const bundleObject = bundleArray.filter((bundle) => bundle.name === bundleName)[0];
@@ -111,6 +125,7 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
           justifyContent: 'center',
         }}
       >
+        <div>{formik.values.order}</div>
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
           <div style={{ width: '110px' }}>
             <TimePicker

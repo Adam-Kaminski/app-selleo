@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
@@ -17,31 +17,18 @@ import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
 import { retunrDateFormatString } from '../../utils/dateHelper';
 import getProfileID from '../../queries/getProfileID';
+import createNewEntry from '../../queries/createNewEntry';
+import updateMutationEntry from '../../queries/updateEntry';
 import removeMutationEntry from '../../queries/removeEntry';
 
-const initialValuesEmpties = {
-  timeDate1: null,
-  timeDate2: null,
-  bundle: 'FirmaTest1',
-  tag: '',
-};
-
-const entrySeed = {
-  startTime: '',
-  endTime: '',
-  order: -201,
-  _id: null,
-  tag: '',
-  tagId: '',
-  tagBundle: '',
-  tagBundleId: '',
-};
-
-// const filter = createFilterOptions();
-
 const EntryList = ({ stateDateCurrent }) => {
-  const [entries, setEntries] = useState([]);
-  const [bundles, setBundles] = useState([]);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [startTime, setStartTime] = useState('');
+  const [getID, setGetID] = useState('');
+
+  const { newEntry, data } = createNewEntry();
+
+  const { updateEntry } = updateMutationEntry();
 
   const { removeEntry } = removeMutationEntry();
 
@@ -62,26 +49,11 @@ const EntryList = ({ stateDateCurrent }) => {
     error: errorEntriesNew,
   } = getEntryByData(retunrDateFormatString(stateDateCurrent));
 
-  useEffect(() => {
-    if (dataEntriesNew && dataEntriesNew !== undefined && typeof dataEntriesNew !== 'undefined') {
-      const newEntries = dataEntriesNew.map((entry, index) => {
-        return {
-          startTime: entry.startTime || '',
-          endTime: entry.endTime || '',
-          order: entry.order || '',
-          _id: entry._id || null,
-          tagName: entry.tag?.name || '',
-          tagBundleName: entry.tag?.tagBundle.name || '',
-          index,
-        };
-      });
-      setEntries(newEntries);
-    }
-  }, [dataEntriesNew]);
+  console.log('Entries:', dataEntriesNew);
 
-  useEffect(() => {
-    if (dataTagBundles && dataTagBundles !== undefined) {
-      const newTagBundles = dataTagBundles.tagBundles.map((bundleItem, index) => {
+  const bundles = useMemo(() => {
+    return (
+      dataTagBundles?.tagBundles?.map((bundleItem, index) => {
         const newBundle = {
           _id: bundleItem._id || null,
           name: bundleItem.name || null,
@@ -89,9 +61,8 @@ const EntryList = ({ stateDateCurrent }) => {
           index,
         };
         return newBundle;
-      });
-      setBundles(newTagBundles);
-    }
+      }) || []
+    );
   }, [dataTagBundles]);
 
   if (loadingTagBundles && loadingEntriesNew) {
@@ -112,22 +83,16 @@ const EntryList = ({ stateDateCurrent }) => {
   }
   if (errorEntriesNew && errorTagBundles) return <div>errors</div>;
 
-  const addLineBeforeFirst = () => {
-    const emptyEntry = { ...entrySeed };
-    setEntries([emptyEntry, ...entries]);
-    showSnackbarMsg(`add after line: ${1}`, 'success');
-  };
-  const addLine = (entryId) => {
-    const emptyEntry = { ...entrySeed };
-    const newArray = [...entries];
-    const index = entries.findIndex((item) => item._id === entryId);
-    newArray.splice(index + 1, 0, emptyEntry);
-    setEntries(newArray);
-    showSnackbarMsg(`add after line: ${index + 1}`, 'success');
+  const addLine = (order, id) => {
+    const newTime = new Date();
+    const time = `${newTime.getHours()}:${
+      (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
+    }`;
+
+    newEntry(null, null, time, '00:00', order);
   };
 
   const removeLine = (entryId) => {
-    setEntries(entries.filter((entryItem) => entryItem._id !== entryId));
     if (entryId) {
       removeEntry(entryId);
     }
@@ -135,19 +100,26 @@ const EntryList = ({ stateDateCurrent }) => {
 
   const handleCopyToClipboard = () => {
     let string = '';
-    entries.forEach((entry, index) => {
+    dataEntriesNew.forEach((entry, index) => {
       string += `${entry.startTime} ${entry.endTime} ${entry.tagBundleName}-${entry.tagName}\n`;
     });
     navigator.clipboard.writeText(string);
   };
 
-  const handleNewEntryStartStop = () => {
-    // const newEntries = [...entries];
-    // const now = getTimeStringFromDate(new Date());
-    // newEntries[newEntries.length - 1].endTime = now;
-    // newEntries.push({ ...entrySeed });
-    // newEntries[newEntries.length - 1].startTime = now;
-    // setEntries(newEntries);
+  const handleNewEntryStartStop = (order) => {
+    const newTime = new Date();
+    const time = `${newTime.getHours()}:${
+      (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
+    }`;
+
+    if (!timerRunning) {
+      newEntry(null, null, time, '00:00', order);
+      setStartTime(time);
+    } else {
+      updateEntry(data?.createEntry?._id, null, null, startTime, time);
+    }
+
+    setTimerRunning(!timerRunning);
   };
 
   return (
@@ -187,7 +159,7 @@ const EntryList = ({ stateDateCurrent }) => {
               color="success"
               sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
               onClick={() => {
-                addLineBeforeFirst();
+                addLine(0);
               }}
             >
               <AddCircleOutlineIcon />
@@ -195,7 +167,7 @@ const EntryList = ({ stateDateCurrent }) => {
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
-        {entries.map((entryItem) => {
+        {dataEntriesNew?.map((entryItem) => {
           const filterSelectOptions = createFilterOptions();
           return (
             <ListItem
@@ -226,7 +198,7 @@ const EntryList = ({ stateDateCurrent }) => {
                   color="success"
                   sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
                   onClick={() => {
-                    addLine(entryItem._id);
+                    addLine(entryItem.order);
                   }}
                 >
                   <AddCircleOutlineIcon />
@@ -259,10 +231,11 @@ const EntryList = ({ stateDateCurrent }) => {
           <StopIcon />
           <PlayArrowIcon />
         </Button>
+
         <Button
           variant="contained"
           onClick={() => {
-            handleCopyToClipboard();
+            handleCopyToClipboard(0);
           }}
         >
           <CopyAllIcon />
