@@ -21,7 +21,7 @@ import updateMutationEntry from '../../queries/updateEntry';
 const stringToDate = (stringTime) => {
   const dateTime = new Date();
   if (!stringTime) {
-    return dateTime;
+    return null;
   }
   const [hours, minutes] = stringTime.split(':');
   dateTime.setHours(hours);
@@ -54,12 +54,14 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
     onSubmit: (values) => {
       console.log('submit', values);
 
-      const startTime = `${values.startTime.getHours()}:${
-        (values.startTime.getMinutes() < 10 ? '0' : '') + values.startTime.getMinutes()
-      }`;
-      const endTime = `${values.endTime.getHours()}:${
+      const startTime = `${
+        (values.startTime.getHours() < 10 ? '0' : '') + values.startTime.getHours()
+      }:${(values.startTime.getMinutes() < 10 ? '0' : '') + values.startTime.getMinutes()}`;
+      const endTime = `${(values.endTime.getHours() < 10 ? '0' : '') + values.endTime.getHours()}:${
         (values.endTime.getMinutes() < 10 ? '0' : '') + values.endTime.getMinutes()
       }`;
+
+      console.log('startTime:', startTime);
 
       if (values._id) {
         if (
@@ -69,7 +71,7 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
           updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
         }
       } else {
-        newEntry(values.tagName, values.tagBundleName, startTime, endTime, values.order);
+        alert('uwaga');
       }
     },
 
@@ -101,7 +103,6 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
   };
 
   const handleSelectChangeTag = (newValue) => {
-    console.log('new tag value', newValue);
     if (typeof newValue === 'string') {
       formik.setFieldValue('tagName', newValue);
     } else if (newValue && newValue.inputValue) {
@@ -125,7 +126,6 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
           justifyContent: 'center',
         }}
       >
-        <div>{formik.values.order}</div>
         <LocalizationProvider dateAdapter={AdapterDateFns} locale={plLocale}>
           <div style={{ width: '110px' }}>
             <TimePicker

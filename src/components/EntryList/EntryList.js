@@ -82,7 +82,7 @@ const EntryList = ({ stateDateCurrent }) => {
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
     }`;
 
-    newEntry(null, null, time, '00:00', order);
+    newEntry(null, null, time);
   };
 
   const removeLine = (entryId) => {
@@ -106,7 +106,7 @@ const EntryList = ({ stateDateCurrent }) => {
     }`;
 
     if (!timerRunning) {
-      newEntry(null, null, time, '00:00', order);
+      newEntry(null, null, time);
       setStartTime(time);
     } else {
       updateEntry(data?.createEntry?._id, null, null, startTime, time);
