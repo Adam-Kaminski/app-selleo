@@ -1,9 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
 
-// entryMany(filter: { date: "2021-10-28T00:00:00.000" }) {
 export const GET_BY_DATE = gql`
   query GetEntryByData($dateValue: Date) {
-    entryMany(filter: { date: $dateValue }) {
+    entryMany(filter: { date: $dateValue }, sort: STARTTIME_ASC) {
       _id
       startTime
       endTime
