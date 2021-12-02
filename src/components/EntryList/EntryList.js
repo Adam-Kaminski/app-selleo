@@ -24,19 +24,12 @@ import removeMutationEntry from '../../queries/removeEntry';
 const EntryList = ({ stateDateCurrent }) => {
   const [timerRunning, setTimerRunning] = useState(false);
   const [startTime, setStartTime] = useState('');
-  const [getID, setGetID] = useState('');
 
   const { newEntry, data } = createNewEntry();
 
   const { updateEntry } = updateMutationEntry();
 
   const { removeEntry } = removeMutationEntry();
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const showSnackbarMsg = (msg, variant) => {
-    enqueueSnackbar(msg, { variant });
-  };
 
   const {
     dataID: dataTagBundles,
@@ -100,8 +93,8 @@ const EntryList = ({ stateDateCurrent }) => {
 
   const handleCopyToClipboard = () => {
     let string = '';
-    dataEntriesNew.forEach((entry, index) => {
-      string += `${entry.startTime} ${entry.endTime} ${entry.tagBundleName}-${entry.tagName}\n`;
+    dataEntriesNew.forEach((entry) => {
+      string += `${entry.startTime} ${entry.endTime} ${entry.tag.tagBundle.name}-${entry.tag.name}\n`;
     });
     navigator.clipboard.writeText(string);
   };
@@ -235,7 +228,7 @@ const EntryList = ({ stateDateCurrent }) => {
         <Button
           variant="contained"
           onClick={() => {
-            handleCopyToClipboard(0);
+            handleCopyToClipboard();
           }}
         >
           <CopyAllIcon />
