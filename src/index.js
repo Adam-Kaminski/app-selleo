@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/client';
 import { StyledEngineProvider } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
-import App from './App';
 import { getNewClient } from './api';
-import './index.css';
+import './index.scss';
+import Routes from './Routes';
+import Auth0Provider from './Auth0Provider';
 
 const username = localStorage.getItem('username');
 
@@ -18,11 +19,13 @@ const client = getNewClient(username);
 ReactDOM.render(
   <StyledEngineProvider injectFirst>
     <React.StrictMode>
-      <ApolloProvider client={client}>
-        <SnackbarProvider maxSnack={4}>
-          <App />
-        </SnackbarProvider>
-      </ApolloProvider>
+      <Auth0Provider>
+        <ApolloProvider client={client}>
+          <SnackbarProvider maxSnack={4}>
+            <Routes />
+          </SnackbarProvider>
+        </ApolloProvider>
+      </Auth0Provider>
     </React.StrictMode>
   </StyledEngineProvider>,
   document.getElementById('root')

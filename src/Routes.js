@@ -4,21 +4,20 @@ import { Redirect } from 'react-router';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Test1 from './pages/Test1';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Routes = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('username'));
+  const { isAuthenticated, user, isLoading } = useAuth0();
+
+  console.log('AAA', isAuthenticated, user);
+
+  if (isLoading) {
+    return <span>LOADING...</span>;
+  }
 
   return (
     <Router>
-      <Route path="/dashboard">
-        {!isLoggedIn ? <Redirect to="/" /> : <Dashboard handleLogin={setIsLoggedIn} />}
-      </Route>
-      <Route exact path="/">
-        {isLoggedIn ? <Redirect to="/dashboard/calendar" /> : <Login handleLogin={setIsLoggedIn} />}
-      </Route>
-      <Route path={'/test'}>
-        <Test1 />
-      </Route>
+      <Dashboard />
     </Router>
   );
 };

@@ -6,26 +6,28 @@ import Bundles from '../Bundles';
 import Bundle from '../Bundle';
 import Calendar from '../Calendar';
 import Settings from '../Settings';
+import Login from '../Login';
 import './Dashboard.scss';
 
-const Dashboard = ({ handleLogin }) => {
-  const username = localStorage.getItem('username');
-
+const Dashboard = () => {
   return (
     <>
-      <NavBar handleLogin={handleLogin} />
+      <NavBar />
       <div className="main wrapper">
         <Switch>
-          <Route path="/dashboard/bundles">
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/bundles">
             <Bundles />
           </Route>
-          <Route path="/dashboard/bundle/:id">
+          <Route path="/bundle/:id">
             <Bundle />
           </Route>
-          <Route path="/dashboard/calendar">
+          <Route exact path="/">
             <Calendar />
           </Route>
-          <Route path="/dashboard/settings">
+          <Route path="/settings">
             <Settings />
           </Route>
         </Switch>

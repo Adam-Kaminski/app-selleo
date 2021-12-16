@@ -82,7 +82,7 @@ const EntryList = ({ stateDateCurrent }) => {
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
     }`;
 
-    newEntry(null, null, time);
+    newEntry(null, null, time, '00:00');
   };
 
   const removeLine = (entryId) => {

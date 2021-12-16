@@ -29,7 +29,7 @@ const Bundle = () => {
           <AddNewBundle />
           {data.map((singleTagBundle) => {
             return (
-              <Link key={singleTagBundle._id} to={`/dashboard/bundle/${singleTagBundle._id}`}>
+              <Link key={singleTagBundle._id} to={`/bundle/${singleTagBundle._id}`}>
                 <li>
                   {singleTagBundle.name}
                   {dataID?._id === singleTagBundle.creatorId && (

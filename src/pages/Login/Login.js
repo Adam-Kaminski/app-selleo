@@ -3,34 +3,23 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useState } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
-const Login = ({ handleLogin }) => {
-  const [username, setUsername] = useState('');
+const Login = () => {
+  const { loginWithRedirect } = useAuth0();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    localStorage.setItem('username', username);
-    console.log('login');
-    handleLogin(username);
+  const handleSubmit = () => {
+    loginWithRedirect({
+      audience: 'graphql-api',
+      scope: 'read',
+    });
   };
-
   return (
     <div className="login-box">
       <img className="logo" src="/assets/img/logo.png" />
       <Box onSubmit={handleSubmit} component="form" noValidate autoComplete="off">
         <FormControl sx={{ width: '25ch' }}>
-          <OutlinedInput
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-            placeholder="Nazwa użytkownika"
-          />
-          <Button
-            sx={{ marginTop: '10px' }}
-            type="submit"
-            variant="contained"
-            color="primary"
-            disabled={!username}
-          >
+          <Button sx={{ marginTop: '10px' }} type="submit" variant="contained" color="primary">
             Loguj
           </Button>
         </FormControl>
