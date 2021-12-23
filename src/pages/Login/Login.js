@@ -10,7 +10,6 @@ const Login = ({ handleLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     localStorage.setItem('username', username);
-    console.log('login');
     handleLogin(username);
   };
 
