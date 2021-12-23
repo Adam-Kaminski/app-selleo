@@ -76,13 +76,15 @@ const EntryList = ({ stateDateCurrent }) => {
   }
   if (errorEntriesNew && errorTagBundles) return <div>errors</div>;
 
-  const addLine = (order, id) => {
+  const addLine = () => {
     const newTime = new Date();
     const time = `${newTime.getHours()}:${
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
     }`;
 
     newEntry(null, null, time);
+
+    // console.log('aaa:', dataEntriesNew.at(-1).endTime);
   };
 
   const removeLine = (entryId) => {
@@ -105,7 +107,7 @@ const EntryList = ({ stateDateCurrent }) => {
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
     }`;
 
-    if (!timerRunning) {
+    if (!dataEntriesNew.at(-1).endTime) {
       newEntry(null, null, time);
       setStartTime(time);
     } else {
@@ -147,16 +149,6 @@ const EntryList = ({ stateDateCurrent }) => {
               justifyContent: 'space-between',
             }}
           >
-            <Button
-              variant="contained"
-              color="success"
-              sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
-              onClick={() => {
-                addLine(0);
-              }}
-            >
-              <AddCircleOutlineIcon />
-            </Button>
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
@@ -186,7 +178,7 @@ const EntryList = ({ stateDateCurrent }) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Button
+                {/* <Button
                   variant="contained"
                   color="success"
                   sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
@@ -195,11 +187,11 @@ const EntryList = ({ stateDateCurrent }) => {
                   }}
                 >
                   <AddCircleOutlineIcon />
-                </Button>
+                </Button> */}
                 <Button
                   color="error"
                   variant="contained"
-                  sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+                  sx={{ borderRadius: '', minWidth: '50px', height: '50px', width: '50px' }}
                   onClick={() => {
                     removeLine(entryItem._id);
                   }}
@@ -220,6 +212,16 @@ const EntryList = ({ stateDateCurrent }) => {
         }}
         className="calendarContainer__bottomButtons"
       >
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ borderRadius: '', minWidth: '50px', height: '50px', width: '50px' }}
+          onClick={() => {
+            addLine();
+          }}
+        >
+          <AddCircleOutlineIcon />
+        </Button>
         <Button variant="contained" color="error" onClick={() => handleNewEntryStartStop()}>
           <StopIcon />
           <PlayArrowIcon />

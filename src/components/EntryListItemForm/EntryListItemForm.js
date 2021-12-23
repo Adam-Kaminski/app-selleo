@@ -57,19 +57,23 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
       const startTime = `${
         (values.startTime.getHours() < 10 ? '0' : '') + values.startTime.getHours()
       }:${(values.startTime.getMinutes() < 10 ? '0' : '') + values.startTime.getMinutes()}`;
-      const endTime = `${(values.endTime.getHours() < 10 ? '0' : '') + values.endTime.getHours()}:${
-        (values.endTime.getMinutes() < 10 ? '0' : '') + values.endTime.getMinutes()
-      }`;
 
-      console.log('startTime:', startTime);
+      const endTime = values.endTime
+        ? `${(values.endTime.getHours() < 10 ? '0' : '') + values.endTime.getHours()}:${
+            (values.endTime.getMinutes() < 10 ? '0' : '') + values.endTime.getMinutes()
+          }`
+        : null;
 
       if (values._id) {
-        if (
-          (values.tagName && values.tagBundleName) ||
-          (!values.tagName && !values.tagBundleName)
-        ) {
-          updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
-        }
+        console.log(
+          'update:',
+          values._id,
+          values.tagName,
+          values.tagBundleName,
+          startTime,
+          endTime
+        );
+        updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
       } else {
         alert('uwaga');
       }
