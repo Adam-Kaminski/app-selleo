@@ -90,8 +90,9 @@ const EntryList = ({ currentDate }) => {
 
   const handleCopyToClipboard = () => {
     let string = '';
+    string += `${date.slice(0, 10)}\n`;
     dataEntriesNew.forEach((entry) => {
-      string += `${entry.startTime} ${entry.endTime} ${entry.tag.tagBundle.name}-${entry.tag.name}\n`;
+      string += `${entry.startTime} ${entry.endTime} ${entry.tag?.tagBundle?.name}-${entry.tag?.name}\n`;
     });
     navigator.clipboard.writeText(string);
   };
