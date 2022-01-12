@@ -8,6 +8,7 @@ const CREATE_NEW_ENTRY = gql`
     $startTime: String
     $endTime: String
     $order: Int
+    $date: Date
   ) {
     createEntry(
       record: {
@@ -16,6 +17,7 @@ const CREATE_NEW_ENTRY = gql`
         startTime: $startTime
         endTime: $endTime
         order: $order
+        date: $date
       }
     ) {
       _id
@@ -28,7 +30,7 @@ const createNewEntry = () => {
     refetchQueries: [GET_BY_DATE, 'GetEntryByData'],
   });
 
-  const newEntry = (tagName, tagBundleName, startTime, endTime, order) => {
+  const newEntry = (date, tagName, tagBundleName, startTime, endTime, order) => {
     addNewEntry({
       variables: {
         tagName,
@@ -36,6 +38,7 @@ const createNewEntry = () => {
         startTime,
         endTime,
         order,
+        date,
       },
     });
   };

@@ -8,7 +8,7 @@ export function getTimeStringFromDate(date) {
   return `${hours}:${minutes}`;
 }
 
-export function retunrDateFormatString(date) {
+export function returnDateFormatString(date) {
   const dateNew = new Date(date);
   dateNew.setHours(2, 0, 0, 0);
   const dateSting = dateNew.toISOString().replace(/T(.*)/, 'T00:00:00.000Z');
@@ -25,7 +25,7 @@ export function getDateString(date) {
   return dateString;
 }
 export const today = new Date();
-export const todayFormatString = retunrDateFormatString(new Date());
+export const todayFormatString = returnDateFormatString(new Date());
 console.log(todayFormatString);
 export const todayState = new Date(today.getTime() - 100);
 export const todayString = getDateString(today);
