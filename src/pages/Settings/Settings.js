@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Settings.scss';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -12,6 +12,8 @@ import getAllTagBundles from '../../queries/getAllTagBundles';
 
 const Settings = () => {
   const { data } = getAllTagBundles();
+
+  const [checkedBundles, setCheckedBundles] = useState(false);
 
   const { dataID } = getProfileID();
 
@@ -34,18 +36,26 @@ const Settings = () => {
       <div className="settings__bundles">
         <h3>Użytkowane Bundle:</h3>
         <FormGroup>
+          <FormControlLabel
+            control={<Checkbox />}
+            label="zaznaczone Bundle"
+            onChange={() => setCheckedBundles(!checkedBundles)}
+          />
           {data?.map((singleTagBundle) => {
+            const userBundles = profileBundles[0].includes(singleTagBundle._id);
+
+            if (checkedBundles && !userBundles) {
+              return null;
+            }
+
             return (
               <FormControlLabel
                 className="settings__checkbox"
                 key={singleTagBundle._id}
                 control={<Checkbox />}
-                checked={profileBundles[0].includes(singleTagBundle._id)}
+                checked={userBundles}
                 label={singleTagBundle.name}
-                onClick={bundleIDhandler(
-                  singleTagBundle._id,
-                  profileBundles[0].includes(singleTagBundle._id)
-                )}
+                onClick={bundleIDhandler(singleTagBundle._id, userBundles)}
               />
             );
           })}

@@ -3,7 +3,6 @@ import './Bundles.scss';
 import CircularProgress from '@mui/material/CircularProgress';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Box from '@mui/material/Box';
 import getProfileID from '../../queries/getProfileID';
 import getAllTagBundles from '../../queries/getAllTagBundles';
