@@ -15,13 +15,13 @@ import getAllTagBundles from '../../queries/getAllTagBundles';
 import getEntryByData from '../../queries/getEntryByDate';
 import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
-import { retunrDateFormatString } from '../../utils/dateHelper';
+import { returnDateFormatString } from '../../utils/dateHelper';
 import getProfileID from '../../queries/getProfileID';
 import createNewEntry from '../../queries/createNewEntry';
 import updateMutationEntry from '../../queries/updateEntry';
 import removeMutationEntry from '../../queries/removeEntry';
 
-const EntryList = ({ stateDateCurrent }) => {
+const EntryList = ({ currentDate }) => {
   const [timerRunning, setTimerRunning] = useState(false);
   const [startTime, setStartTime] = useState('');
 
@@ -40,7 +40,7 @@ const EntryList = ({ stateDateCurrent }) => {
     data: dataEntriesNew,
     loading: loadingEntriesNew,
     error: errorEntriesNew,
-  } = getEntryByData(retunrDateFormatString(stateDateCurrent));
+  } = getEntryByData(returnDateFormatString(currentDate));
 
   console.log('Entries:', dataEntriesNew);
 
@@ -77,14 +77,14 @@ const EntryList = ({ stateDateCurrent }) => {
   if (errorEntriesNew && errorTagBundles) return <div>errors</div>;
 
   const addLine = () => {
-    const newTime = new Date();
+    const date = returnDateFormatString(currentDate);
+
+    const newTime = new Date(currentDate);
     const time = `${newTime.getHours()}:${
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
     }`;
 
-    newEntry(null, null, time);
-
-    // console.log('aaa:', dataEntriesNew.at(-1).endTime);
+    newEntry(date, null, null, time);
   };
 
   const removeLine = (entryId) => {
@@ -101,7 +101,7 @@ const EntryList = ({ stateDateCurrent }) => {
     navigator.clipboard.writeText(string);
   };
 
-  const handleNewEntryStartStop = (order) => {
+  const handleNewEntryStartStop = () => {
     const newTime = new Date();
     const time = `${newTime.getHours()}:${
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
