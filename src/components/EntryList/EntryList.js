@@ -22,8 +22,7 @@ import updateMutationEntry from '../../queries/updateEntry';
 import removeMutationEntry from '../../queries/removeEntry';
 
 const EntryList = ({ currentDate }) => {
-  const [timerRunning, setTimerRunning] = useState(false);
-  const [startTime, setStartTime] = useState('');
+  const date = returnDateFormatString(currentDate);
 
   const { newEntry, data } = createNewEntry();
 
@@ -41,8 +40,6 @@ const EntryList = ({ currentDate }) => {
     loading: loadingEntriesNew,
     error: errorEntriesNew,
   } = getEntryByData(returnDateFormatString(currentDate));
-
-  console.log('Entries:', dataEntriesNew);
 
   const bundles = useMemo(() => {
     return (
@@ -77,8 +74,6 @@ const EntryList = ({ currentDate }) => {
   if (errorEntriesNew && errorTagBundles) return <div>errors</div>;
 
   const addLine = () => {
-    const date = returnDateFormatString(currentDate);
-
     const newTime = new Date(currentDate);
     const time = `${newTime.getHours()}:${
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
@@ -107,14 +102,18 @@ const EntryList = ({ currentDate }) => {
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
     }`;
 
-    if (!dataEntriesNew.at(-1).endTime) {
-      newEntry(null, null, time);
-      setStartTime(time);
+    if (dataEntriesNew.at(-1).endTime) {
+      newEntry(date, null, null, dataEntriesNew.at(-1).endTime);
     } else {
-      updateEntry(data?.createEntry?._id, null, null, startTime, time);
+      updateEntry(
+        dataEntriesNew.at(-1)._id,
+        dataEntriesNew.at(-1).name,
+        dataEntriesNew.at(-1).tags,
+        dataEntriesNew.at(-1).startTime,
+        time
+      );
+      newEntry(date, null, null, time);
     }
-
-    setTimerRunning(!timerRunning);
   };
 
   return (
