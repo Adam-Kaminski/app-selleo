@@ -1,8 +1,6 @@
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const Login = () => {
@@ -14,6 +12,7 @@ const Login = () => {
       scope: 'read',
     });
   };
+
   return (
     <div className="login-box">
       <img className="logo" src="/assets/img/logo.png" />

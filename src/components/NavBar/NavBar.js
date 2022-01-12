@@ -11,21 +11,13 @@ import './NavBar.scss';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const NavBar = () => {
-  const { logout, getAccessTokenSilently, user } = useAuth0();
+  const { logout } = useAuth0();
 
   const logOut = async () => {
-    // logout({
-    //   returnTo: window.location.origin,
-    // });
-    const token = await getAccessTokenSilently({
-      audience: 'graphql-api',
-      scope: 'read',
+    logout({
+      returnTo: window.location.origin,
     });
-
-    console.log('token:', token);
   };
-
-  console.log('user:', user);
 
   return (
     <>
