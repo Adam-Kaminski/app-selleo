@@ -6,7 +6,7 @@ import './Calendar.scss';
 import { todayState } from '../../utils/dateHelper';
 
 const Calendar = () => {
-  const [stateDateCurrent, setStateDateCurrent] = useState(new Date(todayState.getTime()));
+  const [currentDate, setCurrentDate] = useState(new Date(todayState.getTime()));
   return (
     <Box
       sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'start', boxShadow: 2 }}
@@ -22,13 +22,10 @@ const Calendar = () => {
         className="calendarContainer__main"
       >
         <section className="calendarSection">
-          <DatePickerComponet
-            stateDateCurrent={stateDateCurrent}
-            setStateDateCurrent={setStateDateCurrent}
-          />
+          <DatePickerComponet stateDateCurrent={currentDate} setStateDateCurrent={setCurrentDate} />
         </section>
         <section className="listSection">
-          <EntryList stateDateCurrent={stateDateCurrent} />
+          <EntryList currentDate={currentDate} />
         </section>
       </Box>
     </Box>

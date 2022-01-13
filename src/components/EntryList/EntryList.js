@@ -15,15 +15,14 @@ import getAllTagBundles from '../../queries/getAllTagBundles';
 import getEntryByData from '../../queries/getEntryByDate';
 import EntryListItemForm from '../EntryListItemForm';
 import './EntryList.scss';
-import { retunrDateFormatString } from '../../utils/dateHelper';
+import { returnDateFormatString } from '../../utils/dateHelper';
 import getProfileID from '../../queries/getProfileID';
 import createNewEntry from '../../queries/createNewEntry';
 import updateMutationEntry from '../../queries/updateEntry';
 import removeMutationEntry from '../../queries/removeEntry';
 
-const EntryList = ({ stateDateCurrent }) => {
-  const [timerRunning, setTimerRunning] = useState(false);
-  const [startTime, setStartTime] = useState('');
+const EntryList = ({ currentDate }) => {
+  const date = returnDateFormatString(currentDate);
 
   const { newEntry, data } = createNewEntry();
 
@@ -40,9 +39,7 @@ const EntryList = ({ stateDateCurrent }) => {
     data: dataEntriesNew,
     loading: loadingEntriesNew,
     error: errorEntriesNew,
-  } = getEntryByData(retunrDateFormatString(stateDateCurrent));
-
-  console.log('Entries:', dataEntriesNew);
+  } = getEntryByData(returnDateFormatString(currentDate));
 
   const bundles = useMemo(() => {
     return (
@@ -76,13 +73,13 @@ const EntryList = ({ stateDateCurrent }) => {
   }
   if (errorEntriesNew && errorTagBundles) return <div>errors</div>;
 
-  const addLine = (order, id) => {
-    const newTime = new Date();
+  const addLine = () => {
+    const newTime = new Date(currentDate);
     const time = `${newTime.getHours()}:${
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
     }`;
 
-    newEntry(null, null, time, '00:00');
+    newEntry(date, null, null, time);
   };
 
   const removeLine = (entryId) => {
@@ -93,26 +90,31 @@ const EntryList = ({ stateDateCurrent }) => {
 
   const handleCopyToClipboard = () => {
     let string = '';
+    string += `${date.slice(0, 10)}\n`;
     dataEntriesNew.forEach((entry) => {
-      string += `${entry.startTime} ${entry.endTime} ${entry.tag.tagBundle.name}-${entry.tag.name}\n`;
+      string += `${entry.startTime} ${entry.endTime} ${entry.tag?.tagBundle?.name}-${entry.tag?.name}\n`;
     });
     navigator.clipboard.writeText(string);
   };
 
-  const handleNewEntryStartStop = (order) => {
+  const handleNewEntryStartStop = () => {
     const newTime = new Date();
     const time = `${newTime.getHours()}:${
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
     }`;
 
-    if (!timerRunning) {
-      newEntry(null, null, time);
-      setStartTime(time);
+    if (dataEntriesNew.at(-1).endTime) {
+      newEntry(date, null, null, dataEntriesNew.at(-1).endTime);
     } else {
-      updateEntry(data?.createEntry?._id, null, null, startTime, time);
+      updateEntry(
+        dataEntriesNew.at(-1)._id,
+        dataEntriesNew.at(-1).name,
+        dataEntriesNew.at(-1).tags,
+        dataEntriesNew.at(-1).startTime,
+        time
+      );
+      newEntry(date, null, null, time);
     }
-
-    setTimerRunning(!timerRunning);
   };
 
   return (
@@ -147,16 +149,6 @@ const EntryList = ({ stateDateCurrent }) => {
               justifyContent: 'space-between',
             }}
           >
-            <Button
-              variant="contained"
-              color="success"
-              sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
-              onClick={() => {
-                addLine(0);
-              }}
-            >
-              <AddCircleOutlineIcon />
-            </Button>
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
@@ -187,19 +179,9 @@ const EntryList = ({ stateDateCurrent }) => {
                 }}
               >
                 <Button
-                  variant="contained"
-                  color="success"
-                  sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
-                  onClick={() => {
-                    addLine(entryItem.order);
-                  }}
-                >
-                  <AddCircleOutlineIcon />
-                </Button>
-                <Button
                   color="error"
                   variant="contained"
-                  sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
+                  sx={{ borderRadius: '', minWidth: '50px', height: '50px', width: '50px' }}
                   onClick={() => {
                     removeLine(entryItem._id);
                   }}
@@ -220,6 +202,16 @@ const EntryList = ({ stateDateCurrent }) => {
         }}
         className="calendarContainer__bottomButtons"
       >
+        <Button
+          variant="contained"
+          color="success"
+          sx={{ borderRadius: '', minWidth: '50px', height: '50px', width: '50px' }}
+          onClick={() => {
+            addLine();
+          }}
+        >
+          <AddCircleOutlineIcon />
+        </Button>
         <Button variant="contained" color="error" onClick={() => handleNewEntryStartStop()}>
           <StopIcon />
           <PlayArrowIcon />
