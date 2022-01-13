@@ -31,7 +31,7 @@ const stringToDate = (stringTime) => {
 };
 
 const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
-  const [currentTags, setCurrentTags] = useState([]); // ??
+  const [currentTags, setCurrentTags] = useState([]);
 
   const { newEntry, data } = createNewEntry();
 

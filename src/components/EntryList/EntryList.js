@@ -178,16 +178,6 @@ const EntryList = ({ currentDate }) => {
                   justifyContent: 'space-between',
                 }}
               >
-                {/* <Button
-                  variant="contained"
-                  color="success"
-                  sx={{ borderRadius: '50%', minWidth: '50px', height: '50px', width: '50px' }}
-                  onClick={() => {
-                    addLine(entryItem.order);
-                  }}
-                >
-                  <AddCircleOutlineIcon />
-                </Button> */}
                 <Button
                   color="error"
                   variant="contained"
