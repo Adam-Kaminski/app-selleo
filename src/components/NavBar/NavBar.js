@@ -11,13 +11,15 @@ import './NavBar.scss';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const NavBar = () => {
-  const { logout } = useAuth0();
+  const { logout, user } = useAuth0();
 
   const logOut = async () => {
     logout({
       returnTo: window.location.origin,
     });
   };
+
+  console.log(user);
 
   return (
     <>
@@ -28,8 +30,12 @@ const NavBar = () => {
 
         <BottomNavigation showLabels>
           <div className="logged-user">
-            <AccountCircleIcon />
-            <h3>{localStorage.getItem('username')}</h3>
+            {user.picture ? (
+              <img className="logged-user__avatar" src={user.picture}></img>
+            ) : (
+              <AccountCircleIcon />
+            )}
+            <h3>{user.email}</h3>
           </div>
 
           <Link to="/">
