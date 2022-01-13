@@ -1,17 +1,16 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { gql } from 'graphql-tag';
 
-export const getNewClient = (username) => {
+export const getNewClient = (token) => {
   const httpLink = createHttpLink({
-    uri: 'https://worklog-on-steroids.herokuapp.com/api/ql_open',
+    uri: 'https://worklog-on-steroids.herokuapp.com/api/ql',
   });
 
   const authLink = setContext((_, { headers }) => {
     return {
       headers: {
         ...headers,
-        'user-name': username || '',
+        Authorization: `Bearer ${token}` || '',
       },
     };
   });
@@ -21,19 +20,6 @@ export const getNewClient = (username) => {
     cache: new InMemoryCache(),
   });
 
-  client
-    .query({
-      query: gql`
-        query getData {
-          getProfile {
-            oauthId
-          }
-        }
-      `,
-    })
-    .then((result) =>
-      console.log(result.data.getProfile.oauthId === username ? 'Poprawnie' : 'Błąd')
-    );
   return client;
 };
 

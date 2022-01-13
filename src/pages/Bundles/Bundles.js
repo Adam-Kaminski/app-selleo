@@ -45,7 +45,7 @@ const Bundle = () => {
               return null;
             }
             return (
-              <Link key={singleTagBundle._id} to={`/dashboard/bundle/${singleTagBundle._id}`}>
+              <Link key={singleTagBundle._id} to={`/bundle/${singleTagBundle._id}`}>
                 <li>
                   {singleTagBundle.name}
                   {isCreatedByCurrentUser && (

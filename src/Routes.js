@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Redirect } from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Test1 from './pages/Test1';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Routes = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('username'));
+  const { isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <span>LOADING...</span>;
+  }
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
 
   return (
     <Router>
-      <Route path="/dashboard">
-        {!isLoggedIn ? <Redirect to="/" /> : <Dashboard handleLogin={setIsLoggedIn} />}
-      </Route>
-      <Route exact path="/">
-        {isLoggedIn ? <Redirect to="/dashboard/calendar" /> : <Login handleLogin={setIsLoggedIn} />}
-      </Route>
-      <Route path={'/test'}>
-        <Test1 />
-      </Route>
+      <Dashboard />
     </Router>
   );
 };

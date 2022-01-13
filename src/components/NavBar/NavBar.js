@@ -8,11 +8,15 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import './NavBar.scss';
+import { useAuth0 } from '@auth0/auth0-react';
 
-const NavBar = ({ handleLogin }) => {
-  const logOut = () => {
-    localStorage.setItem('username', '');
-    handleLogin('');
+const NavBar = () => {
+  const { logout } = useAuth0();
+
+  const logOut = async () => {
+    logout({
+      returnTo: window.location.origin,
+    });
   };
 
   return (
@@ -28,7 +32,7 @@ const NavBar = ({ handleLogin }) => {
             <h3>{localStorage.getItem('username')}</h3>
           </div>
 
-          <Link to="/dashboard/calendar">
+          <Link to="/">
             <BottomNavigationAction
               className="header__nav-item"
               label="kalendarz"
@@ -36,7 +40,7 @@ const NavBar = ({ handleLogin }) => {
               icon={<CalendarTodayIcon />}
             />
           </Link>
-          <Link to="/dashboard/bundles">
+          <Link to="/bundles">
             <BottomNavigationAction
               className="header__nav-item"
               icon={<PlaylistAddCheckIcon />}
@@ -44,7 +48,7 @@ const NavBar = ({ handleLogin }) => {
               showLabel
             />
           </Link>
-          <Link to="/dashboard/settings">
+          <Link to="/settings">
             <BottomNavigationAction
               className="header__nav-item"
               icon={<SettingsIcon />}
