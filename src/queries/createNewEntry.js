@@ -27,7 +27,7 @@ const CREATE_NEW_ENTRY = gql`
 `;
 
 const createNewEntry = () => {
-  const [addNewEntry, { data }] = useMutation(CREATE_NEW_ENTRY, {
+  const [addNewEntry, { data, loading, error }] = useMutation(CREATE_NEW_ENTRY, {
     refetchQueries: [{ query: GET_BY_DATE }, 'GetEntryByData', { query: GET_PROFILE_ID }, 'GetID'],
   });
 
@@ -44,7 +44,7 @@ const createNewEntry = () => {
     });
   };
 
-  return { newEntry, data };
+  return { newEntry, data, loading, error };
 };
 
 export default createNewEntry;

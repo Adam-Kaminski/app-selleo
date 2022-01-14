@@ -13,13 +13,13 @@ import { useAuth0 } from '@auth0/auth0-react';
 const NavBar = () => {
   const { logout, user } = useAuth0();
 
+  console.log('user:', user);
+
   const logOut = async () => {
     logout({
       returnTo: window.location.origin,
     });
   };
-
-  console.log(user);
 
   return (
     <>
@@ -35,7 +35,7 @@ const NavBar = () => {
             ) : (
               <AccountCircleIcon />
             )}
-            <h3>{user.email}</h3>
+            <h3>{user.name}</h3>
           </div>
 
           <Link to="/">

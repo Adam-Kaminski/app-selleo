@@ -29,13 +29,14 @@ const Bundle = () => {
 
   const { tagBundle, loading, error } = tagBundlebyID(id, skipPages);
 
-  console.log(dataPag?.pageInfo.pageCount);
-
   if (loading)
     return (
-      <Box sx={{ display: 'flex' }}>
-        <CircularProgress />
-      </Box>
+      <div className="login-box">
+        <img className="logo" src="/assets/img/logo.png" />
+        <Box sx={{ justifyContent: 'center', display: 'flex', marginTop: '10px' }}>
+          <CircularProgress />
+        </Box>
+      </div>
     );
   if (error) return <div>error</div>;
 

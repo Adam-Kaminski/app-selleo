@@ -14,15 +14,18 @@ import Checkbox from '@mui/material/Checkbox';
 const Bundle = () => {
   const { data, loading, error } = getAllTagBundles();
 
-  const { dataID, loadingID, errorID } = getProfileID();
+  const { dataID } = getProfileID();
 
   const [showMyBundles, setShowMyBundles] = useState(false);
 
   if (loading)
     return (
-      <Box sx={{ display: 'flex' }}>
-        <CircularProgress />
-      </Box>
+      <div className="login-box">
+        <img className="logo" src="/assets/img/logo.png" />
+        <Box sx={{ justifyContent: 'center', display: 'flex', marginTop: '10px' }}>
+          <CircularProgress />
+        </Box>
+      </div>
     );
   if (error) return <div>error</div>;
 

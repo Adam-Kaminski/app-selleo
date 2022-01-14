@@ -65,14 +65,6 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
         : null;
 
       if (values._id) {
-        console.log(
-          'update:',
-          values._id,
-          values.tagName,
-          values.tagBundleName,
-          startTime,
-          endTime
-        );
         updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
       } else {
         alert('uwaga');
@@ -173,7 +165,7 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
               }}
               isInvalid={formik.errors.bundle}
             >
-              {bundleArray.map((bundle, index) => {
+              {bundleArray.map((bundle) => {
                 return (
                   <MenuItem key={bundle._id} value={bundle.name}>
                     {bundle.name}
@@ -221,8 +213,15 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
           renderOption={(props, option) => <li {...props}>{option.name}</li>}
           sx={{ width: 300 }}
           freeSolo
-          renderInput={(params) => <TextField {...params} label="Wybierz tag lub dodaj nowy Tag" />}
-          disabled={formik.errors.bundle}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={
+                formik.values.tagBundleName ? 'Wybierz tag lub dodaj nowy Tag' : 'Wybierz bundle'
+              }
+            />
+          )}
+          disabled={!formik.values.tagBundleName}
           isInvalid={formik.errors.tag}
         />
       </Box>

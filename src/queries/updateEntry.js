@@ -24,7 +24,7 @@ const UPDATE_ENTRY = gql`
 `;
 
 const updateMutationEntry = () => {
-  const [updateNewEntry] = useMutation(UPDATE_ENTRY, {
+  const [updateNewEntry, { data, loading, error }] = useMutation(UPDATE_ENTRY, {
     refetchQueries: [GET_BY_DATE, 'GetEntryByData'],
   });
 
@@ -40,7 +40,7 @@ const updateMutationEntry = () => {
     });
   };
 
-  return { updateEntry };
+  return { updateEntry, data, loading, error };
 };
 
 export default updateMutationEntry;

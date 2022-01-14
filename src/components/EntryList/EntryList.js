@@ -24,7 +24,7 @@ import removeMutationEntry from '../../queries/removeEntry';
 const EntryList = ({ currentDate }) => {
   const date = returnDateFormatString(currentDate);
 
-  const { newEntry, data } = createNewEntry();
+  const { newEntry } = createNewEntry();
 
   const { updateEntry } = updateMutationEntry();
 
@@ -78,7 +78,6 @@ const EntryList = ({ currentDate }) => {
     const time = `${newTime.getHours()}:${
       (newTime.getMinutes() < 10 ? '0' : '') + newTime.getMinutes()
     }`;
-
     newEntry(date, null, null, time);
   };
 
@@ -106,10 +105,17 @@ const EntryList = ({ currentDate }) => {
     if (dataEntriesNew.at(-1).endTime) {
       newEntry(date, null, null, dataEntriesNew.at(-1).endTime);
     } else {
+      console.log(
+        'updateTest',
+        dataEntriesNew.at(-1)._id,
+        dataEntriesNew.at(-1).tag.name,
+        dataEntriesNew.at(-1).tag.tagBundle.name,
+        dataEntriesNew.at(-1).startTime
+      );
       updateEntry(
         dataEntriesNew.at(-1)._id,
-        dataEntriesNew.at(-1).name,
-        dataEntriesNew.at(-1).tags,
+        dataEntriesNew.at(-1).tag.name,
+        dataEntriesNew.at(-1).tag.tagBundle.name,
         dataEntriesNew.at(-1).startTime,
         time
       );
