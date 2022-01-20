@@ -1,5 +1,4 @@
 import { gql, useMutation } from '@apollo/client';
-import React, { useState } from 'react';
 import { TAG_BUNDLE_BY_ID } from './tagBundlebyID';
 
 const EDIT_BUNDLE_DESC = gql`
@@ -16,8 +15,6 @@ const editBundleDesc = () => {
   });
 
   const createNewDesc = (bundleID, desc) => {
-    console.log(bundleID);
-    console.log(desc);
     editDesc({
       variables: {
         _id: bundleID,

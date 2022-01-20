@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Settings.scss';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -44,7 +44,7 @@ const Settings = () => {
     <div className="settings">
       <div className="settings__user">
         <h3>{user.name}</h3>
-        <h3>email: {user.email}</h3>
+        <h3>{user.email}</h3>
       </div>
       <div className="settings__bundles">
         <h3>Użytkowane Bundle:</h3>

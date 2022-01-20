@@ -16,6 +16,7 @@ const ApolloSetup = ({ children }) => {
         .then((token) => {
           setToken(token);
         })
+        // eslint-disable-next-line no-console
         .catch((e) => console.warn(e));
     } else {
       localStorage.removeItem('token');

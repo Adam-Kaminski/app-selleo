@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Button from '@mui/material/Button';
@@ -10,16 +10,14 @@ import StopIcon from '@mui/icons-material/Stop';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CircularProgress from '@mui/material/CircularProgress';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-import { useSnackbar } from 'notistack';
-import getAllTagBundles from '../../queries/getAllTagBundles';
 import getEntryByData from '../../queries/getEntryByDate';
 import EntryListItemForm from '../EntryListItemForm';
-import './EntryList.scss';
 import { returnDateFormatString } from '../../utils/dateHelper';
 import getProfileID from '../../queries/getProfileID';
 import createNewEntry from '../../queries/createNewEntry';
 import updateMutationEntry from '../../queries/updateEntry';
 import removeMutationEntry from '../../queries/removeEntry';
+import './EntryList.scss';
 
 const EntryList = ({ currentDate }) => {
   const date = returnDateFormatString(currentDate);
@@ -105,13 +103,6 @@ const EntryList = ({ currentDate }) => {
     if (dataEntriesNew.at(-1).endTime) {
       newEntry(date, null, null, dataEntriesNew.at(-1).endTime);
     } else {
-      console.log(
-        'updateTest',
-        dataEntriesNew.at(-1)._id,
-        dataEntriesNew.at(-1).tag.name,
-        dataEntriesNew.at(-1).tag.tagBundle.name,
-        dataEntriesNew.at(-1).startTime
-      );
       updateEntry(
         dataEntriesNew.at(-1)._id,
         dataEntriesNew.at(-1).tag.name,

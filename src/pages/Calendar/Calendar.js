@@ -2,8 +2,8 @@ import Box from '@mui/material/Box';
 import { useState } from 'react';
 import DatePickerComponet from '../../components/DatePickerComponet';
 import EntryList from '../../components/EntryList';
-import './Calendar.scss';
 import { todayState } from '../../utils/dateHelper';
+import './Calendar.scss';
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date(todayState.getTime()));

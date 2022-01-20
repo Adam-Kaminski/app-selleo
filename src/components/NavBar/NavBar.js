@@ -13,8 +13,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 const NavBar = () => {
   const { logout, user } = useAuth0();
 
-  console.log('user:', user);
-
   const logOut = async () => {
     logout({
       returnTo: window.location.origin,

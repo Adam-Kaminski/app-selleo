@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';

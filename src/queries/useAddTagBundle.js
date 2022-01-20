@@ -1,5 +1,4 @@
 import { gql, useMutation } from '@apollo/client';
-import React, { useState } from 'react';
 import { GET_ALL_TAG_BUNDLES } from './getAllTagBundles';
 
 const CREATE_TAG_BUNDLE = gql`

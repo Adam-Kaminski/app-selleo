@@ -1,5 +1,4 @@
 import { gql, useMutation } from '@apollo/client';
-import { GET_PROFILE_ID } from './getProfileID';
 import { GET_BY_DATE } from './getEntryByDate';
 
 const REMOVE_ENTRY = gql`

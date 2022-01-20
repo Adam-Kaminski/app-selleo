@@ -10,11 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Autocomplete from '@mui/material/Autocomplete';
-import { useSnackbar } from 'notistack';
 import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
-import calendarEntrySchema from '../../schemas/calendarEntrySchema';
-import { getTimeStringFromDate } from '../../utils/dateHelper';
 import createNewEntry from '../../queries/createNewEntry';
 import updateMutationEntry from '../../queries/updateEntry';
 
@@ -33,7 +30,7 @@ const stringToDate = (stringTime) => {
 const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
   const [currentTags, setCurrentTags] = useState([]);
 
-  const { newEntry, data } = createNewEntry();
+  const { data } = createNewEntry();
 
   const { updateEntry } = updateMutationEntry();
 
@@ -52,8 +49,6 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
     initialValues: formInitialValues,
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log('submit', values);
-
       const startTime = `${
         (values.startTime.getHours() < 10 ? '0' : '') + values.startTime.getHours()
       }:${(values.startTime.getMinutes() < 10 ? '0' : '') + values.startTime.getMinutes()}`;
@@ -66,8 +61,6 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
 
       if (values._id) {
         updateEntry(values._id, values.tagName, values.tagBundleName, startTime, endTime);
-      } else {
-        alert('uwaga');
       }
     },
 
@@ -194,6 +187,7 @@ const EntryListItemForm = ({ entryItem, bundleArray, filterSelectOptions }) => {
             return filtered;
           }}
           selectOnFocus
+          disableClearable
           clearOnBlur
           handleHomeEndKeys
           id="free-solo-with-text-demo"

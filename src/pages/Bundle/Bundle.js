@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
-
-import './Bundle.scss';
-import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import EditBundleDesc from '../../components/EditBundleDesc/EditBundleDesc';
 import usePagination from '../../queries/usePagination';
 import getProfileID from '../../queries/getProfileID';
 import tagBundlebyID from '../../queries/tagBundlebyID';
+import './Bundle.scss';
 
 const Bundle = () => {
   const [currentPage, setCurrentPage] = useState(1);
