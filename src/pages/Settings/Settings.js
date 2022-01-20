@@ -29,7 +29,7 @@ const Settings = () => {
     checked ? removeBundle(bundleID) : toggleBundle(bundleID);
   };
 
-  if (loading) return Loading();
+  if (loading) return <Loading />;
 
   return (
     <div className="settings">

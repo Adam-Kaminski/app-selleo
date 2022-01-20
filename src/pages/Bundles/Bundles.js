@@ -17,7 +17,7 @@ const Bundle = () => {
 
   const [showMyBundles, setShowMyBundles] = useState(false);
 
-  if (loading) return Loading();
+  if (loading) return <Loading />;
   if (error) return <div>error</div>;
 
   return (

@@ -8,7 +8,6 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import StopIcon from '@mui/icons-material/Stop';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import CircularProgress from '@mui/material/CircularProgress';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import getEntryByData from '../../../queries/getEntryByDate';
 import EntryListItemForm from './EntryListItemForm';
@@ -54,24 +53,55 @@ const EntryList = ({ currentDate }) => {
     );
   }, [dataTagBundles]);
 
-  if (loadingEntriesNew) return Loading();
+  const renderEntries = useMemo(
+    () =>
+      loadingTagBundles || loadingEntriesNew ? (
+        <Loading normal />
+      ) : (
+        dataEntriesNew?.map?.((entryItem) => {
+          const filterSelectOptions = createFilterOptions();
+          return (
+            <ListItem
+              key={entryItem._id}
+              className="entryList"
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+              }}
+            >
+              <EntryListItemForm
+                entryItem={entryItem}
+                bundleArray={bundles}
+                filterSelectOptions={filterSelectOptions}
+              />
+              <Box
+                sx={{
+                  width: '110px',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Button
+                  color="error"
+                  variant="contained"
+                  sx={{ borderRadius: '', minWidth: '50px', height: '50px', width: '50px' }}
+                  onClick={() => {
+                    removeLine(entryItem._id);
+                  }}
+                >
+                  <DeleteOutlineIcon />
+                </Button>
+              </Box>
+            </ListItem>
+          );
+        })
+      ),
+    [dataEntriesNew]
+  );
 
-  if (loadingTagBundles && loadingEntriesNew) {
-    return (
-      <Box
-        sx={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
   if (errorEntriesNew && errorTagBundles) return <div>errors</div>;
 
   const addLine = () => {
@@ -152,46 +182,7 @@ const EntryList = ({ currentDate }) => {
             <Box sx={{ height: '50px', width: '50px' }}></Box>
           </Box>
         </ListItem>
-        {dataEntriesNew?.map((entryItem) => {
-          const filterSelectOptions = createFilterOptions();
-          return (
-            <ListItem
-              key={entryItem._id}
-              className="entryList"
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-              }}
-            >
-              <EntryListItemForm
-                entryItem={entryItem}
-                bundleArray={bundles}
-                filterSelectOptions={filterSelectOptions}
-              />
-              <Box
-                sx={{
-                  width: '110px',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Button
-                  color="error"
-                  variant="contained"
-                  sx={{ borderRadius: '', minWidth: '50px', height: '50px', width: '50px' }}
-                  onClick={() => {
-                    removeLine(entryItem._id);
-                  }}
-                >
-                  <DeleteOutlineIcon />
-                </Button>
-              </Box>
-            </ListItem>
-          );
-        })}
+        {renderEntries}
       </List>
       <Box
         sx={{

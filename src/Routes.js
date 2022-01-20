@@ -8,7 +8,7 @@ import Loading from './components/Loading';
 const Routes = () => {
   const { isAuthenticated, isLoading } = useAuth0();
 
-  if (isLoading) return Loading();
+  if (isLoading) return <Loading />;
 
   if (!isAuthenticated) {
     return <Login />;

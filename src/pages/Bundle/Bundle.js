@@ -26,7 +26,7 @@ const Bundle = () => {
 
   const { tagBundle, loading, error } = tagBundlebyID(id, skipPages);
 
-  if (loading) return Loading();
+  if (loading) return <Loading />;
   if (error) return <div>error</div>;
 
   return (
