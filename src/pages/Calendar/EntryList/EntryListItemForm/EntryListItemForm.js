@@ -12,8 +12,8 @@ import Select from '@mui/material/Select';
 import Autocomplete from '@mui/material/Autocomplete';
 import plLocale from 'date-fns/locale/pl';
 import './EntryListItemForm.scss';
-import createNewEntry from '../../queries/createNewEntry';
-import updateMutationEntry from '../../queries/updateEntry';
+import createNewEntry from '../../../../mutations/createNewEntry';
+import updateMutationEntry from '../../../../mutations/updateEntry';
 
 const stringToDate = (stringTime) => {
   const dateTime = new Date();

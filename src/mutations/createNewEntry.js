@@ -1,6 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
-import { GET_BY_DATE } from './getEntryByDate';
-import { GET_PROFILE_ID } from './getProfileID';
+import { GET_BY_DATE } from '../queries/getEntryByDate';
+import { GET_PROFILE_ID } from '../queries/getProfileID';
 
 const CREATE_NEW_ENTRY = gql`
   mutation addNewEntry(

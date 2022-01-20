@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { GET_ALL_TAG_BUNDLES } from './getAllTagBundles';
+import { GET_ALL_TAG_BUNDLES } from '../queries/getAllTagBundles';
 
 const CREATE_TAG_BUNDLE = gql`
   mutation AddNewTagBundle($name: String!) {

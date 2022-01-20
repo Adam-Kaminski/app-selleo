@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { GET_BY_DATE } from './getEntryByDate';
+import { GET_BY_DATE } from '../queries/getEntryByDate';
 
 const UPDATE_ENTRY = gql`
   mutation updateEntry(

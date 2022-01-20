@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import editBundleDesc from '../../queries/editBundleDesc';
+import editBundleDesc from '../../../mutations/editBundleDesc';
 
 const EditBundleDesc = ({ editDesc, bundleID }) => {
   const [desc, setDesc] = useState(editDesc);

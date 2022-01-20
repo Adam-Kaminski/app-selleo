@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/system';
-import CircularProgress from '@mui/material/CircularProgress';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import EditBundleDesc from '../../components/EditBundleDesc/EditBundleDesc';
+import EditBundleDesc from './EditBundleDesc/EditBundleDesc';
 import usePagination from '../../queries/usePagination';
 import getProfileID from '../../queries/getProfileID';
 import tagBundlebyID from '../../queries/tagBundlebyID';
+import Loading from '../../components/Loading';
 import './Bundle.scss';
 
 const Bundle = () => {
@@ -27,15 +26,7 @@ const Bundle = () => {
 
   const { tagBundle, loading, error } = tagBundlebyID(id, skipPages);
 
-  if (loading)
-    return (
-      <div className="login-box">
-        <img className="logo" src="/assets/img/logo.png" />
-        <Box sx={{ justifyContent: 'center', display: 'flex', marginTop: '10px' }}>
-          <CircularProgress />
-        </Box>
-      </div>
-    );
+  if (loading) return Loading();
   if (error) return <div>error</div>;
 
   return (

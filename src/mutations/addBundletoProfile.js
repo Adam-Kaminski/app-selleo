@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { GET_PROFILE_ID } from './getProfileID';
+import { GET_PROFILE_ID } from '../queries/getProfileID';
 
 const ADD_BUNDLE_TO_PROFILE = gql`
   mutation AddBundletoUser($bundleId: ID) {

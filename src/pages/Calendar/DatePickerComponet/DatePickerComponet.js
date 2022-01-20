@@ -12,7 +12,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import plLocale from 'date-fns/locale/pl';
 import './DatePickerComponet.scss';
-import { getDateString, today, todayState, todayString } from '../../utils/dateHelper';
+import { getDateString, today, todayState, todayString } from '../../../utils/dateHelper';
 
 const styleModal = {
   position: 'absolute',

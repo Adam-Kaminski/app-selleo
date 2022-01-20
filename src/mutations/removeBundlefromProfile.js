@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { GET_PROFILE_ID } from './getProfileID';
+import { GET_PROFILE_ID } from '../queries/getProfileID';
 
 const REMOVE_BUNDLE_FROM_PROFILE = gql`
   mutation removeBundlefromUser($bundleId: ID) {

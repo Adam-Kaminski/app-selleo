@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import useAddTagBundle from '../../queries/useAddTagBundle';
+import useAddTagBundle from '../../../mutations/useAddTagBundle';
 
 const AddNewBundle = () => {
   const [newBundleName, setNewBundleName] = useState('');

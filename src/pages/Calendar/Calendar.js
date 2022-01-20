@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { useState } from 'react';
-import DatePickerComponet from '../../components/DatePickerComponet';
-import EntryList from '../../components/EntryList';
+import DatePickerComponet from './DatePickerComponet';
+import EntryList from './EntryList';
 import { todayState } from '../../utils/dateHelper';
 import './Calendar.scss';
 

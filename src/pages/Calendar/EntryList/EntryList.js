@@ -10,13 +10,14 @@ import StopIcon from '@mui/icons-material/Stop';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CircularProgress from '@mui/material/CircularProgress';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-import getEntryByData from '../../queries/getEntryByDate';
-import EntryListItemForm from '../EntryListItemForm';
-import { returnDateFormatString } from '../../utils/dateHelper';
-import getProfileID from '../../queries/getProfileID';
-import createNewEntry from '../../queries/createNewEntry';
-import updateMutationEntry from '../../queries/updateEntry';
-import removeMutationEntry from '../../queries/removeEntry';
+import getEntryByData from '../../../queries/getEntryByDate';
+import EntryListItemForm from './EntryListItemForm';
+import { returnDateFormatString } from '../../../utils/dateHelper';
+import getProfileID from '../../../queries/getProfileID';
+import createNewEntry from '../../../mutations/createNewEntry';
+import updateMutationEntry from '../../../mutations/updateEntry';
+import removeMutationEntry from '../../../mutations/removeEntry';
+import Loading from '../../../components/Loading';
 import './EntryList.scss';
 
 const EntryList = ({ currentDate }) => {
@@ -52,6 +53,8 @@ const EntryList = ({ currentDate }) => {
       }) || []
     );
   }, [dataTagBundles]);
+
+  if (loadingEntriesNew) return Loading();
 
   if (loadingTagBundles && loadingEntriesNew) {
     return (

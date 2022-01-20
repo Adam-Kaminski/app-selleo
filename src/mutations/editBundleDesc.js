@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client';
-import { TAG_BUNDLE_BY_ID } from './tagBundlebyID';
+import { TAG_BUNDLE_BY_ID } from '../queries/tagBundlebyID';
 
 const EDIT_BUNDLE_DESC = gql`
   mutation AddNewTagBundle($_id: MongoID!, $description: String!) {

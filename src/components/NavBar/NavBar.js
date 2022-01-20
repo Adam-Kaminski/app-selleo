@@ -48,7 +48,7 @@ const NavBar = () => {
             <BottomNavigationAction
               className="header__nav-item"
               icon={<PlaylistAddCheckIcon />}
-              label="bundle"
+              label="bundles"
               showLabel
             />
           </Link>

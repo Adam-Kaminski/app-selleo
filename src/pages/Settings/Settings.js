@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import './Settings.scss';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import removeBundlefromProfile from '../../queries/removeBundlefromProfile';
-import addBundletoProfile from '../../queries/addBundletoProfile';
+import removeBundlefromProfile from '../../mutations/removeBundlefromProfile';
+import addBundletoProfile from '../../mutations/addBundletoProfile';
 import getProfileID from '../../queries/getProfileID';
 import getAllTagBundles from '../../queries/getAllTagBundles';
 import { useAuth0 } from '@auth0/auth0-react';
+import Loading from '../../components/Loading';
 
 const Settings = () => {
   const { user } = useAuth0();
@@ -30,15 +29,7 @@ const Settings = () => {
     checked ? removeBundle(bundleID) : toggleBundle(bundleID);
   };
 
-  if (loading)
-    return (
-      <div className="login-box">
-        <img className="logo" src="/assets/img/logo.png" />
-        <Box sx={{ justifyContent: 'center', display: 'flex', marginTop: '10px' }}>
-          <CircularProgress />
-        </Box>
-      </div>
-    );
+  if (loading) return Loading();
 
   return (
     <div className="settings">
